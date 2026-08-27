@@ -11,7 +11,7 @@ import { formatCents } from "@/lib/money";
 
 type BidStatus = {
   kind: "bid";
-  status: "pending" | "paid" | "failed";
+  status: "pending" | "paid" | "failed" | "reversed";
   standingBidCents?: number | null;
   overallRank?: number | null;
   categoryRank?: number | null;
@@ -47,7 +47,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
 
   const settled =
     state?.kind === "bid"
-      ? state.status === "paid" || state.status === "failed"
+      ? state.status === "paid" || state.status === "failed" || state.status === "reversed"
       : state?.status === "active" || state?.status === "failed";
 
   useEffect(() => {
@@ -123,6 +123,22 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
         </p>
         <Link href="/" className="btn btn-primary mt-7 px-6 py-3">
           See it on the board
+        </Link>
+      </div>
+    );
+  }
+
+  if (state.status === "reversed") {
+    return (
+      <div className="py-14 text-center">
+        <h1 className="display text-[clamp(1.75rem,5vw,2.5rem)] leading-none">
+          That payment was refunded
+        </h1>
+        <p className="mx-auto mt-4 max-w-[40ch] text-[14.5px] leading-[1.55] text-ink-2">
+          The money went back, so the rank it bought came off the board with it.
+        </p>
+        <Link href="/#claim" className="btn btn-primary mt-7 px-6 py-3">
+          Claim a rank
         </Link>
       </div>
     );

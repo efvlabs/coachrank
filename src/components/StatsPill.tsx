@@ -19,7 +19,7 @@ export function StatsPill({ stats, onlineCount, className = "" }: Props) {
     parts.push(
       <span key="v">
         <strong className="tnum font-semibold text-ink">{formatCount(stats.visitors)}</strong>{" "}
-        visitors
+        visitors since launch
       </span>,
     );
   }

@@ -45,7 +45,7 @@ export type RankedListing = Listing & {
 };
 
 export type PaymentPurpose = "bid" | "spotlight";
-export type PaymentStatus = "pending" | "paid" | "failed";
+export type PaymentStatus = "pending" | "paid" | "failed" | "reversed";
 
 export type BidPaymentDoc = {
   listingId: string;
@@ -65,6 +65,14 @@ export type BidPaymentDoc = {
   status: PaymentStatus;
   /** True when this payment first published a pending listing. */
   publishedListing: boolean;
+
+  /** Set when a refund or a lost dispute took this payment's rank back. */
+  reversal?: {
+    reason: "refund" | "dispute";
+    reference: string;
+    cents: number;
+    at: Timestamp;
+  };
 
   createdAt: Timestamp;
   paidAt: Timestamp | null;

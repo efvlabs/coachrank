@@ -38,7 +38,7 @@ export default async function AdminPaymentsPage() {
                   </td>
                   <td className="py-2 pr-3">
                     <span
-                      className={`pill ${payment.status === "paid" ? "border-accent" : payment.status === "failed" ? "border-line-2" : ""}`}
+                      className={`pill ${payment.status === "paid" ? "border-accent" : payment.status === "reversed" ? "border-flag text-flag" : payment.status === "failed" ? "border-line-2" : ""}`}
                     >
                       {payment.status}
                     </span>

@@ -307,3 +307,65 @@ export function spotlightPriceCents(
 ): number {
   return slot === "premium" ? pricing.premiumSpotlightCents : pricing.standardSpotlightCents;
 }
+
+/**
+ * Frees a slot whose checkout never completed. The buyer abandoned the Dodo page or the
+ * card was declined - without this the hold squats the slot until it lapses on its own.
+ */
+export async function abandonSpotlightBooking(bookingId: string): Promise<void> {
+  const db = getDb();
+  if (!db || !bookingId) return;
+  try {
+    const snap = await db.collection(COLLECTIONS.spotlightBookings).doc(bookingId).get();
+    if (!snap.exists) return;
+    const booking = snap.data() as SpotlightBookingDoc;
+    // An activated Spotlight is paid for - a late failure event must not end it.
+    if (booking.status !== "pending") return;
+    await releaseSpotlightHold(booking.slot, bookingId);
+  } catch (error) {
+    console.error("[spotlight] abandonSpotlightBooking failed:", error);
+  }
+}
+
+/**
+ * Ends a running Spotlight whose money went back - a refund, or a lost dispute. The slot
+ * frees immediately so it can be sold again rather than running out unpaid.
+ */
+export async function endSpotlightForPayment(args: {
+  dodoPaymentId: string;
+  reason: "refund" | "dispute";
+  reference: string;
+}): Promise<"ended" | "not_found" | "already_ended"> {
+  const db = getDb();
+  if (!db) return "not_found";
+
+  const ledger = await db
+    .collection(COLLECTIONS.processedWebhooks)
+    .doc(args.dodoPaymentId)
+    .get();
+  if (!ledger.exists) return "not_found";
+  const entry = ledger.data() as { kind?: string; bookingId?: string };
+  if (entry.kind !== "spotlight" || !entry.bookingId) return "not_found";
+
+  const bookingRef = db.collection(COLLECTIONS.spotlightBookings).doc(entry.bookingId);
+  const snap = await bookingRef.get();
+  if (!snap.exists) return "not_found";
+  const booking = snap.data() as SpotlightBookingDoc;
+  if (booking.status !== "active") return "already_ended";
+
+  const now = Timestamp.now();
+  await bookingRef.update({
+    status: "expired",
+    endsAt: now,
+    reversal: { reason: args.reason, reference: args.reference, at: now },
+  });
+
+  // Clearing the slot pointer is what actually takes the ad down.
+  await db
+    .collection(COLLECTIONS.spotlightSlots)
+    .doc(booking.slot)
+    .set({ activeBookingId: null, endsAt: null, holdBookingId: null, holdExpiresAt: null }, { merge: true })
+    .catch((error) => console.error("[spotlight] could not clear slot after reversal:", error));
+
+  return "ended";
+}

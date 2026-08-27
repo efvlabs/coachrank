@@ -137,6 +137,30 @@ export function readCheckoutMetadata(metadata: Record<string, unknown> | null | 
   };
 }
 
+/**
+ * What the buyer actually paid for the rank itself, in USD cents.
+ *
+ * `total_amount` is the whole charge including tax, and with adaptive pricing it can be
+ * denominated in the buyer's own currency. We only trust the comparison when the payment
+ * settled in USD; anywhere else we return null and fall back to the amount we asked for.
+ */
+export function netPaidUsdCents(payment: {
+  currency?: string | null;
+  total_amount?: number | null;
+  tax?: number | null;
+  settlement_currency?: string | null;
+  settlement_amount?: number | null;
+  settlement_tax?: number | null;
+}): number | null {
+  if (payment.currency === "USD" && typeof payment.total_amount === "number") {
+    return payment.total_amount - (payment.tax ?? 0);
+  }
+  if (payment.settlement_currency === "USD" && typeof payment.settlement_amount === "number") {
+    return payment.settlement_amount - (payment.settlement_tax ?? 0);
+  }
+  return null;
+}
+
 /** Belt-and-braces reconciliation for the success screen - never used to credit money. */
 export async function fetchPaymentStatus(dodoPaymentId: string): Promise<string | null> {
   const dodo = getDodoClient();

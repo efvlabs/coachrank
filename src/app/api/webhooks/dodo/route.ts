@@ -1,9 +1,17 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { readCheckoutMetadata, verifyWebhook } from "@/lib/dodo";
-import { markBidPaymentFailed, processVerifiedBidPayment } from "@/lib/domain/payments";
-import { processVerifiedSpotlightPayment } from "@/lib/domain/spotlight";
+import { netPaidUsdCents, readCheckoutMetadata, verifyWebhook } from "@/lib/dodo";
+import {
+  markBidPaymentFailed,
+  processVerifiedBidPayment,
+  reverseBidPayment,
+} from "@/lib/domain/payments";
+import {
+  abandonSpotlightBooking,
+  endSpotlightForPayment,
+  processVerifiedSpotlightPayment,
+} from "@/lib/domain/spotlight";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -61,6 +69,7 @@ export async function POST(request: Request) {
             internalPaymentId: meta.internalPaymentId,
             dodoPaymentId: payment.payment_id,
             paidAt: safePaidAt,
+            paidNetCents: netPaidUsdCents(payment),
           });
           console.info("[dodo-webhook] bid", payment.payment_id, "->", result.outcome);
           return NextResponse.json({ received: true, outcome: result.outcome });
@@ -85,11 +94,34 @@ export async function POST(request: Request) {
       case "payment.cancelled": {
         const payment = event.data;
         const meta = readCheckoutMetadata(payment.metadata);
-        if (meta.kind === "bid" && meta.internalPaymentId) {
-          await markBidPaymentFailed(meta.internalPaymentId);
+        if (meta.internalPaymentId) {
+          if (meta.kind === "bid") await markBidPaymentFailed(meta.internalPaymentId);
+          // Otherwise the hold squats the slot until it lapses on its own.
+          if (meta.kind === "spotlight") await abandonSpotlightBooking(meta.internalPaymentId);
         }
         // A failed payment publishes nothing and generates no activity event.
         return NextResponse.json({ received: true, outcome: "marked_failed" });
+      }
+
+      // Money that goes back takes the rank with it. A cardholder cannot buy #1, charge
+      // it back, and keep the place - and neither can a refunded Spotlight keep running.
+      case "refund.succeeded":
+      case "dispute.lost":
+      case "dispute.accepted": {
+        const reason = event.type === "refund.succeeded" ? "refund" : "dispute";
+        const dodoPaymentId = event.data.payment_id;
+        const reference =
+          event.type === "refund.succeeded" ? event.data.refund_id : event.data.dispute_id;
+
+        const bid = await reverseBidPayment({ dodoPaymentId, reason, reference });
+        if (bid.outcome === "reversed" || bid.outcome === "already_reversed") {
+          console.info("[dodo-webhook]", event.type, dodoPaymentId, "->", bid.outcome);
+          return NextResponse.json({ received: true, outcome: bid.outcome });
+        }
+
+        const spotlight = await endSpotlightForPayment({ dodoPaymentId, reason, reference });
+        console.info("[dodo-webhook]", event.type, dodoPaymentId, "-> spotlight", spotlight);
+        return NextResponse.json({ received: true, outcome: spotlight });
       }
 
       default:

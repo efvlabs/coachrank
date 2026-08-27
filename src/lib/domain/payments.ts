@@ -169,6 +169,8 @@ export async function processVerifiedBidPayment(args: {
   internalPaymentId: string;
   dodoPaymentId: string;
   paidAt?: Date;
+  /** Pre-tax USD cents Dodo says were actually paid, when that is knowable. */
+  paidNetCents?: number | null;
 }): Promise<ProcessBidResult> {
   const db = requireDb();
   const paidAt = Timestamp.fromDate(args.paidAt ?? new Date());
@@ -203,7 +205,23 @@ export async function processVerifiedBidPayment(args: {
 
     const listing = listingSnap.data() as ListingDoc;
     const previous = listing.standingBidCents ?? 0;
-    const resulting = previous + payment.incrementCents;
+
+    // Rank is bought with money that actually arrived. We ask Dodo for a fixed amount, so
+    // a mismatch should never happen - if one ever does, the smaller, real number wins.
+    const asked = payment.incrementCents;
+    const credited = args.paidNetCents != null && args.paidNetCents > 0 ? args.paidNetCents : asked;
+    if (credited !== asked) {
+      console.warn(
+        "[payments] amount mismatch on",
+        args.dodoPaymentId,
+        "- asked",
+        asked,
+        "but crediting",
+        credited,
+      );
+    }
+
+    const resulting = previous + credited;
     const wasPending = listing.status === "pending";
 
     tx.update(listingRef, {
@@ -218,6 +236,8 @@ export async function processVerifiedBidPayment(args: {
       status: "paid",
       paidAt,
       dodoPaymentId: args.dodoPaymentId,
+      incrementCents: credited,
+      askedIncrementCents: asked,
       previousStandingBidCents: previous,
       resultingStandingBidCents: resulting,
       publishedListing: wasPending,
@@ -233,7 +253,7 @@ export async function processVerifiedBidPayment(args: {
     tx.set(
       statsRef,
       {
-        leaderboardRevenueCents: FieldValue.increment(payment.incrementCents),
+        leaderboardRevenueCents: FieldValue.increment(credited),
         listedCoaches: FieldValue.increment(wasPending && listing.status !== "hidden" ? 1 : 0),
       },
       { merge: true },
@@ -362,4 +382,105 @@ export async function listRecentPayments(limit = 100): Promise<BidPayment[]> {
     console.error("[payments] listRecentPayments failed:", error);
     return [];
   }
+}
+
+export type ReversalReason = "refund" | "dispute";
+
+export type ReverseBidResult =
+  | { outcome: "reversed"; paymentId: string; listingId: string; cents: number }
+  | { outcome: "already_reversed"; paymentId: string }
+  | { outcome: "never_credited"; dodoPaymentId: string }
+  | { outcome: "not_a_bid"; dodoPaymentId: string };
+
+/**
+ * Takes back the rank a payment bought when the money goes away again - a refund, or a
+ * dispute the cardholder wins. Rank is indivisible, so any reversal takes the whole
+ * increment back rather than a slice of it: you cannot keep four fifths of a place.
+ *
+ * Idempotent. The payment can only leave "paid" once, so repeated refund deliveries and a
+ * refund followed by a lost dispute reverse the same money exactly once.
+ */
+export async function reverseBidPayment(args: {
+  dodoPaymentId: string;
+  reason: ReversalReason;
+  reference: string;
+}): Promise<ReverseBidResult> {
+  const db = requireDb();
+
+  // The webhook ledger is the only thing that maps a Dodo payment back to our own id:
+  // refunds and disputes do not carry the checkout metadata.
+  const ledger = await db
+    .collection(COLLECTIONS.processedWebhooks)
+    .doc(args.dodoPaymentId)
+    .get();
+  if (!ledger.exists) return { outcome: "never_credited", dodoPaymentId: args.dodoPaymentId };
+
+  const entry = ledger.data() as { kind?: string; internalPaymentId?: string };
+  if (entry.kind !== "bid" || !entry.internalPaymentId) {
+    return { outcome: "not_a_bid", dodoPaymentId: args.dodoPaymentId };
+  }
+
+  const paymentId = entry.internalPaymentId;
+  const paymentRef = db.collection(COLLECTIONS.bidPayments).doc(paymentId);
+  const statsRef = db.collection(COLLECTIONS.stats).doc("site");
+  const at = Timestamp.now();
+
+  const result = await db.runTransaction<ReverseBidResult>(async (tx) => {
+    const paymentSnap = await tx.get(paymentRef);
+    if (!paymentSnap.exists) return { outcome: "already_reversed", paymentId };
+
+    const payment = paymentSnap.data() as BidPaymentDoc;
+    if (payment.status !== "paid") return { outcome: "already_reversed", paymentId };
+
+    const listingRef = db.collection(COLLECTIONS.listings).doc(payment.listingId);
+    const listingSnap = await tx.get(listingRef);
+
+    tx.update(paymentRef, {
+      status: "reversed",
+      reversal: { reason: args.reason, reference: args.reference, cents: payment.incrementCents, at },
+    });
+    tx.set(
+      statsRef,
+      { leaderboardRevenueCents: FieldValue.increment(-payment.incrementCents) },
+      { merge: true },
+    );
+
+    if (listingSnap.exists) {
+      const listing = listingSnap.data() as ListingDoc;
+      const remaining = Math.max(0, (listing.standingBidCents ?? 0) - payment.incrementCents);
+      const wasOnTheBoard = listing.status === "active";
+      // Nothing paid for, nothing listed: back to pending, off the board entirely.
+      const status = remaining === 0 && wasOnTheBoard ? "pending" : listing.status;
+
+      tx.update(listingRef, {
+        standingBidCents: remaining,
+        standingBidReachedAt: at,
+        status,
+        updatedAt: at,
+      });
+      if (status !== listing.status) {
+        tx.set(statsRef, { listedCoaches: FieldValue.increment(-1) }, { merge: true });
+      }
+    }
+
+    return {
+      outcome: "reversed",
+      paymentId,
+      listingId: payment.listingId,
+      cents: payment.incrementCents,
+    };
+  });
+
+  // The tape should not keep bragging about money that went back.
+  if (result.outcome === "reversed") {
+    await db
+      .collection(COLLECTIONS.activityEvents)
+      .doc(paymentId)
+      .update({ visible: false })
+      .catch(() => {
+        // No event for this payment - the coach was hidden when it landed. Nothing to do.
+      });
+  }
+
+  return result;
 }
