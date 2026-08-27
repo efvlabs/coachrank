@@ -101,11 +101,9 @@ env:
   # ---- Admin ---------------------------------------------------------------------------
   #
   # ADMIN_EMAILS gates /admin, where listings are hidden for impersonation and Spotlights
-  # are reviewed. It is not a credential, but it controls access and is a personal address,
-  # so it stays out of the repo. Create it, then uncomment:
-  #
-  #   firebase apphosting:secrets:set ADMIN_EMAILS
-  #
-  # - variable: ADMIN_EMAILS
-  #   secret: ADMIN_EMAILS
-  #   availability: [RUNTIME]
+  # are reviewed. It is not a credential, but it controls access and holds personal
+  # addresses, so it stays out of the repo. Comma-separated; being on this list only makes
+  # an account an admin - the account itself still has to exist in Firebase Auth.
+  - variable: ADMIN_EMAILS
+    secret: ADMIN_EMAILS
+    availability: [RUNTIME]
