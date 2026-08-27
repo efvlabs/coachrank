@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { Modal } from "./Modal";
 import { TermsConsent } from "./TermsConsent";
 import { CATEGORIES, type CategorySlug } from "@/lib/categories";
 import { CLAIM_EVENT, type ClaimEventDetail } from "@/lib/claim-event";
@@ -53,6 +54,7 @@ export function BidPanel({
   const [category, setCategory] = useState<CategorySlug | "">("");
   const [lookup, setLookup] = useState<LookupState>({ status: "idle" });
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorField, setErrorField] = useState<string | null>(null);
@@ -149,6 +151,9 @@ export function BidPanel({
   }, [amountCents, currentStandingBidCents, currentTopCents, topExcludingSelf, pricing]);
 
   const chargeCents = validation?.ok ? validation.incrementCents : null;
+  // The browser knows the leader's amount, so it knows whether this takes #1. It cannot
+  // know which rank a smaller amount lands on without the whole board, so it does not guess.
+  const takesTop = amountCents !== null && amountCents > currentTopCents;
 
   function step(direction: 1 | -1) {
     const base = amountCents ?? claimTopCents;
@@ -179,8 +184,14 @@ export function BidPanel({
       if (!name.trim()) return fail("Add your name.", "name");
       if (!category) return fail("Pick a category.", "category");
     }
+    setError(null);
+    setConfirming(true);
+  }
+
+  /** The second step: the buyer has seen the rank and the price, and agreed to the terms. */
+  async function confirm() {
     if (!acceptedTerms) {
-      return fail("Tick the box to confirm you agree to the Rules and Terms.", "terms");
+      return fail("Tick the box to agree to the Terms of Service.", "terms");
     }
 
     setSubmitting(true);
@@ -199,6 +210,7 @@ export function BidPanel({
       const data = await response.json();
       if (!response.ok || !data?.ok) {
         setSubmitting(false);
+        setConfirming(false);
         return fail(data?.error ?? "Something went wrong. Try again.", data?.field ?? null);
       }
       window.location.assign(data.checkoutUrl as string);
@@ -359,20 +371,6 @@ export function BidPanel({
             </p>
           ) : null}
 
-          <div className="mt-4 flex justify-center">
-            <TermsConsent
-              checked={acceptedTerms}
-              onChange={(next) => {
-                setAcceptedTerms(next);
-                if (next && errorField === "terms") {
-                  setError(null);
-                  setErrorField(null);
-                }
-              }}
-              invalid={errorField === "terms"}
-            />
-          </div>
-
           {error ? (
             <p role="alert" className="mt-3 text-[13.5px] font-medium text-flag">
               {error}
@@ -388,6 +386,72 @@ export function BidPanel({
           </p>
         </div>
       </form>
+
+      <Modal
+        open={confirming}
+        onClose={() => {
+          setConfirming(false);
+          setError(null);
+          setErrorField(null);
+        }}
+        title="Confirm this rank"
+      >
+        <div className="mt-5 rounded-2xl bg-tint p-4 text-left">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="eyebrow">Rank</p>
+              <p className="display mt-1 text-[26px] leading-none">
+                {takesTop ? "#1" : "Board"}
+              </p>
+              <p className="meta mt-1.5">{known ? known.name : name || "Your listing"}</p>
+            </div>
+            <div className="text-right">
+              <p className="eyebrow">Price</p>
+              <p className="display tnum mt-1 text-[26px] leading-none text-accent">
+                {chargeCents === null ? "-" : formatCents(chargeCents)}
+              </p>
+              <p className="meta mt-1.5">Due now</p>
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-4 text-left text-[13.5px] leading-[1.55] text-ink-2">
+          {takesTop
+            ? "The top spot on the public board. It goes live when the payment confirms, and someone else can pay more to take it back."
+            : "A place on the public board at whatever rank this amount supports when the payment confirms."}{" "}
+          Tax is added at checkout where it applies.
+        </p>
+
+        <div className="mt-4">
+          <TermsConsent
+            className="max-w-none"
+            checked={acceptedTerms}
+            invalid={errorField === "terms"}
+            onChange={(next) => {
+              setAcceptedTerms(next);
+              if (next && errorField === "terms") {
+                setError(null);
+                setErrorField(null);
+              }
+            }}
+          />
+        </div>
+
+        {error ? (
+          <p role="alert" className="mt-3 text-[13.5px] font-medium text-flag">
+            {error}
+          </p>
+        ) : null}
+
+        <button
+          type="button"
+          onClick={confirm}
+          disabled={submitting || !paymentsEnabled}
+          className="btn btn-primary mt-4 w-full px-4 py-3"
+        >
+          {cta}
+        </button>
+      </Modal>
     </section>
   );
 }

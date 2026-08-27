@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
+import { Modal } from "./Modal";
 import { TermsConsent } from "./TermsConsent";
 import { CATEGORIES, type CategorySlug } from "@/lib/categories";
 import { formatCents } from "@/lib/money";
@@ -20,7 +21,7 @@ type Found = {
 
 /**
  * A Spotlight is an advertisement, not a rank, so it does not require a listing. The flow
- * is: enter website → confirm the listing if we found one, otherwise fill in who the ad is
+ * is: enter the website → confirm the listing if we found one, otherwise say who the ad is
  * for → Dodo checkout.
  */
 export function SpotlightRent({ slot, priceCents, label }: Props) {
@@ -31,18 +32,14 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
   const [unlisted, setUnlisted] = useState(false);
   const [name, setName] = useState("");
   const [category, setCategory] = useState<CategorySlug | "">("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  function close() {
+    setOpen(false);
+    setError(null);
+  }
 
   async function findListing(event: React.FormEvent) {
     event.preventDefault();
@@ -68,13 +65,11 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
   async function checkout() {
     setError(null);
     if (unlisted) {
-      if (!name.trim()) return setError("Add the name to show on the ad.");
+      if (!name.trim()) return setError("Add a name.");
       if (!category) return setError("Pick a category.");
     }
-    if (!acceptedTerms) {
-      setError("Tick the box to agree to the Terms of Service.");
-      return;
-    }
+    if (!acceptedTerms) return setError("Tick the box to agree to the Terms of Service.");
+
     setBusy(true);
     try {
       const response = await fetch("/api/spotlight/checkout", {
@@ -103,146 +98,106 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className="btn btn-primary w-full px-4 py-2.5">
-        Rent this slot
+      <button type="button" onClick={() => setOpen(true)} className="btn btn-primary w-full py-2.5">
+        {label}
       </button>
 
-      <dialog
-        ref={dialogRef}
-        onClose={() => setOpen(false)}
-        onClick={(e) => {
-          if (e.target === dialogRef.current) setOpen(false);
-        }}
-        className="w-[min(26rem,calc(100vw-2rem))] border border-ink bg-paper p-0 text-ink backdrop:bg-ink/50"
-      >
-        <div className="p-6">
-          <div className="flex items-baseline justify-between gap-4 border-b border-line pb-3">
-            <h2 className="eyebrow text-ink">{label}</h2>
+      <Modal open={open} onClose={close} title="Rent this spot">
+        <p className="display tnum mt-5 text-[40px] leading-none text-accent">
+          {formatCents(priceCents)}
+        </p>
+        <p className="eyebrow mt-2">24 hours · Spotlight</p>
+
+        {!found && !unlisted ? (
+          <form onSubmit={findListing} className="mt-6">
+            <label className="block">
+              <span className="eyebrow">Website</span>
+              <input
+                className="field mt-1"
+                placeholder="https://coachrank.lol"
+                inputMode="url"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                required
+              />
+            </label>
+            {error ? (
+              <p role="alert" className="meta mt-3 text-flag">
+                {error}
+              </p>
+            ) : null}
+            <button type="submit" disabled={busy} className="btn btn-quiet mt-5 w-full px-4 py-2.5">
+              {busy ? "Checking" : "Continue"}
+            </button>
+          </form>
+        ) : (
+          <div className="mt-6">
+            {found ? (
+              <div>
+                <p className="display text-[22px] leading-none">{found.name}</p>
+                <p className="meta mt-2">{found.displayWebsite}</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <label className="block">
+                  <span className="eyebrow">Name</span>
+                  <input
+                    className="field mt-1"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name or brand"
+                    required
+                  />
+                </label>
+                <label className="block">
+                  <span className="eyebrow">Category</span>
+                  <select
+                    className="field mt-1"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value as CategorySlug)}
+                    required
+                  >
+                    <option value="">Pick one</option>
+                    {CATEGORIES.map((c) => (
+                      <option key={c.slug} value={c.slug}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <p className="meta">{website}</p>
+              </div>
+            )}
+
+            <div className="mt-5">
+              <TermsConsent
+                id="accept-terms-spotlight"
+                className="max-w-none"
+                checked={acceptedTerms}
+                onChange={(next) => {
+                  setAcceptedTerms(next);
+                  if (next) setError(null);
+                }}
+              />
+            </div>
+
+            {error ? (
+              <p role="alert" className="meta mt-3 text-flag">
+                {error}
+              </p>
+            ) : null}
+
             <button
               type="button"
-              onClick={() => setOpen(false)}
-              aria-label="Close"
-              className="eyebrow hover:text-ink"
+              onClick={checkout}
+              disabled={busy}
+              className="btn btn-primary mt-4 w-full px-4 py-2.5"
             >
-              Close
+              {busy ? "Opening" : `Rent · ${formatCents(priceCents)}`}
             </button>
           </div>
-
-          <p className="display tnum mt-5 text-[40px] leading-none text-accent">
-            {formatCents(priceCents)}
-          </p>
-          <p className="eyebrow mt-2">for 24 hours · changes no ranks</p>
-
-          {!found && !unlisted ? (
-            <form onSubmit={findListing} className="mt-6">
-              <label className="block">
-                <span className="eyebrow">The website the ad links to</span>
-                <input
-                  className="field mt-1"
-                  placeholder="yourname.com"
-                  inputMode="url"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  required
-                />
-              </label>
-              {error ? (
-                <p role="alert" className="meta mt-3 text-flag">
-                  {error}
-                </p>
-              ) : null}
-              <button type="submit" disabled={busy} className="btn btn-quiet mt-5 w-full px-4 py-2.5">
-                {busy ? "Looking" : "Find my listing"}
-              </button>
-            </form>
-          ) : (
-            <div className="mt-6">
-              {found ? (
-                <div className="pt-3">
-                  <p className="display text-[22px] leading-none">{found.name}</p>
-                  <p className="meta mt-2">{found.displayWebsite}</p>
-                  <p className="mt-3 text-[14px] leading-[1.5] text-ink-2">{found.bio}</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <p className="meta">
-                    Not on the board - that is fine, a Spotlight is an ad. Tell us who it is for.
-                  </p>
-                  <label className="block">
-                    <span className="eyebrow">Name to show on the ad</span>
-                    <input
-                      className="field mt-1"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Your name or brand"
-                      required
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="eyebrow">Category</span>
-                    <select
-                      className="field mt-1"
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value as CategorySlug)}
-                      required
-                    >
-                      <option value="">Pick one</option>
-                      {CATEGORIES.map((c) => (
-                        <option key={c.slug} value={c.slug}>
-                          {c.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <p className="meta">{website}</p>
-                </div>
-              )}
-
-              {error ? (
-                <p role="alert" className="meta mt-3 text-flag">
-                  {error}
-                </p>
-              ) : null}
-
-              <div className="mt-5">
-                <TermsConsent
-                  id="accept-terms-spotlight"
-                  checked={acceptedTerms}
-                  onChange={(next) => {
-                    setAcceptedTerms(next);
-                    if (next) setError(null);
-                  }}
-                />
-              </div>
-
-              <div className="mt-4 flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFound(null);
-                    setUnlisted(false);
-                    setError(null);
-                  }}
-                  className="btn btn-quiet flex-1 px-4 py-2.5"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={checkout}
-                  disabled={busy}
-                  className="btn btn-primary flex-[2] px-4 py-2.5"
-                >
-                  {busy ? "Opening" : `Rent · ${formatCents(priceCents)}`}
-                </button>
-              </div>
-              <p className="eyebrow mt-3 leading-[1.5]">
-                The slot starts when payment is verified and runs exactly 24 hours.
-              </p>
-            </div>
-          )}
-        </div>
-      </dialog>
+        )}
+      </Modal>
     </>
   );
 }
