@@ -50,7 +50,7 @@ env:
     value: "203917136843"
     availability: [BUILD, RUNTIME]
   - variable: NEXT_PUBLIC_FIREBASE_APP_ID
-    value: 1:203917136843:web:85088b1e27ad77e7085c4e
+    value: 1:203917136843:web:c2123b1d0324dee2085c4e
     availability: [BUILD, RUNTIME]
 
   # CoachRank lives in its own Firestore database inside the shared project, so it never
