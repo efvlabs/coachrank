@@ -91,6 +91,17 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /*
+   * A dialog centres itself with the browser's own `margin: auto`, which the Tailwind
+   * reset zeroes along with every other margin - leaving every modal pinned to the top
+   * left. Restore it, and keep a tall one scrollable inside the viewport.
+   */
+  dialog {
+    margin: auto;
+    max-height: calc(100dvh - 2rem);
+    max-width: calc(100vw - 2rem);
+  }
+
   body {
     background-color: var(--paper);
     color: var(--ink);
