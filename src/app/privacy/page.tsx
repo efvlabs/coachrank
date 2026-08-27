@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Fill, LegalPage } from "@/components/LegalPage";
+import { LegalPage } from "@/components/LegalPage";
 import { SITE, absoluteUrl } from "@/lib/config";
 
 export const metadata = {
@@ -26,8 +26,9 @@ export default function PrivacyPage() {
     >
       <h2>Who is responsible</h2>
       <p>
-        The controller for personal data processed here is <Fill>legal name</Fill>, based in{" "}
-        <Fill>country</Fill>. Contact: {mail}.
+        The controller for personal data processed here is the individual who operates{" "}
+        {SITE.shortName}, based in India. Contact: {mail}. Payment data has its own controller - see
+        the payment provider named below.
       </p>
 
       <h2>What we collect</h2>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Fill, LegalPage } from "@/components/LegalPage";
+import { LegalPage } from "@/components/LegalPage";
 import { SITE, absoluteUrl } from "@/lib/config";
 
 export const metadata = {
@@ -28,8 +28,10 @@ export default function TermsPage() {
     >
       <h2>Who operates this</h2>
       <p>
-        CoachRank is operated by <Fill>legal name</Fill>, based in <Fill>country</Fill>
-        (&ldquo;we&rdquo;, &ldquo;us&rdquo;). Legal, listing and takedown notices: {mail}.
+        CoachRank is operated by an individual based in India
+        (&ldquo;we&rdquo;, &ldquo;us&rdquo;). Checkout, billing and tax are handled by our payment
+        provider as merchant of record, and their name appears on your receipt. Legal, listing and
+        takedown notices: {mail}.
       </p>
       <p>
         These terms work alongside the public <Link href="/rules">Rules</Link>. Where the two
@@ -256,9 +258,8 @@ export default function TermsPage() {
 
       <h2>Governing law</h2>
       <p>
-        These terms are governed by the laws of <Fill>governing law</Fill>, excluding its
-        conflict-of-law rules, and the courts of <Fill>jurisdiction</Fill> have exclusive
-        jurisdiction to the extent permitted. If you are a consumer with mandatory local protections,
+        These terms are governed by the laws of India, excluding its conflict-of-law rules, and the
+        courts at Mumbai have exclusive jurisdiction to the extent permitted. If you are a consumer with mandatory local protections,
         those continue to apply to you.
       </p>
 
