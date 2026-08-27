@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CoachRank
+# The default `.env*` rule above would swallow the template too — it holds no secrets
+# and must be committed.
+!.env.example
+firebase-debug.log
+firestore-debug.log
+.firebase/
+*.serviceaccount.json
+*-serviceaccount.json

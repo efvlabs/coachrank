@@ -1,0 +1,78 @@
+rules_version = '2';
+
+// ---------------------------------------------------------------------------
+// CoachRank production rules.
+//
+// The public web client is READ-ONLY, and only for the two collections the live
+// UI genuinely needs. Every write that moves money, publishes a listing, changes
+// a rank, records a click or publishes an article happens through the Firebase
+// Admin SDK on our server, which bypasses these rules entirely.
+//
+// There is deliberately no "admin can write from the browser" path: the /admin
+// UI calls server actions, which authenticate against ADMIN_EMAILS and then use
+// the Admin SDK. That keeps the client incapable of writing anything at all.
+// ---------------------------------------------------------------------------
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Active listings are public. Pending (unpaid) and hidden (moderated)
+    // listings are not readable by the client at all.
+    match /listings/{listingId} {
+      allow read: if resource.data.status == 'active';
+      allow create, update, delete: if false;
+    }
+
+    // Powers the live "Latest activity" feed. Written only after a verified
+    // payment has been processed server-side.
+    match /activityEvents/{eventId} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    // Money. Never readable or writable from a browser.
+    match /bidPayments/{paymentId} {
+      allow read, write: if false;
+    }
+
+    // Webhook idempotency keys.
+    match /processedWebhooks/{webhookId} {
+      allow read, write: if false;
+    }
+
+    // Advertisement rentals and the slot reservation records.
+    match /spotlightBookings/{bookingId} {
+      allow read, write: if false;
+    }
+    match /spotlightSlots/{slot} {
+      allow read, write: if false;
+    }
+
+    // Financial and traffic totals. Served to the browser pre-rendered by the
+    // server so the client never needs — and never gets — write access.
+    match /stats/{docId} {
+      allow read, write: if false;
+    }
+
+    // Pricing configuration. Admin-only, through the server.
+    match /settings/{docId} {
+      allow read, write: if false;
+    }
+
+    // Blog content is delivered as server-rendered HTML; the client never reads
+    // it directly, and publication status is never client-controlled.
+    match /blogPosts/{postId} {
+      allow read, write: if false;
+    }
+
+    // Presence heartbeats are written by our server route, not by the browser.
+    match /presence/{visitorId} {
+      allow read, write: if false;
+    }
+
+    // Anything not named above is denied.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

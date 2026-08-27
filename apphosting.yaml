@@ -1,0 +1,86 @@
+# Firebase App Hosting — CoachRank
+# https://firebase.google.com/docs/app-hosting/configure
+#
+# App Hosting detects Next.js, runs `next build`, and serves it on Cloud Run, so the
+# server components, route handlers and the Dodo webhook all work as they do locally.
+#
+# TWO THINGS THAT BITE:
+#
+# 1. NEXT_PUBLIC_* are inlined into the browser bundle at BUILD time. They must be
+#    `availability: [BUILD, RUNTIME]` or the client Firebase config ships empty and the
+#    live activity feed and admin sign-in silently stop working.
+#
+# 2. Server credentials come from the runtime's own service account (ADC). Do NOT put a
+#    service-account JSON in a secret — src/lib/firebase/admin.ts detects App Hosting and
+#    uses ADC automatically.
+#
+# The NEXT_PUBLIC_FIREBASE_* values below are the public web-app config. They already ship
+# in the client JS, so committing them exposes nothing new. Everything secret lives in
+# Secret Manager and is referenced by name.
+
+runConfig:
+  minInstances: 0
+  maxInstances: 2
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  # ---- Public site config -------------------------------------------------------------
+  # Update to https://coachrank.lol once the custom domain is live, then redeploy:
+  # this drives canonical URLs, the sitemap, OG images and Dodo's return_url.
+  - variable: NEXT_PUBLIC_SITE_URL
+    value: https://coachrank.lol
+    availability: [BUILD, RUNTIME]
+
+  # ---- Firebase web SDK (public) ------------------------------------------------------
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyA_EuvmmmOMON1JPoWealbjbwwYRiJtX9I
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: corporate-gupshup.firebaseapp.com
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: corporate-gupshup
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: corporate-gupshup.firebasestorage.app
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "203917136843"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:203917136843:web:85088b1e27ad77e7085c4e
+    availability: [BUILD, RUNTIME]
+
+  # CoachRank lives in its own Firestore database inside the shared project, so it never
+  # touches the (default) database. Both names must match.
+  - variable: NEXT_PUBLIC_FIREBASE_DATABASE_ID
+    value: coachrank
+    availability: [BUILD, RUNTIME]
+  - variable: FIREBASE_DATABASE_ID
+    value: coachrank
+    availability: [BUILD, RUNTIME]
+
+  # ---- Server-only, non-secret --------------------------------------------------------
+  - variable: DODO_PAYMENTS_ENVIRONMENT
+    value: test_mode
+    availability: [RUNTIME]
+
+  # ---- Secrets (Secret Manager) -------------------------------------------------------
+  # Create each with:  firebase apphosting:secrets:set <NAME>
+  - variable: DODO_PAYMENTS_API_KEY
+    secret: DODO_PAYMENTS_API_KEY
+    availability: [RUNTIME]
+  - variable: DODO_PAYMENTS_WEBHOOK_KEY
+    secret: DODO_PAYMENTS_WEBHOOK_KEY
+    availability: [RUNTIME]
+  - variable: DODO_BID_PRODUCT_ID
+    secret: DODO_BID_PRODUCT_ID
+    availability: [RUNTIME]
+
+  # Not a credential, but it is the allow-list that gates /admin — and it is a personal
+  # address, so it stays out of the repo.
+  - variable: ADMIN_EMAILS
+    secret: ADMIN_EMAILS
+    availability: [RUNTIME]
