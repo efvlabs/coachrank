@@ -62,7 +62,7 @@ export default function TermsPage() {
         </li>
       </ul>
 
-      <h2>Payments and taxes</h2>
+      <h2 id="payments">Payments and taxes</h2>
       <p>
         Checkout is handled by Dodo Payments. We never receive or store card numbers. Dodo&apos;s own
         terms and privacy notice apply to the payment itself. Prices are in US dollars and applicable
@@ -75,7 +75,7 @@ export default function TermsPage() {
         server and written to the board.
       </p>
 
-      <h2>No refunds</h2>
+      <h2 id="refunds">No refunds</h2>
       <p>
         Leaderboard payments are final. Placement is a digital service that begins the instant
         payment is confirmed: the listing is created or the standing bid is raised, and the amount

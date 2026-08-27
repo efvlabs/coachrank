@@ -56,6 +56,7 @@ export function Footer() {
                 { href: "/rules", label: "Rules" },
                 { href: "/about", label: "About" },
                 { href: "/terms", label: "Terms" },
+                { href: "/terms#refunds", label: "Refunds" },
                 { href: "/privacy", label: "Privacy" },
               ].map((l) => (
                 <li key={l.href}>
