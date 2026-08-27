@@ -29,6 +29,10 @@ export const SITE = {
   url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   twitter: "@coachranklol",
   contactEmail: "contact@coachrank.lol",
+  socials: [
+    { label: "X", href: "https://x.com/coachranklol" },
+    { label: "Instagram", href: "https://www.instagram.com/coachranklol/" },
+  ],
 } as const;
 
 export function absoluteUrl(path: string): string {

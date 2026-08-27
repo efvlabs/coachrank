@@ -19,6 +19,19 @@ export function Footer() {
             <p className="mt-2 max-w-[34ch] text-[13.5px] leading-relaxed text-ink-3">
               {SITE.tagline}
             </p>
+            <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+              {SITE.socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="me noopener"
+                  className="meta text-ink-2 hover:text-ink"
+                >
+                  {s.label}
+                </a>
+              ))}
+            </p>
             <a
               href={`mailto:${SITE.contactEmail}`}
               className="meta mt-3 inline-block text-accent hover:underline"

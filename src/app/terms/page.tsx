@@ -35,6 +35,19 @@ export default function TermsPage() {
         These terms work alongside the public <Link href="/rules">Rules</Link>. Where the two
         conflict, these terms control.
       </p>
+      <p>
+        Before checkout you must confirm, by ticking a box, that you have read and agree to these
+        terms. If you do not agree, do not pay. You can also reach us at{" "}
+        {SITE.socials.map((s, i) => (
+          <span key={s.label}>
+            {i > 0 ? " or " : ""}
+            <a href={s.href} target="_blank" rel="noopener">
+              {s.label}
+            </a>
+          </span>
+        ))}
+        , though legal and takedown notices should go to {mail}.
+      </p>
 
       <h2>What the service is</h2>
       <p>

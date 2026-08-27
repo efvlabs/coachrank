@@ -104,7 +104,8 @@ export default function PrivacyPage() {
           <strong>Google Firebase</strong> - the database and administrator sign-in.
         </li>
         <li>
-          <strong><Fill>hosting provider</Fill></strong> - serving the site.
+          <strong>Firebase App Hosting, on Google Cloud</strong> - serving the site. Requests to it
+          carry the standard technical data described above.
         </li>
         <li>
           <strong>Public favicon services</strong> - the icon lookup described above, which receives

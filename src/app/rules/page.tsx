@@ -173,7 +173,9 @@ export default async function RulesPage() {
       <p>
         Because positions are live and competitive, your final rank is whatever your amount supports
         at the moment the payment clears - not what was displayed when you started checkout.
-        Leaderboard payments are not refundable. If a payment is refunded or charged back anyway,
+        Paying means you agree to the <Link href="/terms">Terms</Link> and the{" "}
+        <Link href="/privacy">Privacy Policy</Link>, which you confirm with a tick box before
+        checkout. Leaderboard payments are not refundable. If a payment is refunded or charged back anyway,
         the amount comes back off the standing bid and the rank it bought goes with it. See the{" "}
         <Link href="/terms">Terms</Link>.
       </p>
