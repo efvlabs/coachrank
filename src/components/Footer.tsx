@@ -10,7 +10,7 @@ export function Footer() {
   return (
     <footer className="mt-24 bg-tint">
       <div className="mx-auto max-w-[1180px] px-5 py-10 sm:px-8">
-        <div className="grid gap-8 sm:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-8 sm:grid-cols-[1.2fr_1.4fr_0.8fr]">
           <div>
             <p className="display flex items-center gap-2 text-[20px] leading-none">
               <Logo size={26} />
@@ -31,7 +31,7 @@ export function Footer() {
             <h2 id="ft-board" className="eyebrow">
               Board
             </h2>
-            <ul className="mt-3 space-y-1.5">
+            <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5">
               <li>
                 <Link href="/today" className="meta text-ink-2 hover:text-ink">
                   Today

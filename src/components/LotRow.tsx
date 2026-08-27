@@ -14,14 +14,24 @@ type Props = {
   source: ClickSource;
   /** Ranks 2 and 3 sit on a tint so the podium still reads as a podium. */
   podium?: boolean;
+  /** The biggest standing bid on this board, which the money rail is drawn against. */
+  topBidCents: number;
 };
 
-export function LotRow({ listing, claimCents, source, podium = false }: Props) {
+export function LotRow({ listing, claimCents, source, podium = false, topBidCents }: Props) {
+  // The rail is linear on purpose. A log scale would flatter the bottom of the board, and
+  // the one thing this product claims is that the amount is the entire ranking - so the
+  // sliver next to #10 and the full band next to #2 are both telling the truth.
+  const share = topBidCents > 0 ? Math.max(1.5, (listing.standingBidCents / topBidCents) * 100) : 0;
+
   return (
     <article
       className={`card flex flex-wrap items-start gap-x-3 gap-y-3 px-4 py-4 transition-colors sm:flex-nowrap sm:gap-x-4 sm:px-5 ${
         podium ? "border-accent/25 bg-tint" : "hover:border-line-2"
       }`}
+      style={{
+        backgroundImage: `linear-gradient(to right, color-mix(in srgb, var(--accent) 8%, transparent) ${share}%, transparent calc(${share}% + 10px))`,
+      }}
       aria-label={`Rank ${listing.overallRank}: ${listing.name}`}
     >
       <span

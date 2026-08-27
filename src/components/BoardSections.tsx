@@ -59,6 +59,8 @@ export function BoardSections({
 
   const leader = listings[0].overallRank === 1 ? listings[0] : null;
   const rest = leader ? listings.slice(1) : listings;
+  // Page 2 has no #1 on it, so the rail is drawn against whatever leads the page.
+  const topBidCents = listings[0].standingBidCents;
 
   return (
     <div id="board">
@@ -81,6 +83,7 @@ export function BoardSections({
                 claimCents={claimCentsFor(listing, pricing)}
                 source={source}
                 podium={listing.overallRank <= 3}
+                topBidCents={topBidCents}
               />
             </li>
           ))}
