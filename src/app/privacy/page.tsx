@@ -42,16 +42,16 @@ export default function PrivacyPage() {
           identifier from Dodo Payments. Card details are collected by Dodo and never reach us.
         </li>
         <li>
-          <strong>A visitor cookie.</strong> <code>cr_visitor</code> — a random opaque token, stored
+          <strong>A visitor cookie.</strong> <code>cr_visitor</code> - a random opaque token, stored
           up to a year, used once to count your browser in the visitor total. It is not your name and
           is not used for advertising.
         </li>
         <li>
-          <strong>A presence cookie.</strong> <code>cr_presence</code> — a random token that expires
+          <strong>A presence cookie.</strong> <code>cr_presence</code> - a random token that expires
           within a day, used only to count how many people are on the site right now.
         </li>
         <li>
-          <strong>An admin session cookie.</strong> <code>cr_admin</code> — set only for
+          <strong>An admin session cookie.</strong> <code>cr_admin</code> - set only for
           administrators who sign in, and only for them.
         </li>
         <li>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
           you paid for.
         </li>
         <li>
-          <strong>Legitimate interests.</strong> To keep the board fair and working — rate limiting,
+          <strong>Legitimate interests.</strong> To keep the board fair and working - rate limiting,
           abuse prevention, counting traffic, debugging, and defending legal claims. You can object
           to this processing; see your rights below.
         </li>
@@ -98,16 +98,16 @@ export default function PrivacyPage() {
       <h2>Who else sees data</h2>
       <ul>
         <li>
-          <strong>Dodo Payments</strong> — checkout and payment confirmation.
+          <strong>Dodo Payments</strong> - checkout and payment confirmation.
         </li>
         <li>
-          <strong>Google Firebase</strong> — the database and administrator sign-in.
+          <strong>Google Firebase</strong> - the database and administrator sign-in.
         </li>
         <li>
-          <strong><Fill>hosting provider</Fill></strong> — serving the site.
+          <strong><Fill>hosting provider</Fill></strong> - serving the site.
         </li>
         <li>
-          <strong>Public favicon services</strong> — the icon lookup described above, which receives
+          <strong>Public favicon services</strong> - the icon lookup described above, which receives
           only the listed domain name.
         </li>
         <li>
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
       <p>
         Email {mail}. We may need enough detail to find your records. Note that listing content which
         also appears on your own website does not become private simply because a listing is removed
-        — but you can ask us to remove the listing at any time.
+        - but you can ask us to remove the listing at any time.
       </p>
 
       <h2>Children</h2>

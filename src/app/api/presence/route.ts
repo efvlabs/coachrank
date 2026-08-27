@@ -13,7 +13,7 @@ const COOKIE = "cr_presence";
 
 /**
  * One heartbeat per open tab. The "N online" figure is a count of heartbeats received
- * inside the presence window — a real measurement, never an estimate.
+ * inside the presence window - a real measurement, never an estimate.
  */
 export async function POST(request: Request) {
   if (!PRESENCE_ENABLED) return NextResponse.json({ ok: true, disabled: true });

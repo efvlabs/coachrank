@@ -24,9 +24,8 @@ export type Pricing = { -readonly [K in keyof typeof PRICING_DEFAULTS]: number }
 export const SITE = {
   name: "CoachRank.lol",
   shortName: "CoachRank",
-  tagline: "The paid leaderboard for coaches.",
-  description:
-    "CoachRank.lol is a public paid leaderboard for coaches. Coaches bid to rank. Rank = bid, nothing else — never a review, rating or recommendation.",
+  tagline: "Find coaches betting on themselves.",
+  description: "Find coaches betting on themselves.",
   url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   twitter: "@coachranklol",
   contactEmail: "contact@coachrank.lol",

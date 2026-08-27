@@ -82,7 +82,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
         </h1>
         <p className="mx-auto mt-4 max-w-[42ch] text-[14.5px] leading-[1.55] text-ink-2">
           {timedOut
-            ? "This is taking longer than usual. Your payment is safe — if it succeeded, the board updates itself the moment we receive confirmation."
+            ? "This is taking longer than usual. Your payment is safe - if it succeeded, the board updates itself the moment we receive confirmation."
             : "A listing is published only once Dodo confirms the charge to our server. This usually takes a few seconds."}
         </p>
         <Link href="/" className="btn btn-quiet mt-7 px-6 py-3">
@@ -100,7 +100,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
             That spotlight could not be activated
           </h1>
           <p className="mx-auto mt-4 max-w-[42ch] text-[14.5px] leading-[1.55] text-ink-2">
-            The slot was taken before your payment cleared. It is flagged for a refund — nothing
+            The slot was taken before your payment cleared. It is flagged for a refund - nothing
             was double-booked.
           </p>
           <Link href="/" className="btn btn-quiet mt-7 px-6 py-3">
@@ -167,13 +167,13 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
           <div>
             <dt className="eyebrow text-white/70">Overall</dt>
             <dd className="display tnum mt-2 text-[28px] leading-none">
-              #{state.overallRank ?? "—"}
+              #{state.overallRank ?? "-"}
             </dd>
           </div>
           <div>
             <dt className="eyebrow text-white/70">{categoryLabel ?? "Category"}</dt>
             <dd className="display tnum mt-2 text-[28px] leading-none">
-              #{state.categoryRank ?? "—"}
+              #{state.categoryRank ?? "-"}
             </dd>
           </div>
         </dl>

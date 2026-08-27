@@ -19,7 +19,7 @@ export default function TermsPage() {
       updated="August 2026"
       intro={
         <p>
-          These terms govern use of coachrank.lol — the public board, listing pages, checkout and
+          These terms govern use of coachrank.lol - the public board, listing pages, checkout and
           everything around them. By using the site, creating a listing or completing a payment you
           agree to them and to the <Link href="/privacy">Privacy Policy</Link>. If you do not agree,
           do not list and do not pay.
@@ -39,7 +39,7 @@ export default function TermsPage() {
       <h2>What the service is</h2>
       <p>
         CoachRank is a paid public ranking. You may pay to list a coaching website and to occupy a
-        position based on the amount paid. <strong>Listings are advertisements</strong> — not
+        position based on the amount paid. <strong>Listings are advertisements</strong> - not
         editorial reviews, certifications, endorsements or independent rankings.
       </p>
       <p>

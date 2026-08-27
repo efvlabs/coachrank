@@ -56,11 +56,11 @@ export default async function AdminOverviewPage() {
           </li>
           <li className="flex items-center gap-2">
             <StatusDot ok={isDodoConfigured()} />
-            Dodo Payments {isDodoConfigured() ? "configured" : "not configured — checkout disabled"}
+            Dodo Payments {isDodoConfigured() ? "configured" : "not configured - checkout disabled"}
           </li>
           <li className="flex items-center gap-2">
             <StatusDot ok={Boolean(process.env.DODO_PAYMENTS_WEBHOOK_KEY)} />
-            Webhook key {process.env.DODO_PAYMENTS_WEBHOOK_KEY ? "set" : "missing — webhooks rejected"}
+            Webhook key {process.env.DODO_PAYMENTS_WEBHOOK_KEY ? "set" : "missing - webhooks rejected"}
           </li>
         </ul>
       </section>

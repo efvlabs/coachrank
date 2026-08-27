@@ -32,7 +32,7 @@ let dbPromise: Promise<Firestore | null> | null = null;
 let authPromise: Promise<Auth | null> | null = null;
 
 /**
- * The Firebase web SDK is ~180 KiB and only two surfaces need it — the live activity feed
+ * The Firebase web SDK is ~180 KiB and only two surfaces need it - the live activity feed
  * and admin sign-in. Everything here is dynamically imported so it never lands in the
  * initial bundle for a visitor who is just reading the board.
  */

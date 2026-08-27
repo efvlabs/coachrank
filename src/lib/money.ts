@@ -1,6 +1,6 @@
 /**
  * All money in CoachRank is stored and computed as integer cents.
- * Floating point is never used for arithmetic — only for parsing user input,
+ * Floating point is never used for arithmetic - only for parsing user input,
  * which is immediately rounded into an integer.
  */
 

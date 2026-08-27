@@ -2,7 +2,7 @@ import Link from "next/link";
 
 type Props = { page: number; pageCount: number; basePath: string };
 
-/** Explicit pages, never infinite scroll — the board stays fast and crawlable. */
+/** Explicit pages, never infinite scroll - the board stays fast and crawlable. */
 export function Pagination({ page, pageCount, basePath }: Props) {
   if (pageCount <= 1) return null;
 

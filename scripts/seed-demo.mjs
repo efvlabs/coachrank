@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * LOCAL DEMO SEED — never for production.
+ * LOCAL DEMO SEED - never for production.
  *
  * Creates clearly-labelled demo coaches, payments, activity events, a Spotlight booking
  * and blog articles so the whole product can be exercised offline. Every demo website is
@@ -102,7 +102,7 @@ const COACHES = [
   {
     name: "Daniel Okafor",
     host: "danielokafor.example.com",
-    category: "executive-leadership",
+    category: "executive",
     bio: "I coach first-time VPs through the year where managing managers stops resembling anything they did before.",
     payments: [{ cents: 175 * DOLLAR, hoursAgo: 40 }],
     clicks: 212,
@@ -121,7 +121,7 @@ const COACHES = [
   {
     name: "Tom Reyes",
     host: "tomreyes.example.com",
-    category: "business",
+    category: "health-wellness",
     bio: "Operations coach for agencies between ten and fifty people, where the founder is still the bottleneck.",
     payments: [{ cents: 75 * DOLLAR, hoursAgo: 26 }],
     clicks: 156,
@@ -129,7 +129,7 @@ const COACHES = [
   {
     name: "Hannah Boateng",
     host: "hannahboateng.example.com",
-    category: "life",
+    category: "career",
     bio: "Career changes in your forties. Practical, unsentimental, and mostly about money and time.",
     payments: [{ cents: 51 * DOLLAR, hoursAgo: 22 }],
     clicks: 97,
@@ -145,7 +145,7 @@ const COACHES = [
   {
     name: "Marcus Bell",
     host: "marcusbell.example.com",
-    category: "executive-leadership",
+    category: "leadership",
     bio: "I run difficult conversations rehearsals for leadership teams that keep avoiding the same decision.",
     payments: [{ cents: 20 * DOLLAR, hoursAgo: 11 }],
     clicks: 41,
@@ -169,32 +169,32 @@ const POSTS = [
     ctaCategory: "business",
     seoTitle: "How Much Does a Business Coach Cost? (Real Ranges)",
     metaDescription:
-      "What business coaching actually costs per session, per month and per engagement — plus the five factors that move the price.",
+      "What business coaching actually costs per session, per month and per engagement - plus the five factors that move the price.",
     markdownBody: `Most people asking this question have already had one number quoted at them and no idea whether it was sane. So here are ranges, then the things that move them.
 
 ## The ranges
 
 Business coaching is usually sold in one of three shapes.
 
-**Per session.** Typically $150–$500 an hour for an independent coach working with small businesses, and $500–$1,500 for coaches who work mainly with companies past a few million in revenue. Below about $100 you are usually buying group content with a call attached.
+**Per session.** Typically $150-$500 an hour for an independent coach working with small businesses, and $500-$1,500 for coaches who work mainly with companies past a few million in revenue. Below about $100 you are usually buying group content with a call attached.
 
-**Monthly retainer.** $500–$2,500 a month is the common band for two calls a month plus messaging between them. Retainers at $3,000+ normally include something structural — sitting in on your leadership meeting, reviewing numbers, talking to your team.
+**Monthly retainer.** $500-$2,500 a month is the common band for two calls a month plus messaging between them. Retainers at $3,000+ normally include something structural - sitting in on your leadership meeting, reviewing numbers, talking to your team.
 
-**Fixed engagement.** A three- or six-month programme with a defined outcome, usually $3,000–$15,000. This is where most of the "install a sales system" or "get out of the day-to-day" work sits.
+**Fixed engagement.** A three- or six-month programme with a defined outcome, usually $3,000-$15,000. This is where most of the "install a sales system" or "get out of the day-to-day" work sits.
 
 ## What actually moves the price
 
 1. **Who they normally work with.** A coach whose clients are $20m businesses charges accordingly, and will not be cheaper for you just because you are smaller.
 2. **Whether they do the work or only ask the questions.** Pure coaching is cheaper than coaching plus consulting. Be clear which you are buying.
 3. **Access between calls.** Unlimited messaging is a real cost to them and is priced in.
-4. **Group versus one-to-one.** Group programmes run 60–80% cheaper and are a genuinely good fit for common problems.
+4. **Group versus one-to-one.** Group programmes run 60-80% cheaper and are a genuinely good fit for common problems.
 5. **Their alternative.** Coaches who still run an operating business price their time against it.
 
 ## How to sanity-check a quote
 
 Ask what a specific outcome would look like in ninety days, and what they would do in the first three sessions. A coach who cannot answer that concretely is charging for their calendar, not their judgement.
 
-Then work out what the outcome is worth. If the honest answer is "one more retained client pays for the quarter", the price question mostly resolves itself. If you cannot connect the engagement to anything measurable, the price is not the problem — the brief is.
+Then work out what the outcome is worth. If the honest answer is "one more retained client pays for the quarter", the price question mostly resolves itself. If you cannot connect the engagement to anything measurable, the price is not the problem - the brief is.
 
 ## What coaching does not cost
 
@@ -204,16 +204,16 @@ It does not cost you a percentage of your business. Be wary of equity or revenue
     slug: "business-coach-vs-consultant",
     title: "Business Coach vs Consultant: Which One Do You Actually Need?",
     excerpt:
-      "The difference is not seniority or price. It is who is holding the pen — and getting that wrong is the most common way this money gets wasted.",
+      "The difference is not seniority or price. It is who is holding the pen - and getting that wrong is the most common way this money gets wasted.",
     ctaCategory: "business",
-    seoTitle: "Business Coach vs Consultant — The Practical Difference",
+    seoTitle: "Business Coach vs Consultant - The Practical Difference",
     metaDescription:
       "Coaches build your capability; consultants deliver a result. How to tell which one your problem needs, and what to do when you need both.",
     markdownBody: `The distinction gets muddled because plenty of good practitioners do both. But the underlying difference is simple, and it decides which one you should hire.
 
 ## Who holds the pen
 
-**A consultant holds the pen.** You have a problem, they produce the answer — the pricing model, the org design, the go-to-market plan. You are buying a deliverable and the expertise behind it.
+**A consultant holds the pen.** You have a problem, they produce the answer - the pricing model, the org design, the go-to-market plan. You are buying a deliverable and the expertise behind it.
 
 **A coach hands you the pen.** You have a problem, and they improve your ability to solve this one and the next four like it. You are buying capability.
 
@@ -245,7 +245,7 @@ Often you do, sequentially. A consultant builds the compensation plan; a coach w
 
 ## A note on mentors
 
-A mentor is a third thing: someone further along the same path who gives you their opinion, usually informally and usually for free. Mentors are excellent and unaccountable. Do not expect a mentor to hold you to anything — that is what you are paying a coach for.`,
+A mentor is a third thing: someone further along the same path who gives you their opinion, usually informally and usually for free. Mentors are excellent and unaccountable. Do not expect a mentor to hold you to anything - that is what you are paying a coach for.`,
   },
   {
     slug: "how-to-choose-a-startup-coach",
@@ -253,7 +253,7 @@ A mentor is a third thing: someone further along the same path who gives you the
     excerpt:
       "Six questions worth asking, two answers that should end the conversation, and why the first ninety days matter more than the credentials.",
     ctaCategory: "startup-founder",
-    seoTitle: "How to Choose a Startup Coach — A Founder's Checklist",
+    seoTitle: "How to Choose a Startup Coach - A Founder's Checklist",
     metaDescription:
       "How to evaluate a startup or founder coach: the questions to ask, the red flags, and how to structure a trial that tells you something.",
     markdownBody: `Founder coaching is unregulated, which means the label tells you nothing. Here is how to evaluate one in a single conversation.
@@ -261,7 +261,7 @@ A mentor is a third thing: someone further along the same path who gives you the
 ## Six questions
 
 **1. Who are your last three clients, at what stage, and what were we working on?**
-Vagueness here is the strongest negative signal there is. You are not asking for names — you are asking whether the work is real.
+Vagueness here is the strongest negative signal there is. You are not asking for names - you are asking whether the work is real.
 
 **2. What do you do when a founder does not do the thing they said they would?**
 Everyone has an answer. You want one that involves changing the plan rather than repeating it more firmly.
@@ -270,7 +270,7 @@ Everyone has an answer. You want one that involves changing the plan rather than
 A coach who has been doing this a while knows exactly which founders they are wrong for. One who says "I work with everyone" has not paid attention.
 
 **4. What does the first ninety days look like?**
-You want specifics — what happens in session one, what you will have by session six. Not a methodology diagram.
+You want specifics - what happens in session one, what you will have by session six. Not a methodology diagram.
 
 **5. Have you run a company?**
 Not required, and not sufficient. But it changes the kind of coach they are, and you should know which kind you are hiring.
@@ -285,7 +285,7 @@ Good coaches have an exit in mind. Indefinite retainers with no defined outcome 
 
 ## Structure a trial
 
-Buy three sessions, not six months. Agree in advance what would make you continue. Notice whether you leave sessions with a decision or with a feeling — both are legitimate, but you should know which one you are paying for.
+Buy three sessions, not six months. Agree in advance what would make you continue. Notice whether you leave sessions with a decision or with a feeling - both are legitimate, but you should know which one you are paying for.
 
 ## On credentials
 

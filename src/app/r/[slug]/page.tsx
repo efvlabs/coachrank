@@ -28,7 +28,7 @@ export async function generateMetadata({
   }
 
   const ranks = await computeRanks(listing);
-  const title = `${listing.name} — #${ranks.overallRank} on CoachRank`;
+  const title = `${listing.name} - #${ranks.overallRank} on CoachRank`;
   const description = `${listing.name} holds #${ranks.overallRank} overall and #${ranks.categoryRank} in ${categoryLabel(listing.category)} with a standing bid of ${formatCents(listing.standingBidCents)}. Rank reflects money bid only.`;
 
   return {

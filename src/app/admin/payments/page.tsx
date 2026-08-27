@@ -10,7 +10,7 @@ export default async function AdminPaymentsPage() {
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Payments</h1>
       <p className="mt-1.5 text-[14px] text-ink-3">
-        Read-only. Payment records are immutable — they are the audit trail for every position on
+        Read-only. Payment records are immutable - they are the audit trail for every position on
         the board.
       </p>
 
@@ -51,11 +51,11 @@ export default async function AdminPaymentsPage() {
                   </td>
                   <td className="tnum py-2 pr-3">
                     {payment.resultingStandingBidCents === null
-                      ? "—"
+                      ? "-"
                       : formatCents(payment.resultingStandingBidCents)}
                   </td>
                   <td className="tnum py-2 pr-3 text-ink-3">
-                    {payment.resultingOverallRank ? `#${payment.resultingOverallRank}` : "—"}
+                    {payment.resultingOverallRank ? `#${payment.resultingOverallRank}` : "-"}
                   </td>
                   <td className="py-2 pr-3 font-mono text-[11px] text-ink-3">
                     {payment.listingId.slice(0, 12)}

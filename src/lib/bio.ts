@@ -47,5 +47,5 @@ export const BIO_REJECTION_MESSAGE: Record<BioRejectionReason, string> = {
   empty: "Add a short bio.",
   too_many_words: `Keep it to ${MAX_BIO_WORDS} words or fewer.`,
   too_long: "That bio is too long.",
-  markup: "Plain text only — no HTML or angle brackets.",
+  markup: "Plain text only - no HTML or angle brackets.",
 };

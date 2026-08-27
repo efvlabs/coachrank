@@ -48,7 +48,7 @@ function usingEmulator(): boolean {
 
 /**
  * On Firebase App Hosting (and any Cloud Run / GCP host) the runtime supplies Application
- * Default Credentials, so no service-account JSON is needed — and none should be stored.
+ * Default Credentials, so no service-account JSON is needed - and none should be stored.
  */
 function googleManagedRuntime(): string | null {
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON || process.env.FIREBASE_CLIENT_EMAIL) return null;
@@ -126,7 +126,7 @@ export function getDb(): Firestore | null {
   return cached?.db ?? null;
 }
 
-/** For code paths that genuinely cannot proceed — payment processing, admin writes. */
+/** For code paths that genuinely cannot proceed - payment processing, admin writes. */
 export function requireDb(): Firestore {
   const db = getDb();
   if (!db) {

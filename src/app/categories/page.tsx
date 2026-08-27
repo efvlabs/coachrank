@@ -28,7 +28,7 @@ export default async function CategoriesPage() {
       <header className="mx-auto max-w-[40ch] text-center">
         <h1 className="display text-[clamp(2.25rem,6vw,3.5rem)]">Categories</h1>
         <p className="mt-4 text-[15px] leading-[1.55] text-ink-2">
-          One coach, one category. The same bid sets both ranks.
+          Every category has its own ranking. Pick one to see who leads it.
         </p>
       </header>
 

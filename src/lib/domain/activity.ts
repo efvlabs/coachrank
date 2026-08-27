@@ -9,7 +9,7 @@ export const ACTIVITY_EXPANDED_COUNT = 20;
 
 /**
  * Latest Activity is written only by verified payment processing. Nothing seeds it,
- * nothing simulates it — if the feed is empty, nobody has paid yet.
+ * nothing simulates it - if the feed is empty, nobody has paid yet.
  */
 export async function getRecentActivity(limit = ACTIVITY_EXPANDED_COUNT): Promise<ActivityEvent[]> {
   const db = getDb();

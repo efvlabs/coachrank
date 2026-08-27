@@ -6,7 +6,7 @@ type Props = {
   spotlights: { premium: ActiveSpotlight | null; standard: ActiveSpotlight | null };
   pricing: Pricing;
   nowMs: number;
-  /** Sits directly above the board and shares its width — the category tabs. */
+  /** Sits directly above the board and shares its width - the category tabs. */
   toolbar?: React.ReactNode;
   children: React.ReactNode;
 };
@@ -16,7 +16,7 @@ type Props = {
  * toolbar in its own row above the board so the tabs match the board's width.
  * Narrower: tabs, board, then the two slots paired beneath it.
  *
- * `order` is only reset at xl, where explicit grid placement takes over — resetting it
+ * `order` is only reset at xl, where explicit grid placement takes over - resetting it
  * earlier would float the ads above the board.
  */
 export function SpotlightRail({ spotlights, pricing, nowMs, toolbar, children }: Props) {

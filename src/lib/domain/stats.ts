@@ -60,7 +60,7 @@ export async function incrementStats(patch: Partial<Record<keyof SiteStats, numb
 }
 
 /**
- * "42 online" — a real count of heartbeats received in the last PRESENCE_WINDOW_MS.
+ * "42 online" - a real count of heartbeats received in the last PRESENCE_WINDOW_MS.
  * Returns null when presence cannot be read, so the UI omits the figure rather than
  * printing a number that isn't true.
  */

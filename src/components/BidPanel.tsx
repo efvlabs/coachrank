@@ -360,7 +360,7 @@ export function BidPanel({
           ) : null}
 
           {!paymentsEnabled ? (
-            <p className="meta mt-3">Checkout opens shortly — the board is live.</p>
+            <p className="meta mt-3">Checkout opens shortly - the board is live.</p>
           ) : lookup.status === "checking" ? (
             <p className="meta mt-3">Checking…</p>
           ) : null}

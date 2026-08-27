@@ -14,7 +14,7 @@ type Props = {
   deleteAction?: (formData: FormData) => Promise<ActionResult>;
 };
 
-/** Plain Markdown editing with a live preview toggle — deliberately not a page builder. */
+/** Plain Markdown editing with a live preview toggle - deliberately not a page builder. */
 export function PostEditor({ post, saveAction, deleteAction }: Props) {
   const [title, setTitle] = useState(post?.title ?? "");
   const [slug, setSlug] = useState(post?.slug ?? "");

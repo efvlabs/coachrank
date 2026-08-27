@@ -33,7 +33,7 @@ export async function generateMetadata({
   const category = getCategory(slug);
   if (!category) return {};
 
-  const title = `${category.label} coaches — paid leaderboard`;
+  const title = `${category.label} coaches - paid leaderboard`;
   const description = `${category.label} coaches ranked by how much they have paid for their position on CoachRank. Rank = bid, nothing else. ${category.blurb}`;
 
   return {

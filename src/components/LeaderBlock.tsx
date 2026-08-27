@@ -11,7 +11,7 @@ import type { RankedListing } from "@/lib/domain/types";
 type Props = { listing: RankedListing; claimCents: number; source: ClickSource };
 
 /**
- * The one inverted card on the page. Everything else stays quiet so #1 reads as a trophy —
+ * The one inverted card on the page. Everything else stays quiet so #1 reads as a trophy -
  * and so a screenshot of it is worth posting.
  */
 export function LeaderBlock({ listing, claimCents, source }: Props) {

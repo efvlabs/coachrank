@@ -15,7 +15,7 @@ export type TodayTotal = {
 /**
  * Today is a rolling 24-hour window over immutable payment events. A payment contributes
  * its actual amount for exactly 24 hours after it succeeded, then silently drops out.
- * Nothing is ever mutated to make this work — All-time is untouched.
+ * Nothing is ever mutated to make this work - All-time is untouched.
  */
 export function aggregateToday(
   payments: TodayPaymentInput[],

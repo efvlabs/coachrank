@@ -5,7 +5,7 @@ import { formatCents } from "@/lib/money";
 export const dynamic = "force-dynamic";
 
 function stamp(ms: number | null): string {
-  return ms ? new Date(ms).toISOString().replace("T", " ").slice(0, 16) : "—";
+  return ms ? new Date(ms).toISOString().replace("T", " ").slice(0, 16) : "-";
 }
 
 export default async function AdminSpotlightsPage() {
@@ -40,7 +40,7 @@ export default async function AdminSpotlightsPage() {
               {bookings.map((booking, index) => (
                 <tr key={booking.id} className="border-b border-line">
                   <td className="py-2 pr-3 font-semibold capitalize">{booking.slot}</td>
-                  <td className="py-2 pr-3">{listings[index]?.name ?? "—"}</td>
+                  <td className="py-2 pr-3">{listings[index]?.name ?? "-"}</td>
                   <td className="py-2 pr-3">
                     <span
                       className={`pill ${booking.status === "active" ? "border-accent" : booking.status === "failed" ? "border-line-2" : ""}`}

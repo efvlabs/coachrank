@@ -21,7 +21,7 @@ export function Confetti({ pieces = 44 }: { pieces?: number }) {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
       {Array.from({ length: pieces }, (_, i) => {
-        // Deterministic spread so the burst looks designed rather than noisy — and so the
+        // Deterministic spread so the burst looks designed rather than noisy - and so the
         // server and client render identical markup.
         const left = ((i * 37) % 100) + (i % 3);
         const delay = (i % 11) * 0.09;

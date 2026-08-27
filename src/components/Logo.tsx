@@ -3,7 +3,7 @@ type Props = { size?: number; className?: string };
 /**
  * Three ascending bars: a leaderboard, with the tallest one paid for.
  *
- * The mark is a fixed brand object — always indigo behind white bars, in both themes and in
+ * The mark is a fixed brand object - always indigo behind white bars, in both themes and in
  * every exported asset in public/brand. It deliberately does NOT follow the theme tokens, so
  * the favicon, the header and a social avatar are all the same picture.
  */

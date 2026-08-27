@@ -52,7 +52,7 @@ export type BidPaymentDoc = {
 
   incrementCents: number;
   previousStandingBidCents: number;
-  /** What the buyer was aiming for at checkout time. Informational — bids are cumulative. */
+  /** What the buyer was aiming for at checkout time. Informational - bids are cumulative. */
   intendedStandingBidCents: number;
   resultingStandingBidCents: number | null;
 

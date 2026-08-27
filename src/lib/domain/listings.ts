@@ -230,7 +230,7 @@ export async function listAllListings(limit = 300): Promise<Listing[]> {
 export { compareForRank };
 
 /**
- * The highest standing bid that is not this listing's own — a coach raising their own bid
+ * The highest standing bid that is not this listing's own - a coach raising their own bid
  * does not have to out-bid themselves by the #1 increment.
  */
 export async function getTopStandingBidExcludingCents(listingId: string | null): Promise<number> {

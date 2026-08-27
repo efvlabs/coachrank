@@ -17,7 +17,7 @@ export function ShareRank({ url, name, overallRank, categoryRank, categoryLabel 
   const text =
     overallRank === 1
       ? "I'm currently #1 on CoachRank.lol."
-      : `I'm #${overallRank} on CoachRank.lol — #${categoryRank} in ${categoryLabel}.`;
+      : `I'm #${overallRank} on CoachRank.lol - #${categoryRank} in ${categoryLabel}.`;
 
   const links = [
     { label: "X", href: `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}` },

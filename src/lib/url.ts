@@ -1,7 +1,7 @@
 /**
  * A coach's website is the identity of their listing. Two submissions that point at the
  * same site must resolve to the same `normalizedWebsite` so we never create a duplicate
- * listing — while distinct, meaningful paths stay distinct.
+ * listing - while distinct, meaningful paths stay distinct.
  */
 
 const TRACKING_PARAM_PREFIXES = ["utm_", "vero_", "_hs", "pk_", "mtm_", "matomo_", "hsa_"];
@@ -17,7 +17,7 @@ const TRACKING_PARAMS = new Set([
   "at_medium", "at_campaign", "gh_src", "wickedid", "wickedsource",
 ]);
 
-/** Obvious URL shorteners — the destination, not the shortener, is the identity. */
+/** Obvious URL shorteners - the destination, not the shortener, is the identity. */
 const SHORTENER_HOSTS = new Set([
   "bit.ly", "t.co", "tinyurl.com", "goo.gl", "ow.ly", "buff.ly", "is.gd", "cutt.ly",
   "rebrand.ly", "shorturl.at", "rb.gy", "t.ly", "lnkd.in", "shorte.st", "adf.ly",
@@ -93,7 +93,7 @@ export function normalizeWebsite(
   if (hostname.startsWith("www.")) hostname = hostname.slice(4);
   if (SHORTENER_HOSTS.has(hostname)) return { ok: false, reason: "shortener" };
 
-  // Path: keep it — distinct paths are distinct listings — but drop a trailing slash so
+  // Path: keep it - distinct paths are distinct listings - but drop a trailing slash so
   // `/coaching` and `/coaching/` are one listing.
   let path = url.pathname;
   if (path === "/") path = "";
@@ -117,7 +117,7 @@ export function normalizeWebsite(
   return { ok: true, value: { normalized, display, host: hostname } };
 }
 
-/** `sarahchen.com/coaching` — what we print on a listing card. */
+/** `sarahchen.com/coaching` - what we print on a listing card. */
 export function prettyWebsite(displayWebsite: string): string {
   return displayWebsite.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
 }

@@ -19,7 +19,7 @@ type Props = {
 };
 
 /**
- * The tape. Written only by verified payments — if it is empty, nobody has paid. Where the
+ * The tape. Written only by verified payments - if it is empty, nobody has paid. Where the
  * browser has Firebase config it also subscribes live, so a payment landing anywhere in the
  * world prints here without a refresh.
  */

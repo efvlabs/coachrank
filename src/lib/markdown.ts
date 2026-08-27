@@ -15,7 +15,7 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   },
   allowedSchemes: ["http", "https", "mailto"],
   transformTags: {
-    // Demote h1 — the page already owns the single top-level heading.
+    // Demote h1 - the page already owns the single top-level heading.
     h1: "h2",
     a: (tagName, attribs) => {
       const href = attribs.href ?? "";

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";
-export const alt = "CoachRank — the paid leaderboard for coaches";
+export const alt = "CoachRank - the paid leaderboard for coaches";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -22,7 +22,7 @@ export default function OpenGraphImage() {
         }}
       >
         <div style={{ display: "flex", fontSize: 22, color: "#9aa0b0", letterSpacing: 3 }}>
-          THE PAID LEADERBOARD FOR COACHES
+          COACHRANK.LOL
         </div>
         <div
           style={{
@@ -46,8 +46,8 @@ export default function OpenGraphImage() {
         >
           Rank higher.
         </div>
-        <div style={{ display: "flex", fontSize: 26, color: "#9aa0b0", marginTop: 34 }}>
-          CoachRank · Rank = bid. Nothing else.
+        <div style={{ display: "flex", fontSize: 30, color: "#9aa0b0", marginTop: 34 }}>
+          Find coaches betting on themselves.
         </div>
       </div>
     ),

@@ -17,8 +17,7 @@ export function Footer() {
               CoachRank
             </p>
             <p className="mt-2 max-w-[34ch] text-[13.5px] leading-relaxed text-ink-3">
-              A public paid leaderboard for coaches. Rank is the amount bid, and nothing else — not
-              a review, rating, endorsement or measure of quality.
+              {SITE.tagline}
             </p>
             <a
               href={`mailto:${SITE.contactEmail}`}
@@ -69,9 +68,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <p className="meta mt-10">
-          © {YEAR} CoachRank · Positions are advertisements bought with money
-        </p>
+        <p className="meta mt-10">© {YEAR} CoachRank</p>
       </div>
     </footer>
   );

@@ -123,7 +123,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
             </h2>
             <p className="mt-2 text-[14.5px] leading-relaxed text-ink-3">
               The CoachRank {cta.label} board lists coaches by how much they have paid for their
-              position. It is not a quality ranking — but every listing links straight to the
+              position. It is not a quality ranking - but every listing links straight to the
               coach&apos;s own site, so you can judge for yourself.
             </p>
             <div className="mt-4 flex flex-wrap gap-2.5">

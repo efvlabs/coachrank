@@ -89,7 +89,7 @@ export function validateTargetBid(args: {
   targetStandingBidCents: number;
   currentStandingBidCents: number;
   currentTopCents: number;
-  /** The top bid excluding this listing — a coach does not have to out-bid themselves by $5. */
+  /** The top bid excluding this listing - a coach does not have to out-bid themselves by $5. */
   topExcludingSelfCents?: number;
   pricing: RankingPricing;
 }): BidValidationResult {
@@ -147,7 +147,7 @@ export function bidValidationMessage(error: BidValidationError, fmt: (c: number)
     case "increment_too_small":
       return `Raise your standing bid by at least ${fmt(error.minimumIncrementCents)}.`;
     case "top_gap":
-      return `#1 is at ${fmt(error.currentTopCents)}. To pass it, go to ${fmt(error.minimumCents)} or more — or pick any amount at or below ${fmt(error.currentTopCents)}.`;
+      return `#1 is at ${fmt(error.currentTopCents)}. To pass it, go to ${fmt(error.minimumCents)} or more - or pick any amount at or below ${fmt(error.currentTopCents)}.`;
     case "invalid_amount":
       return "Enter a valid amount.";
   }

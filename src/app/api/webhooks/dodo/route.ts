@@ -13,10 +13,10 @@ export const dynamic = "force-dynamic";
  * Spotlight. A browser redirect proves nothing; a signature-verified Dodo event does.
  *
  * Guarantees:
- *   • authenticated — Standard Webhooks signature, verified by the Dodo SDK
- *   • idempotent    — keyed on the Dodo payment id, so N deliveries credit exactly once
- *   • transactional — money, listing state and stats move together or not at all
- *   • ordered-safe  — bids are applied as increments, never assignments
+ *   • authenticated - Standard Webhooks signature, verified by the Dodo SDK
+ *   • idempotent    - keyed on the Dodo payment id, so N deliveries credit exactly once
+ *   • transactional - money, listing state and stats move together or not at all
+ *   • ordered-safe  - bids are applied as increments, never assignments
  */
 export async function POST(request: Request) {
   const raw = await request.text();

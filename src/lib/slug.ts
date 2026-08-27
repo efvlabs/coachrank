@@ -25,7 +25,7 @@ export function randomSuffix(length = 4): string {
   return out;
 }
 
-/** `sarah-chen-k4m2` — human readable, collision resistant, never a reserved route. */
+/** `sarah-chen-k4m2` - human readable, collision resistant, never a reserved route. */
 export function buildListingSlug(name: string): string {
   const base = slugifyName(name);
   return RESERVED.has(base) ? `${base}-coach-${randomSuffix()}` : `${base}-${randomSuffix()}`;

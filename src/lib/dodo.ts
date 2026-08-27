@@ -40,7 +40,7 @@ export function isDodoConfigured(): boolean {
 
 /**
  * Both products are one-time "pay what you want" products in the Dodo dashboard, which is
- * what lets us set the exact amount per checkout — a $10 top-up and a $505 claim for #1
+ * what lets us set the exact amount per checkout - a $10 top-up and a $505 claim for #1
  * are the same product at different amounts.
  */
 export function bidProductId(): string | null {
@@ -54,7 +54,7 @@ export function spotlightProductId(): string | null {
 export type CheckoutRequest = {
   productId: string;
   amountCents: number;
-  /** Our own payment document id — the key we reconcile the webhook against. */
+  /** Our own payment document id - the key we reconcile the webhook against. */
   internalPaymentId: string;
   kind: "bid" | "spotlight";
   listingId: string;
@@ -108,7 +108,7 @@ export type DodoWebhookHeaders = {
 
 /**
  * Verifies the Standard Webhooks signature and returns the typed event.
- * Throws when the signature, timestamp or secret does not check out — the route turns
+ * Throws when the signature, timestamp or secret does not check out - the route turns
  * that into a 401 and nothing is credited.
  */
 export function verifyWebhook(rawBody: string, headers: DodoWebhookHeaders): UnwrapWebhookEvent {
@@ -137,7 +137,7 @@ export function readCheckoutMetadata(metadata: Record<string, unknown> | null | 
   };
 }
 
-/** Belt-and-braces reconciliation for the success screen — never used to credit money. */
+/** Belt-and-braces reconciliation for the success screen - never used to credit money. */
 export async function fetchPaymentStatus(dodoPaymentId: string): Promise<string | null> {
   const dodo = getDodoClient();
   if (!dodo) return null;

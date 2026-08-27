@@ -9,8 +9,8 @@ type Props = {
 };
 
 /**
- * Server-rendered. /api/icon always returns an image — the site's real favicon, or a
- * generated initials mark — so there is no client-side fallback and no layout shift.
+ * Server-rendered. /api/icon always returns an image - the site's real favicon, or a
+ * generated initials mark - so there is no client-side fallback and no layout shift.
  */
 export function CoachAvatar({ name, displayWebsite, size = 20, className = "" }: Props) {
   const host = prettyWebsite(displayWebsite).split("/")[0];

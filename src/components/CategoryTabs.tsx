@@ -12,7 +12,7 @@ export function CategoryTabs({ active, board }: Props) {
   ];
 
   return (
-    <nav aria-label="Categories" className="rail justify-start sm:justify-center">
+    <nav aria-label="Categories" className="rail">
       {tabs.map((tab) => {
         const isActive = tab.key === active;
         return (

@@ -1,6 +1,6 @@
 /**
  * Cheap, deterministic screening applied at submission time. It is not a content-safety
- * system — it rejects the obviously-not-a-coach-website cases and hands everything else
+ * system - it rejects the obviously-not-a-coach-website cases and hands everything else
  * to the human moderation path in /admin.
  */
 
@@ -26,7 +26,7 @@ const SPAM_BIO_PATTERNS = [
   /https?:\/\//i,
 ];
 
-/** Superlatives we refuse to publish — the rank is paid, and the copy must not imply otherwise. */
+/** Superlatives we refuse to publish - the rank is paid, and the copy must not imply otherwise. */
 const QUALITY_CLAIM_PATTERNS = [
   /\b(?:the\s+)?(?:world'?s\s+|uk'?s\s+|nation'?s\s+)?(?:#?\s*1|number\s+one|best|top[- ]rated|most\s+trusted|leading|award[- ]winning)\b/i,
 ];

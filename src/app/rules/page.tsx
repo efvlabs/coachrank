@@ -58,7 +58,7 @@ export default async function RulesPage() {
       </p>
       <p>
         You cannot land in between. An amount above the current #1 but below that threshold is
-        rejected — pick a higher number, or any amount at or below the current #1.
+        rejected - pick a higher number, or any amount at or below the current #1.
       </p>
 
       <h2>Taking any other position</h2>
@@ -75,7 +75,7 @@ export default async function RulesPage() {
       </p>
       <p>
         A raise must be at least {cents(pricing.standardIncrementCents)} above your current standing
-        bid. Nobody can take your position by paying that same difference — they have to clear your
+        bid. Nobody can take your position by paying that same difference - they have to clear your
         full standing bid.
       </p>
 
@@ -87,7 +87,7 @@ export default async function RulesPage() {
       <h2>All-time</h2>
       <p>
         The main board is permanent. Standing bids never expire and are never reset. Being outbid
-        costs you position, not money — every dollar you have committed stays behind your name.
+        costs you position, not money - every dollar you have committed stays behind your name.
       </p>
 
       <h2>Today</h2>
@@ -109,7 +109,7 @@ export default async function RulesPage() {
 
       <h2>What can be listed</h2>
       <ul>
-        <li>The coach&apos;s own website — the place they would send a prospective client.</li>
+        <li>The coach&apos;s own website - the place they would send a prospective client.</li>
         <li>
           The site must make clear who is behind it. A page with no identifiable operator can be
           removed.
@@ -127,7 +127,7 @@ export default async function RulesPage() {
         <li>Malware, phishing, scams, and sites whose purpose is to mislead.</li>
         <li>Anyone else&apos;s website, unless you are authorised to represent it.</li>
         <li>
-          Names that impersonate someone, or that carry superlatives — no &ldquo;best&rdquo;,
+          Names that impersonate someone, or that carry superlatives - no &ldquo;best&rdquo;,
           &ldquo;#1&rdquo; or &ldquo;top-rated&rdquo;. The rank is paid, and the copy must not
           suggest otherwise.
         </li>
@@ -152,8 +152,8 @@ export default async function RulesPage() {
             {cents(pricing.standardSpotlightCents)}
           </>
         )}{" "}
-        — each for exactly 24 hours from the moment payment is verified. Neither affects any position.
-        Only a coach already on the board can rent one, and a slot cannot be double-booked — if a
+        - each for exactly 24 hours from the moment payment is verified. Neither affects any position.
+        Only a coach already on the board can rent one, and a slot cannot be double-booked - if a
         payment lands after its hold has lapsed and the slot is taken, that payment is refunded.
       </p>
 
@@ -165,7 +165,7 @@ export default async function RulesPage() {
       </p>
       <p>
         Because positions are live and competitive, your final rank is whatever your amount supports
-        at the moment the payment clears — not what was displayed when you started checkout.
+        at the moment the payment clears - not what was displayed when you started checkout.
         Leaderboard payments are not refundable. See the{" "}
         <Link href="/terms">Terms</Link>.
       </p>

@@ -1,4 +1,4 @@
-/** "2 minutes ago" — deterministic, so server and client renders agree given the same clock. */
+/** "2 minutes ago" - deterministic, so server and client renders agree given the same clock. */
 export function relativeTime(from: Date | number, now: Date | number = Date.now()): string {
   const then = from instanceof Date ? from.getTime() : from;
   const ref = now instanceof Date ? now.getTime() : now;
@@ -47,7 +47,7 @@ export function initials(name: string): string {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-/** "a business coach" / "an executive coach" — decided by sound, not just the first letter. */
+/** "a business coach" / "an executive coach" - decided by sound, not just the first letter. */
 export function indefiniteArticle(word: string): "a" | "an" {
   const first = word.trim().toLowerCase();
   if (!first) return "a";

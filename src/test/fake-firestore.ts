@@ -3,8 +3,8 @@
  * CoachRank uses: documents, transactions, batches, equality/inequality queries, ordering,
  * limits, count aggregations and the FieldValue/Timestamp sentinels.
  *
- * It exists so the money-critical paths — webhook idempotency, cumulative bids, spotlight
- * reservation — are tested against real code rather than mocked-out behaviour.
+ * It exists so the money-critical paths - webhook idempotency, cumulative bids, spotlight
+ * reservation - are tested against real code rather than mocked-out behaviour.
  */
 
 export class FakeTimestamp {

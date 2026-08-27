@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * LOCAL WEBHOOK SENDER — for development against the Firestore emulator.
+ * LOCAL WEBHOOK SENDER - for development against the Firestore emulator.
  *
  * Dodo only calls a public URL, so this reproduces a signed delivery locally: it creates a
  * pending payment exactly as /api/bid/checkout would, signs a `payment.succeeded` body with
@@ -141,8 +141,8 @@ const events = await db.collection("activityEvents").where("listingId", "==", li
 console.log(`\n  listing   ${after.name} · ${after.status} · $${after.standingBidCents / 100}`);
 console.log(
   `  payment   ${payment.status} · charged $${payment.incrementCents / 100} · resulting $${
-    payment.resultingStandingBidCents === null ? "—" : payment.resultingStandingBidCents / 100
-  } · rank #${payment.resultingOverallRank ?? "—"}`,
+    payment.resultingStandingBidCents === null ? "-" : payment.resultingStandingBidCents / 100
+  } · rank #${payment.resultingOverallRank ?? "-"}`,
 );
 console.log(`  activity  ${events.size} event(s) for this listing\n`);
 process.exit(0);

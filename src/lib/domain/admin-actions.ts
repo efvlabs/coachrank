@@ -29,7 +29,7 @@ function fail(message: string): ActionResult {
 
 /**
  * Admins may fix a typo, correct a mis-filed category and moderate a listing.
- * They can never edit a standing bid, a payment or a click total — those are
+ * They can never edit a standing bid, a payment or a click total - those are
  * derived from verified payments and nothing else.
  */
 export async function updateListingAction(formData: FormData): Promise<ActionResult> {

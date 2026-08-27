@@ -8,7 +8,7 @@ import { readingMinutes } from "@/lib/markdown";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Blog — coaching, plainly explained",
+  title: "Blog - coaching, plainly explained",
   description:
     "Practical, plainly written guides on hiring and working with coaches: what coaching costs, coach vs consultant, when to hire one, and how to choose.",
   alternates: { canonical: "/blog" },
@@ -43,7 +43,7 @@ export default async function BlogIndexPage() {
           The CoachRank blog
         </h1>
         <p className="mt-3 text-[15px] leading-relaxed text-ink-3">
-          Straight answers about hiring and working with coaches — what it costs, when it helps, and
+          Straight answers about hiring and working with coaches - what it costs, when it helps, and
           how to tell the difference between a coach, a consultant and a mentor.
         </p>
       </header>

@@ -18,7 +18,7 @@ import type { CategorySlug } from "../categories";
 
 /**
  * A listing's document id is derived from its normalized website, so the same site can
- * never produce two listings — Firestore itself enforces the uniqueness.
+ * never produce two listings - Firestore itself enforces the uniqueness.
  */
 export function listingIdForWebsite(normalizedWebsite: string): string {
   return createHash("sha256").update(normalizedWebsite).digest("hex").slice(0, 24);
@@ -259,7 +259,7 @@ export async function processVerifiedBidPayment(args: {
 
 /**
  * Stamps resulting ranks on the payment and publishes exactly one activity event.
- * Safe to call repeatedly — a retried webhook heals a partially-finalised payment.
+ * Safe to call repeatedly - a retried webhook heals a partially-finalised payment.
  */
 export async function finalizeBidPayment(paymentId: string, listingId: string): Promise<void> {
   const db = requireDb();
@@ -303,7 +303,7 @@ export async function finalizeBidPayment(paymentId: string, listingId: string): 
   try {
     await db.collection(COLLECTIONS.activityEvents).doc(paymentId).create(eventDoc);
   } catch {
-    // Already exists — this webhook was a duplicate delivery. Nothing to do.
+    // Already exists - this webhook was a duplicate delivery. Nothing to do.
   }
 }
 

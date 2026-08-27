@@ -327,7 +327,7 @@ itself makes duplicate listings impossible** — one website is one listing, for
   slug: string                      // "sarah-chen-k4m2" → /r/sarah-chen-k4m2
   normalizedWebsite: string         // "sarahchen.com/coaching"
   displayWebsite: string            // "https://sarahchen.com/coaching"
-  category: "business" | "startup-founder" | "executive-leadership" | "life" | "sports"
+  category: CategorySlug            // 14 slugs, see src/lib/categories.ts
   bio: string                       // ≤ 30 words, plain text, no markup
 
   standingBidCents: number          // cumulative total of paid increments

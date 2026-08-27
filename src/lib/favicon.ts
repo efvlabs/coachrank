@@ -2,7 +2,7 @@ import { initials } from "./format";
 
 /**
  * We never ask a coach to upload anything. The board's icon for a listing is derived from
- * their website, and falls back to a generated initials avatar — both served through our
+ * their website, and falls back to a generated initials avatar - both served through our
  * own /api/icon route so the <img> always resolves and there is no client-side fallback JS.
  */
 export function iconUrl(host: string, name: string, size = 64): string {

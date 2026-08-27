@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Read-only status for the success screen while we wait for the webhook. This endpoint can
- * never credit anything — it only reports what verified processing has already recorded.
+ * never credit anything - it only reports what verified processing has already recorded.
  */
 export async function GET(request: Request) {
   if (rateLimited(request, "payment-status", 90, 60_000)) {

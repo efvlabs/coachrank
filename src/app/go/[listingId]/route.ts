@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 /**
  * Every outbound visit to a coach goes through here so clicks delivered is a real,
- * server-side number. The redirect happens whether or not the counters succeed —
+ * server-side number. The redirect happens whether or not the counters succeed -
  * a metrics failure must never cost a coach a visitor.
  */
 export async function GET(

@@ -26,7 +26,7 @@ const sans = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "CoachRank — the paid leaderboard for coaches",
+    default: "CoachRank - the paid leaderboard for coaches",
     template: `%s · CoachRank`,
   },
   description: SITE.description,
@@ -44,14 +44,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: SITE.name,
-    title: "CoachRank — the paid leaderboard for coaches",
+    title: "CoachRank - the paid leaderboard for coaches",
     description: SITE.description,
     url: SITE.url,
   },
   twitter: {
     card: "summary_large_image",
     site: SITE.twitter,
-    title: "CoachRank — the paid leaderboard for coaches",
+    title: "CoachRank - the paid leaderboard for coaches",
     description: SITE.description,
   },
   robots: { index: true, follow: true },

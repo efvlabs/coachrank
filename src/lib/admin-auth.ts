@@ -12,7 +12,7 @@ export type AdminUser = { uid: string; email: string };
 
 /**
  * Resolves the signed-in admin from the httpOnly session cookie, or null.
- * Membership is decided by the ADMIN_EMAILS allow-list — a valid Firebase account that
+ * Membership is decided by the ADMIN_EMAILS allow-list - a valid Firebase account that
  * is not on the list is not an admin.
  */
 export async function getAdminUser(): Promise<AdminUser | null> {

@@ -24,7 +24,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      // Private mode — the choice just will not persist.
+      // Private mode - the choice just will not persist.
     }
   }
 

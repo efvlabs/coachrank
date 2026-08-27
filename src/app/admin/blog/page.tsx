@@ -18,7 +18,7 @@ export default async function AdminBlogPage() {
 
       {posts.length === 0 ? (
         <p className="card mt-6 p-6 text-[14px] text-ink-3">
-          No posts yet. Articles are written and reviewed by hand — nothing is auto-published.
+          No posts yet. Articles are written and reviewed by hand - nothing is auto-published.
         </p>
       ) : (
         <ul className="mt-6 divide-y divide-line border-y border-line">

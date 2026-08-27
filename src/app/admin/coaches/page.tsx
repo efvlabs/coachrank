@@ -99,7 +99,7 @@ export default async function AdminCoachesPage() {
                 </AdminForm>
               ) : (
                 <p className="mt-2 text-[12px] text-ink-3">
-                  Awaiting a verified payment — it will publish itself.
+                  Awaiting a verified payment - it will publish itself.
                 </p>
               )}
             </li>

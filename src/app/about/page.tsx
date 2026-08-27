@@ -51,7 +51,7 @@ export default function AboutPage() {
           <h2 className="eyebrow text-ink">Why bids are permanent</h2>
           <p className="mt-4 text-[16px] leading-[1.6] text-ink-2">
             Your standing bid never expires. Raise it and you pay only the difference. Get outbid and
-            you keep every dollar — you move down, not off, until you decide to take the spot back.
+            you keep every dollar - you move down, not off, until you decide to take the spot back.
           </p>
         </div>
       </div>

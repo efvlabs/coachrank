@@ -244,7 +244,7 @@ async function currentBooking(slot: SpotlightSlot): Promise<SpotlightBooking | n
   }
 }
 
-/** The occupant of a slot right now, with the coach attached — or null if it is free. */
+/** The occupant of a slot right now, with the coach attached - or null if it is free. */
 export async function getActiveSpotlight(slot: SpotlightSlot): Promise<ActiveSpotlight | null> {
   const booking = await currentBooking(slot);
   if (!booking) return null;
