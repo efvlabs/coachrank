@@ -4,7 +4,7 @@ import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { VisitorBeacon } from "@/components/VisitorBeacon";
-import { SITE } from "@/lib/config";
+import { SITE, absoluteUrl } from "@/lib/config";
 
 import "./globals.css";
 
@@ -70,13 +70,25 @@ export const viewport: Viewport = {
 const THEME_SCRIPT = `(function(){try{var s=localStorage.getItem("coachrank-theme");var d=s?s==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",d?"dark":"light");}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  // The alternate names are the spellings people actually type - "coach rank" as two
+  // words, the bare domain - so a brand search resolves to us rather than to a page that
+  // merely mentions coaching. sameAs ties the site to the accounts posting under the name.
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE.name,
+    alternateName: [SITE.shortName, "Coach Rank", "coachrank", "coachrank.lol"],
     url: SITE.url,
     description: SITE.description,
-    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.shortName,
+      alternateName: SITE.name,
+      url: SITE.url,
+      logo: absoluteUrl("/brand/avatar-512.png"),
+      email: SITE.contactEmail,
+      sameAs: SITE.socials.map((s) => s.href),
+    },
   };
 
   return (
