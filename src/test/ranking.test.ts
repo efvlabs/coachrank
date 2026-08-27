@@ -107,8 +107,10 @@ describe("claim prices", () => {
     expect(priceToClaimTopCents(0, pricing)).toBe(5 * DOLLAR);
   });
 
-  it("needs only $1 more to take any position other than #1", () => {
-    expect(priceToClaimRankCents(50 * DOLLAR, 7, pricing)).toBe(51 * DOLLAR);
+  it("needs one standard increment more to take any position other than #1", () => {
+    expect(priceToClaimRankCents(50 * DOLLAR, 7, pricing)).toBe(
+      50 * DOLLAR + pricing.standardIncrementCents,
+    );
   });
 
   it("uses the top increment when the position being claimed is #1", () => {
@@ -202,15 +204,29 @@ describe("cumulative delta pricing", () => {
   });
 
   it("does not make a coach out-bid themselves by the top increment", () => {
-    // Sarah is #1 at $500 and wants $501. Excluding herself the board tops out at $300.
+    // Sarah is #1 at $500 and raises by one standard increment. Excluding herself the
+    // board tops out at $300, so the larger #1 increment must not be demanded of her.
+    const raise = pricing.standardIncrementCents;
     const result = validateTargetBid({
-      targetStandingBidCents: 501 * DOLLAR,
+      targetStandingBidCents: 500 * DOLLAR + raise,
       currentStandingBidCents: 500 * DOLLAR,
       currentTopCents: 500 * DOLLAR,
       topExcludingSelfCents: 300 * DOLLAR,
       pricing,
     });
-    expect(result).toMatchObject({ ok: true, incrementCents: 1 * DOLLAR });
+    expect(result).toMatchObject({ ok: true, incrementCents: raise });
+  });
+
+  it("rejects a raise below one standard increment", () => {
+    const result = validateTargetBid({
+      targetStandingBidCents: 500 * DOLLAR + pricing.standardIncrementCents - 1,
+      currentStandingBidCents: 500 * DOLLAR,
+      currentTopCents: 500 * DOLLAR,
+      topExcludingSelfCents: 0,
+      pricing,
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error.code).toBe("increment_too_small");
   });
 
   it("rejects a target that is not an increase", () => {

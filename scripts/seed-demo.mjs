@@ -463,7 +463,7 @@ async function seed() {
   await db.collection("settings").doc("pricing").set({
     minNewBidCents: 500,
     topPositionIncrementCents: 500,
-    standardIncrementCents: 100,
+    standardIncrementCents: 500,
     premiumSpotlightCents: 9900,
     standardSpotlightCents: 9900,
     updatedAt: FieldValue.serverTimestamp(),
