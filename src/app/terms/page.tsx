@@ -93,6 +93,12 @@ export default function TermsPage() {
         Raising a chargeback or reversing a payment without a legally valid basis is a breach of
         these terms. We may remove the listing and refuse future use of the service.
       </p>
+      <p>
+        Rank is bought with money we actually hold. Where a payment is refunded, charged back or
+        otherwise reversed, the amount it contributed is removed from the standing bid and the
+        position it bought is given up automatically. A listing left with nothing paid for comes
+        off the board. A Spotlight whose payment is reversed ends immediately.
+      </p>
 
       <h2>Your listing</h2>
       <p>By submitting a listing or a payment you represent that:</p>
