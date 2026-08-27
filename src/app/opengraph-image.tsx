@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { SITE } from "@/lib/config";
+
 export const runtime = "nodejs";
 export const alt = "CoachRank - the paid leaderboard for coaches";
 export const size = { width: 1200, height: 630 };
@@ -47,7 +49,7 @@ export default function OpenGraphImage() {
           Rank higher.
         </div>
         <div style={{ display: "flex", fontSize: 30, color: "#9aa0b0", marginTop: 34 }}>
-          Find coaches betting on themselves.
+          {SITE.tagline}
         </div>
       </div>
     ),

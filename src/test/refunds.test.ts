@@ -142,16 +142,42 @@ describe("refunds and lost disputes take the rank back", () => {
     expect(stats().listedCoaches).toBe(0);
   });
 
-  it("leaves earlier payments standing when only the last one is reversed", async () => {
+  it("leaves earlier payments standing when we refund only the last one", async () => {
     const { listingId } = await ensureListing(SARAH);
     await pay({ listingId, dollars: 500, previousDollars: 0, dodoPaymentId: "pay_1" });
     await pay({ listingId, dollars: 20, previousDollars: 500, dodoPaymentId: "pay_2" });
     expect(listing(listingId).standingBidCents).toBe(520 * DOLLAR);
 
-    await reverseBidPayment({ dodoPaymentId: "pay_2", reason: "dispute", reference: "dsp_1" });
+    await reverseBidPayment({ dodoPaymentId: "pay_2", reason: "refund", reference: "ref_1" });
 
     expect(listing(listingId).standingBidCents).toBe(500 * DOLLAR);
     expect(listing(listingId).status).toBe("active");
+  });
+
+  it("takes the whole listing down on a chargeback, not just the money", async () => {
+    const { listingId } = await ensureListing(SARAH);
+    await pay({ listingId, dollars: 500, previousDollars: 0, dodoPaymentId: "pay_1" });
+    await pay({ listingId, dollars: 20, previousDollars: 500, dodoPaymentId: "pay_2" });
+
+    // Charging back one payment is a breach of the Terms; paying for the rest does not buy
+    // a way to stay on the board.
+    await reverseBidPayment({ dodoPaymentId: "pay_2", reason: "dispute", reference: "dsp_1" });
+
+    expect(listing(listingId).standingBidCents).toBe(500 * DOLLAR);
+    expect(listing(listingId).status).toBe("hidden");
+    expect(stats().listedCoaches).toBe(0);
+    // Every trace of them leaves the tape, not just the charged-back payment.
+    expect(await getRecentActivity()).toHaveLength(0);
+  });
+
+  it("counts a coach off the board only once, however they leave it", async () => {
+    const { listingId } = await ensureListing(SARAH);
+    await pay({ listingId, dollars: 500, previousDollars: 0, dodoPaymentId: "pay_1" });
+    expect(stats().listedCoaches).toBe(1);
+
+    await reverseBidPayment({ dodoPaymentId: "pay_1", reason: "dispute", reference: "dsp_1" });
+
+    expect(stats().listedCoaches).toBe(0);
   });
 
   it("reverses exactly once however many times the event is delivered", async () => {

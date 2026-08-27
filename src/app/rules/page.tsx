@@ -156,6 +156,11 @@ export default async function RulesPage() {
         Only a coach already on the board can rent one, and a slot cannot be double-booked - if a
         payment lands after its hold has lapsed and the slot is taken, that payment is refunded.
       </p>
+      <p>
+        A Spotlight starts the moment the payment clears, so it is not refundable once it is
+        running - not partway through, and not because the clicks were fewer than you hoped. You
+        can ask us to take it down early and we will, but the 24 hours are not returned as money.
+      </p>
 
       <h2>Payments</h2>
       <p>

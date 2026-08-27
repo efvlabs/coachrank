@@ -6,6 +6,7 @@ import { FieldValue, Timestamp } from "firebase-admin/firestore";
 import { getDb, requireDb } from "../firebase/admin";
 import { buildListingSlug } from "../slug";
 import { COLLECTIONS, toBidPayment } from "./collections";
+import { setActivityVisibilityForListing } from "./activity";
 import { computeRanks, getListingById } from "./listings";
 import type {
   ActivityEventDoc,
@@ -13,6 +14,7 @@ import type {
   BidPaymentDoc,
   Listing,
   ListingDoc,
+  ListingStatus,
 } from "./types";
 import type { CategorySlug } from "../categories";
 
@@ -449,8 +451,16 @@ export async function reverseBidPayment(args: {
       const listing = listingSnap.data() as ListingDoc;
       const remaining = Math.max(0, (listing.standingBidCents ?? 0) - payment.incrementCents);
       const wasOnTheBoard = listing.status === "active";
-      // Nothing paid for, nothing listed: back to pending, off the board entirely.
-      const status = remaining === 0 && wasOnTheBoard ? "pending" : listing.status;
+
+      // A refund we issue is a proportionate adjustment: take the money back, and drop the
+      // coach only if nothing paid for is left. A chargeback is a breach of the Terms, so
+      // the whole listing goes regardless of what else they paid.
+      const status: ListingStatus =
+        args.reason === "dispute"
+          ? "hidden"
+          : remaining === 0 && wasOnTheBoard
+            ? "pending"
+            : listing.status;
 
       tx.update(listingRef, {
         standingBidCents: remaining,
@@ -458,7 +468,8 @@ export async function reverseBidPayment(args: {
         status,
         updatedAt: at,
       });
-      if (status !== listing.status) {
+      // Only a coach who was actually on the board was ever counted on it.
+      if (wasOnTheBoard && status !== "active") {
         tx.set(statsRef, { listedCoaches: FieldValue.increment(-1) }, { merge: true });
       }
     }
@@ -473,13 +484,20 @@ export async function reverseBidPayment(args: {
 
   // The tape should not keep bragging about money that went back.
   if (result.outcome === "reversed") {
-    await db
-      .collection(COLLECTIONS.activityEvents)
-      .doc(paymentId)
-      .update({ visible: false })
-      .catch(() => {
-        // No event for this payment - the coach was hidden when it landed. Nothing to do.
-      });
+    if (args.reason === "dispute") {
+      // The listing is gone, so every event it ever wrote goes with it.
+      await setActivityVisibilityForListing(result.listingId, false).catch((error) =>
+        console.error("[payments] could not clear the tape after a chargeback:", error),
+      );
+    } else {
+      await db
+        .collection(COLLECTIONS.activityEvents)
+        .doc(paymentId)
+        .update({ visible: false })
+        .catch(() => {
+          // No event for this payment - the coach was hidden when it landed. Nothing to do.
+        });
+    }
   }
 
   return result;

@@ -97,7 +97,15 @@ export default function TermsPage() {
         Rank is bought with money we actually hold. Where a payment is refunded, charged back or
         otherwise reversed, the amount it contributed is removed from the standing bid and the
         position it bought is given up automatically. A listing left with nothing paid for comes
-        off the board. A Spotlight whose payment is reversed ends immediately.
+        off the board, and a chargeback removes the listing outright as a breach of these Terms. A
+        Spotlight whose payment is reversed ends immediately.
+      </p>
+      <p>
+        Removal is the only remedy we offer, and it is not a refund. You may ask us at any time to
+        take down your listing or end a running Spotlight, and we will do it - but taking a listing
+        down does not return the money that bought its rank, and ending a Spotlight early does not
+        return the unused hours. A Spotlight is a 24-hour placement that begins as soon as the
+        payment clears; it is not refundable once it is running.
       </p>
 
       <h2>Your listing</h2>

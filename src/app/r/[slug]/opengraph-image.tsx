@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
 import { categoryLabel } from "@/lib/categories";
+import { SITE } from "@/lib/config";
 import { computeRanks, getListingBySlug } from "@/lib/domain/listings";
 import { formatCents } from "@/lib/money";
 
@@ -109,7 +110,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ slu
           <div style={{ ...col({ marginLeft: "auto", alignItems: "flex-end", justifyContent: "flex-end" }) }}>
             <div style={{ ...row({ fontSize: 36, fontWeight: 800, letterSpacing: -1 }) }}>CoachRank</div>
             <div style={{ ...row({ fontSize: 18, color: MUTED, marginTop: 6 }) }}>
-              Find coaches betting on themselves.
+              {SITE.tagline}
             </div>
           </div>
         </div>
