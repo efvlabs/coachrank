@@ -297,6 +297,7 @@ export async function finalizeBidPayment(paymentId: string, listingId: string): 
     resultingStandingBidCents: payment.resultingStandingBidCents ?? listing.standingBidCents,
     resultingOverallRank: ranks.overallRank,
     resultingCategoryRank: ranks.categoryRank,
+    visible: true,
     createdAt: payment.paidAt ?? Timestamp.now(),
   };
 

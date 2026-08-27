@@ -98,6 +98,9 @@ export type ActivityEventDoc = {
   resultingOverallRank: number;
   resultingCategoryRank: number;
 
+  /** Cleared when the coach is hidden, so moderation reaches the tape too. */
+  visible: boolean;
+
   createdAt: Timestamp;
 };
 

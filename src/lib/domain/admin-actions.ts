@@ -10,6 +10,7 @@ import { requireDb } from "../firebase/admin";
 import { parseDollarsToCents } from "../money";
 import { validateName } from "../moderation";
 import { COLLECTIONS } from "./collections";
+import { setActivityVisibilityForListing } from "./activity";
 import { createPost, deletePost, updatePost, validateBlogInput } from "./blog";
 import { updatePricing } from "./settings";
 import type { ListingStatus } from "./types";
@@ -103,6 +104,7 @@ export async function setListingStatusAction(formData: FormData): Promise<Action
         { merge: true },
       );
     });
+    await setActivityVisibilityForListing(id, status === "active");
   } catch (error) {
     console.error("[admin] setListingStatus failed:", error);
     return fail(error instanceof Error ? error.message : "Could not update that listing.");

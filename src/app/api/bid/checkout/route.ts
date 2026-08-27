@@ -101,7 +101,7 @@ export async function POST(request: Request) {
       return jsonError(NAME_MESSAGE[nameResult.reason], 400, { field: "name" });
     }
     if (!isCategorySlug(body.category)) {
-      return jsonError("Pick one of the five categories.", 400, { field: "category" });
+      return jsonError("Pick a category from the list.", 400, { field: "category" });
     }
     // A listing is a name, a website and a category. A bio is optional and only ever
     // added later from /admin, but it is still screened when one is supplied.
@@ -166,7 +166,7 @@ export async function POST(request: Request) {
       kind: "bid",
       listingId: ensured.listingId,
       returnUrl: absoluteUrl(`/success?p=${paymentId}`),
-      cancelUrl: absoluteUrl("/#bid"),
+      cancelUrl: absoluteUrl(`/?claim=${validation.targetStandingBidCents}#claim`),
       customerEmail: typeof body.email === "string" && body.email.includes("@") ? body.email : null,
       customerName: name,
     });

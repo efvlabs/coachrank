@@ -75,7 +75,7 @@ export async function POST(request: Request) {
       kind: "spotlight",
       listingId: listing.id,
       returnUrl: absoluteUrl(`/success?s=${bookingId}`),
-      cancelUrl: absoluteUrl("/"),
+      cancelUrl: absoluteUrl("/#board"),
       customerEmail: typeof body.email === "string" && body.email.includes("@") ? body.email : null,
       customerName: listing.name,
     });

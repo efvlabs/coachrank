@@ -475,22 +475,55 @@ immediately, so you can build and verify the whole flow while verification is pe
 
 ### 2. Create the bid product
 
-**Products → Add product.**
+**Products -> Add product.** These values are verified against the API, not inferred:
 
 | Field | Value |
 | --- | --- |
-| Type | **One-time payment** |
-| Name | `CoachRank leaderboard bid` (this is what buyers see on the receipt) |
-| Pricing | enable **Pay what you want** |
-| Minimum | `1.00` USD — the app enforces the real minimum and passes the exact amount |
+| Product name | `CoachRank leaderboard bid` (buyers see this on the receipt) |
+| Tax category | **Digital products** |
+| Pricing type | **One-time payment** |
+| Pay what you want | **Enabled** |
+| Amount / minimum | `1.00` USD |
+| Suggested price | `5.00` USD |
+| Tax inclusive | **Off** |
 | Currency | USD |
-| Tax category | SaaS / digital services |
 
-Save, then copy the product id (`pdt_…`) into `DODO_BID_PRODUCT_ID`.
+Save, then copy the product id (`pdt_...`) into `DODO_BID_PRODUCT_ID`.
 
-> **Why pay-what-you-want.** Every charge here is a different number — $5, $99, $515 — so rather
-> than a product per price, the app sends one product with `product_cart[0].amount` set in cents
-> per checkout. Without PWYW enabled, Dodo ignores that amount and charges the list price.
+**Why pay-what-you-want.** Every charge is a different number, so rather than a product per
+price the app sends one product with `product_cart[0].amount` set in cents per checkout.
+Without PWYW enabled Dodo ignores that amount and charges the list price.
+
+**Why the minimum is $1, not $5.** With PWYW on, the product's price field is the *minimum a
+customer may pay*, not a fixed price. A product's price cannot be changed once it is live, so
+a $1 floor keeps every future increment valid even if the bid rules change. The app enforces
+the real minimum itself.
+
+**Why tax inclusive is off.** It is tempting to turn it on so the checkout total matches the
+board exactly, but it breaks the ranking. With tax inclusive, a $515 bid from a 0%
+jurisdiction nets $515 while the same bid from India nets about $436 after 18% GST: the same
+rank would cost different amounts depending on where the buyer lives, and revenue per rank
+becomes unpredictable. Tax exclusive keeps every bid worth the same. Dodo, as merchant of
+record, calculates and remits the tax, shows the full breakdown before payment, and the claim
+form says tax is added at checkout.
+
+Equivalent via the API:
+
+```ts
+await client.products.create({
+  name: "CoachRank leaderboard bid",
+  tax_category: "digital_products",
+  price: {
+    type: "one_time_price",
+    currency: "USD",
+    discount: 0,
+    price: 100,              // the MINIMUM, because pay_what_you_want is on
+    pay_what_you_want: true,
+    suggested_price: 500,
+    tax_inclusive: false,
+  },
+});
+```
 
 ### 3. Create the spotlight product (optional)
 

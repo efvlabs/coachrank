@@ -359,11 +359,13 @@ export function BidPanel({
             </p>
           ) : null}
 
-          {!paymentsEnabled ? (
-            <p className="meta mt-3">Checkout opens shortly - the board is live.</p>
-          ) : lookup.status === "checking" ? (
-            <p className="meta mt-3">Checking…</p>
-          ) : null}
+          <p className="meta mt-3">
+            {!paymentsEnabled
+              ? "Checkout opens shortly - the board is live."
+              : lookup.status === "checking"
+                ? "Checking…"
+                : "The bid is what buys your rank. Tax is added at checkout where it applies."}
+          </p>
         </div>
       </form>
     </section>

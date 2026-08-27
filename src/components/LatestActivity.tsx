@@ -43,11 +43,17 @@ export function LatestActivity({ initialEvents, nowMs }: Props) {
     (async () => {
       const db = await getClientDb();
       if (!db || cancelled) return;
-      const { collection, limit, onSnapshot, orderBy, query } = await import("firebase/firestore");
+      const { collection, limit, onSnapshot, orderBy, query, where } =
+        await import("firebase/firestore");
       if (cancelled) return;
 
       unsubscribe = onSnapshot(
-        query(collection(db, "activityEvents"), orderBy("createdAt", "desc"), limit(EXPANDED)),
+        query(
+          collection(db, "activityEvents"),
+          where("visible", "==", true),
+          orderBy("createdAt", "desc"),
+          limit(EXPANDED),
+        ),
         (snapshot) => {
           const next: ActivityEvent[] = snapshot.docs.map((doc) => {
             const d = doc.data() as Record<string, unknown>;

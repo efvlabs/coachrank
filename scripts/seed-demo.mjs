@@ -402,6 +402,7 @@ async function seed() {
     const listing = board.find((l) => l.id === payment.listingId);
     if (!listing) continue;
     await db.collection("activityEvents").doc(doc.id).set({
+      visible: true,
       type: "bid",
       listingId: listing.id,
       listingSlug: listing.slug,
