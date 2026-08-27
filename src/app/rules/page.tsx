@@ -38,7 +38,7 @@ export default async function RulesPage() {
         it never decays.
       </p>
 
-      <h2>Amounts</h2>
+      <h2 id="pricing">Amounts</h2>
       <ul>
         <li>
           A new listing starts at {cents(pricing.minNewBidCents)}. Any amount at or above that is
@@ -141,7 +141,7 @@ export default async function RulesPage() {
         distinct, so two coaches on different pages of the same platform hold separate ranks.
       </p>
 
-      <h2>Spotlights</h2>
+      <h2 id="spotlights">Spotlights</h2>
       <p>
         The two spotlights beside the board are advertisements, not rankings.{" "}
         {pricing.premiumSpotlightCents === pricing.standardSpotlightCents ? (

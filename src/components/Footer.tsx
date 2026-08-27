@@ -54,6 +54,7 @@ export function Footer() {
             <ul className="mt-3 space-y-1.5">
               {[
                 { href: "/rules", label: "Rules" },
+                { href: "/rules#pricing", label: "Pricing" },
                 { href: "/about", label: "About" },
                 { href: "/terms", label: "Terms" },
                 { href: "/terms#refunds", label: "Refunds" },
