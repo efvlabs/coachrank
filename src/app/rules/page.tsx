@@ -153,8 +153,10 @@ export default async function RulesPage() {
           </>
         )}{" "}
         - each for exactly 24 hours from the moment payment is verified. Neither affects any position.
-        Only a coach already on the board can rent one, and a slot cannot be double-booked - if a
-        payment lands after its hold has lapsed and the slot is taken, that payment is refunded.
+        A Spotlight is an advertisement, so it does not require a rank: anyone can rent one, and the
+        name, website and category shown on it are screened the same way a listing is. A slot cannot
+        be double-booked - if a payment lands after its hold has lapsed and the slot is taken, that
+        payment is refunded.
       </p>
       <p>
         A Spotlight starts the moment the payment clears, so it is not refundable once it is

@@ -8,6 +8,7 @@ import { COLLECTIONS, toSpotlightBooking } from "./collections";
 import { getListingById } from "./listings";
 import type {
   ActiveSpotlight,
+  SpotlightAdvertiser,
   SpotlightBooking,
   SpotlightBookingDoc,
   SpotlightSlot,
@@ -49,7 +50,9 @@ export class SpotlightUnavailableError extends Error {
  */
 export async function reserveSpotlight(args: {
   slot: SpotlightSlot;
-  listingId: string;
+  advertiser: SpotlightAdvertiser;
+  /** Only set when the advertiser is also on the board. */
+  listingId?: string | null;
   priceCents: number;
   /** When the buyer affirmed the Rules and Terms at checkout. */
   acceptedTermsAt?: Date;
@@ -75,7 +78,8 @@ export async function reserveSpotlight(args: {
     }
 
     const doc: SpotlightBookingDoc = {
-      listingId: args.listingId,
+      listingId: args.listingId ?? null,
+      advertiser: args.advertiser,
       slot: args.slot,
       priceCents: args.priceCents,
       acceptedTermsAt: args.acceptedTermsAt ? Timestamp.fromDate(args.acceptedTermsAt) : null,
@@ -247,13 +251,19 @@ async function currentBooking(slot: SpotlightSlot): Promise<SpotlightBooking | n
   }
 }
 
-/** The occupant of a slot right now, with the coach attached - or null if it is free. */
+/**
+ * The occupant of a slot right now, or null if it is free. A Spotlight is an ad and runs
+ * on its own booking - but where the advertiser is also a listed coach, hiding that coach
+ * pulls their ad down too, so moderation is not something an ad slot can be used to dodge.
+ */
 export async function getActiveSpotlight(slot: SpotlightSlot): Promise<ActiveSpotlight | null> {
   const booking = await currentBooking(slot);
   if (!booking) return null;
-  const listing = await getListingById(booking.listingId);
-  if (!listing || listing.status !== "active") return null;
-  return { ...booking, listing };
+  if (booking.listingId) {
+    const listing = await getListingById(booking.listingId);
+    if (!listing || listing.status !== "active") return null;
+  }
+  return booking;
 }
 
 export async function getSpotlights(): Promise<Record<SpotlightSlot, ActiveSpotlight | null>> {

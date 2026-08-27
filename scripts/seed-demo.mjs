@@ -424,6 +424,13 @@ async function seed() {
   const endsAt = startsAt + 24 * HOUR;
   await db.collection("spotlightBookings").doc("demo_spotlight_premium").set({
     listingId: spotlightListing.id,
+    advertiser: {
+      name: spotlightListing.name,
+      normalizedWebsite: spotlightListing.normalizedWebsite,
+      displayWebsite: spotlightListing.displayWebsite,
+      category: spotlightListing.category,
+    },
+    acceptedTermsAt: Timestamp.fromMillis(startsAt),
     slot: "premium",
     priceCents: 9900,
     startsAt: Timestamp.fromMillis(startsAt),

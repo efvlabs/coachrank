@@ -133,8 +133,21 @@ export type ActivityEvent = {
 export type SpotlightSlot = "premium" | "standard";
 export type SpotlightStatus = "pending" | "active" | "expired" | "failed";
 
+/**
+ * Who the ad is for. Carried on the booking itself rather than read through a listing,
+ * because a Spotlight is an advertisement and does not require a rank to buy.
+ */
+export type SpotlightAdvertiser = {
+  name: string;
+  normalizedWebsite: string;
+  displayWebsite: string;
+  category: CategorySlug;
+};
+
 export type SpotlightBookingDoc = {
-  listingId: string;
+  /** Set only when the advertiser also happens to be on the board. */
+  listingId: string | null;
+  advertiser: SpotlightAdvertiser;
   slot: SpotlightSlot;
   priceCents: number;
 
@@ -158,7 +171,8 @@ export type SpotlightBookingDoc = {
 
 export type SpotlightBooking = {
   id: string;
-  listingId: string;
+  listingId: string | null;
+  advertiser: SpotlightAdvertiser;
   slot: SpotlightSlot;
   priceCents: number;
   startsAtMs: number | null;
@@ -168,7 +182,8 @@ export type SpotlightBooking = {
   createdAtMs: number;
 };
 
-export type ActiveSpotlight = SpotlightBooking & { listing: Listing };
+/** A running Spotlight. Everything it renders comes off the booking. */
+export type ActiveSpotlight = SpotlightBooking;
 
 export type BlogStatus = "draft" | "published";
 

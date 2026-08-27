@@ -35,22 +35,22 @@ export function SpotlightCard({ slot, booking, priceCents, nowMs }: Props) {
 
         <div className="mt-3 flex items-center gap-2.5">
           <CoachAvatar
-            name={booking.listing.name}
-            displayWebsite={booking.listing.displayWebsite}
+            name={booking.advertiser.name}
+            displayWebsite={booking.advertiser.displayWebsite}
             size={28}
             className="rounded-lg"
           />
           <div className="min-w-0">
-            <p className="display truncate text-[15px]">{booking.listing.name}</p>
+            <p className="display truncate text-[15px]">{booking.advertiser.name}</p>
             <p className="truncate text-[12px] text-ink-3">
-              {categoryLabel(booking.listing.category)}
+              {categoryLabel(booking.advertiser.category)}
             </p>
           </div>
         </div>
 
 
         <a
-          href={`/go/${booking.listing.id}?source=${SOURCE[slot]}`}
+          href={`/go/s/${booking.id}?source=${SOURCE[slot]}`}
           rel="nofollow noopener sponsored"
           target="_blank"
           className="btn btn-quiet mt-4 w-full py-2"

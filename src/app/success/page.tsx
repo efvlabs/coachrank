@@ -30,8 +30,7 @@ export default async function SuccessPage({ searchParams }: PageProps<"/success"
         endsAtMs: booking.endsAtMs,
         slot: booking.slot,
       };
-      const listing = await getListingById(booking.listingId);
-      coachName = listing?.name ?? null;
+      coachName = booking.advertiser?.name ?? null;
     }
   } else if (paymentId) {
     const payment = await getBidPayment(paymentId);

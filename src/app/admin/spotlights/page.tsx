@@ -1,4 +1,3 @@
-import { getListingById } from "@/lib/domain/listings";
 import { listSpotlightBookings } from "@/lib/domain/spotlight";
 import { formatCents } from "@/lib/money";
 
@@ -10,7 +9,6 @@ function stamp(ms: number | null): string {
 
 export default async function AdminSpotlightsPage() {
   const bookings = await listSpotlightBookings(80);
-  const listings = await Promise.all(bookings.map((b) => getListingById(b.listingId)));
 
   return (
     <div>
@@ -37,10 +35,15 @@ export default async function AdminSpotlightsPage() {
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking, index) => (
+              {bookings.map((booking) => (
                 <tr key={booking.id} className="border-b border-line">
                   <td className="py-2 pr-3 font-semibold capitalize">{booking.slot}</td>
-                  <td className="py-2 pr-3">{listings[index]?.name ?? "-"}</td>
+                  <td className="py-2 pr-3">
+                    {booking.advertiser?.name ?? "-"}
+                    {booking.listingId ? null : (
+                      <span className="ml-1.5 text-[11px] text-ink-3">(not listed)</span>
+                    )}
+                  </td>
                   <td className="py-2 pr-3">
                     <span
                       className={`pill ${booking.status === "active" ? "border-accent" : booking.status === "failed" ? "border-line-2" : ""}`}

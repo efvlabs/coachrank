@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { TermsConsent } from "./TermsConsent";
+import { CATEGORIES, type CategorySlug } from "@/lib/categories";
 import { formatCents } from "@/lib/money";
 import type { SpotlightSlot } from "@/lib/domain/types";
 
@@ -18,13 +19,18 @@ type Found = {
 };
 
 /**
- * Only a coach already on the board can take a slot, so the flow is:
- * enter website → confirm the listing we found → Dodo checkout.
+ * A Spotlight is an advertisement, not a rank, so it does not require a listing. The flow
+ * is: enter website → confirm the listing if we found one, otherwise fill in who the ad is
+ * for → Dodo checkout.
  */
 export function SpotlightRent({ slot, priceCents, label }: Props) {
   const [open, setOpen] = useState(false);
   const [website, setWebsite] = useState("");
   const [found, setFound] = useState<Found | null>(null);
+  /** Set when the website is not on the board and the advertiser fills in their own details. */
+  const [unlisted, setUnlisted] = useState(false);
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState<CategorySlug | "">("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -49,8 +55,9 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
         body: JSON.stringify({ website }),
       });
       const data = await response.json();
+      // Not being on the board is not a failure here - it just means we need the details.
       if (data?.found) setFound(data.listing as Found);
-      else setError("That website is not on the board. Claim a rank first.");
+      else setUnlisted(true);
     } catch {
       setError("Something went wrong. Try again.");
     } finally {
@@ -60,8 +67,12 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
 
   async function checkout() {
     setError(null);
+    if (unlisted) {
+      if (!name.trim()) return setError("Add the name to show on the ad.");
+      if (!category) return setError("Pick a category.");
+    }
     if (!acceptedTerms) {
-      setError("Tick the box to confirm you agree to the Rules and Terms.");
+      setError("Tick the box to agree to the Terms of Service.");
       return;
     }
     setBusy(true);
@@ -69,7 +80,13 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
       const response = await fetch("/api/spotlight/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ website, slot, acceptedTerms }),
+        body: JSON.stringify({
+          website,
+          slot,
+          acceptedTerms,
+          name: unlisted ? name : undefined,
+          category: unlisted ? category : undefined,
+        }),
       });
       const data = await response.json();
       if (!response.ok || !data?.ok) {
@@ -116,10 +133,10 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
           </p>
           <p className="eyebrow mt-2">for 24 hours · changes no ranks</p>
 
-          {!found ? (
+          {!found && !unlisted ? (
             <form onSubmit={findListing} className="mt-6">
               <label className="block">
-                <span className="eyebrow">The website you are listed with</span>
+                <span className="eyebrow">The website the ad links to</span>
                 <input
                   className="field mt-1"
                   placeholder="yourname.com"
@@ -140,11 +157,46 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
             </form>
           ) : (
             <div className="mt-6">
-              <div className="pt-3">
-                <p className="display text-[22px] leading-none">{found.name}</p>
-                <p className="meta mt-2">{found.displayWebsite}</p>
-                <p className="mt-3 text-[14px] leading-[1.5] text-ink-2">{found.bio}</p>
-              </div>
+              {found ? (
+                <div className="pt-3">
+                  <p className="display text-[22px] leading-none">{found.name}</p>
+                  <p className="meta mt-2">{found.displayWebsite}</p>
+                  <p className="mt-3 text-[14px] leading-[1.5] text-ink-2">{found.bio}</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="meta">
+                    Not on the board - that is fine, a Spotlight is an ad. Tell us who it is for.
+                  </p>
+                  <label className="block">
+                    <span className="eyebrow">Name to show on the ad</span>
+                    <input
+                      className="field mt-1"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Your name or brand"
+                      required
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="eyebrow">Category</span>
+                    <select
+                      className="field mt-1"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value as CategorySlug)}
+                      required
+                    >
+                      <option value="">Pick one</option>
+                      {CATEGORIES.map((c) => (
+                        <option key={c.slug} value={c.slug}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <p className="meta">{website}</p>
+                </div>
+              )}
 
               {error ? (
                 <p role="alert" className="meta mt-3 text-flag">
@@ -168,11 +220,12 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
                   type="button"
                   onClick={() => {
                     setFound(null);
+                    setUnlisted(false);
                     setError(null);
                   }}
                   className="btn btn-quiet flex-1 px-4 py-2.5"
                 >
-                  Not me
+                  Back
                 </button>
                 <button
                   type="button"

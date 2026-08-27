@@ -91,7 +91,8 @@ export function toActivityEvent(id: string, doc: ActivityEventDoc): ActivityEven
 export function toSpotlightBooking(id: string, doc: SpotlightBookingDoc): SpotlightBooking {
   return {
     id,
-    listingId: doc.listingId,
+    listingId: doc.listingId ?? null,
+    advertiser: doc.advertiser,
     slot: doc.slot,
     priceCents: doc.priceCents,
     startsAtMs: ms(doc.startsAt),
