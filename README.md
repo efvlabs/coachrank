@@ -699,14 +699,22 @@ region such as `us-central1`**, or every request pays a cross-continent round tr
 your GitHub repo, choose the branch to deploy from, and set the root directory to `/`.
 Rollouts then happen automatically on every push to that branch.
 
-**3. Create the three secrets.** `apphosting.yaml` references them by name; the values never
-enter the repo.
+**3. Deploy first, add payments later.** Dodo requires a working website before it will
+verify your business, so the first rollout deliberately needs **no secrets at all**.
+
+`apphosting.yaml` ships with every `secret:` reference commented out, because App Hosting
+validates those references at rollout time — pointing at a secret that does not exist yet
+fails the deploy. Without them the site is fully live: the board, categories, rules, terms
+and privacy all work, and checkout reports that it is not open yet. Nothing can be charged.
+
+Once you have Dodo credentials, create each secret and uncomment its block in
+`apphosting.yaml`:
 
 ```bash
+firebase apphosting:secrets:set ADMIN_EMAILS               # you@example.com
 firebase apphosting:secrets:set DODO_PAYMENTS_API_KEY
 firebase apphosting:secrets:set DODO_PAYMENTS_WEBHOOK_KEY
 firebase apphosting:secrets:set DODO_BID_PRODUCT_ID
-firebase apphosting:secrets:set ADMIN_EMAILS       # e.g. you@example.com
 ```
 
 **4. Check `apphosting.yaml`** — it is committed and already carries the public Firebase web

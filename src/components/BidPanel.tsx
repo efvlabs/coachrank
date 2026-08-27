@@ -203,7 +203,7 @@ export function BidPanel({
   }
 
   const cta = (() => {
-    if (!paymentsEnabled) return "Unavailable";
+    if (!paymentsEnabled) return chargeCents === null ? "Claim" : `Claim · ${formatCents(chargeCents)}`;
     if (submitting) return "Opening…";
     if (chargeCents === null) return "Claim";
     return `Claim · ${formatCents(chargeCents)}`;
@@ -359,7 +359,11 @@ export function BidPanel({
             </p>
           ) : null}
 
-          {lookup.status === "checking" ? <p className="meta mt-3">Checking…</p> : null}
+          {!paymentsEnabled ? (
+            <p className="meta mt-3">Checkout opens shortly — the board is live.</p>
+          ) : lookup.status === "checking" ? (
+            <p className="meta mt-3">Checking…</p>
+          ) : null}
         </div>
       </form>
     </section>
