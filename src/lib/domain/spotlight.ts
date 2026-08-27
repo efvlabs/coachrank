@@ -51,6 +51,8 @@ export async function reserveSpotlight(args: {
   slot: SpotlightSlot;
   listingId: string;
   priceCents: number;
+  /** When the buyer affirmed the Rules and Terms at checkout. */
+  acceptedTermsAt?: Date;
 }): Promise<string> {
   const db = requireDb();
   const now = Timestamp.now();
@@ -76,6 +78,7 @@ export async function reserveSpotlight(args: {
       listingId: args.listingId,
       slot: args.slot,
       priceCents: args.priceCents,
+      acceptedTermsAt: args.acceptedTermsAt ? Timestamp.fromDate(args.acceptedTermsAt) : null,
       startsAt: null,
       endsAt: null,
       totalClicks: 0,

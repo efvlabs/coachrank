@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { TermsConsent } from "./TermsConsent";
 import { CATEGORIES, type CategorySlug } from "@/lib/categories";
 import { CLAIM_EVENT, type ClaimEventDetail } from "@/lib/claim-event";
 import { centsToDollarString, formatCents, parseDollarsToCents } from "@/lib/money";
@@ -51,6 +52,7 @@ export function BidPanel({
   const [website, setWebsite] = useState("");
   const [category, setCategory] = useState<CategorySlug | "">("");
   const [lookup, setLookup] = useState<LookupState>({ status: "idle" });
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorField, setErrorField] = useState<string | null>(null);
@@ -177,6 +179,9 @@ export function BidPanel({
       if (!name.trim()) return fail("Add your name.", "name");
       if (!category) return fail("Pick a category.", "category");
     }
+    if (!acceptedTerms) {
+      return fail("Tick the box to confirm you agree to the Rules and Terms.", "terms");
+    }
 
     setSubmitting(true);
     try {
@@ -188,6 +193,7 @@ export function BidPanel({
           website,
           category: known ? undefined : category,
           amount,
+          acceptedTerms,
         }),
       });
       const data = await response.json();
@@ -352,6 +358,20 @@ export function BidPanel({
               <span className="text-ink-3">· the difference only</span>
             </p>
           ) : null}
+
+          <div className="mt-4 flex justify-center">
+            <TermsConsent
+              checked={acceptedTerms}
+              onChange={(next) => {
+                setAcceptedTerms(next);
+                if (next && errorField === "terms") {
+                  setError(null);
+                  setErrorField(null);
+                }
+              }}
+              invalid={errorField === "terms"}
+            />
+          </div>
 
           {error ? (
             <p role="alert" className="mt-3 text-[13.5px] font-medium text-flag">

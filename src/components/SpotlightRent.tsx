@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { TermsConsent } from "./TermsConsent";
 import { formatCents } from "@/lib/money";
 import type { SpotlightSlot } from "@/lib/domain/types";
 
@@ -35,6 +36,8 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
   async function findListing(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
@@ -57,12 +60,16 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
 
   async function checkout() {
     setError(null);
+    if (!acceptedTerms) {
+      setError("Tick the box to confirm you agree to the Rules and Terms.");
+      return;
+    }
     setBusy(true);
     try {
       const response = await fetch("/api/spotlight/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ website, slot }),
+        body: JSON.stringify({ website, slot, acceptedTerms }),
       });
       const data = await response.json();
       if (!response.ok || !data?.ok) {
@@ -145,7 +152,18 @@ export function SpotlightRent({ slot, priceCents, label }: Props) {
                 </p>
               ) : null}
 
-              <div className="mt-5 flex gap-2">
+              <div className="mt-5">
+                <TermsConsent
+                  id="accept-terms-spotlight"
+                  checked={acceptedTerms}
+                  onChange={(next) => {
+                    setAcceptedTerms(next);
+                    if (next) setError(null);
+                  }}
+                />
+              </div>
+
+              <div className="mt-4 flex gap-2">
                 <button
                   type="button"
                   onClick={() => {

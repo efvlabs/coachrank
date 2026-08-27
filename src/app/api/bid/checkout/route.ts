@@ -31,6 +31,7 @@ type Body = {
   bio?: string;
   amount?: string | number;
   email?: string;
+  acceptedTerms?: boolean;
 };
 
 const URL_MESSAGE: Record<string, string> = {
@@ -57,6 +58,14 @@ export async function POST(request: Request) {
 
   const body = await readJson<Body>(request);
   if (!body) return jsonError("Invalid request.");
+
+  // Nothing is charged without the buyer affirming the Terms, and the affirmation is
+  // recorded on the payment so we can show what they agreed to and when.
+  if (body.acceptedTerms !== true) {
+    return jsonError("Tick the box to confirm you agree to the Rules and Terms.", 400, {
+      field: "terms",
+    });
+  }
 
   // --- Website is the identity of a listing, so it is validated first. -------------------
   const urlResult = normalizeWebsite(body.website);
@@ -153,6 +162,7 @@ export async function POST(request: Request) {
     });
 
     paymentId = await createPendingBidPayment({
+      acceptedTermsAt: new Date(),
       listingId: ensured.listingId,
       incrementCents: validation.incrementCents,
       previousStandingBidCents: currentStandingBidCents,

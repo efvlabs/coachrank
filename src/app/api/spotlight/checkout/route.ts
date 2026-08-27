@@ -17,7 +17,7 @@ import { normalizeWebsite } from "@/lib/url";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type Body = { website?: string; slot?: string; email?: string };
+type Body = { website?: string; slot?: string; email?: string; acceptedTerms?: boolean };
 
 export async function POST(request: Request) {
   if (rateLimited(request, "spotlight-checkout", 8, 60_000)) {
@@ -31,6 +31,11 @@ export async function POST(request: Request) {
   }
 
   const body = await readJson<Body>(request);
+  if (body?.acceptedTerms !== true) {
+    return jsonError("Tick the box to confirm you agree to the Rules and Terms.", 400, {
+      field: "terms",
+    });
+  }
   if (!isSpotlightSlot(body?.slot)) return jsonError("Pick a Spotlight slot.", 400);
   const slot = body.slot;
 
@@ -52,7 +57,12 @@ export async function POST(request: Request) {
   // The hold is what stops two buyers reaching checkout for the same 24-hour slot.
   let bookingId: string;
   try {
-    bookingId = await reserveSpotlight({ slot, listingId: listing.id, priceCents });
+    bookingId = await reserveSpotlight({
+      slot,
+      listingId: listing.id,
+      priceCents,
+      acceptedTermsAt: new Date(),
+    });
   } catch (error) {
     if (error instanceof SpotlightUnavailableError) {
       return jsonError(

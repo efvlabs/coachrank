@@ -113,6 +113,8 @@ function materialise(id: string, doc: ListingDoc): Listing {
 }
 
 export type CreateBidPaymentInput = {
+  /** When the buyer affirmed the Rules and Terms at checkout. */
+  acceptedTermsAt?: Date;
   listingId: string;
   incrementCents: number;
   previousStandingBidCents: number;
@@ -132,6 +134,7 @@ export async function createPendingBidPayment(input: CreateBidPaymentInput): Pro
     dodoSessionId: null,
     status: "pending",
     publishedListing: false,
+    acceptedTermsAt: input.acceptedTermsAt ? Timestamp.fromDate(input.acceptedTermsAt) : null,
     createdAt: Timestamp.now(),
     paidAt: null,
   };

@@ -66,6 +66,9 @@ export type BidPaymentDoc = {
   /** True when this payment first published a pending listing. */
   publishedListing: boolean;
 
+  /** When the buyer ticked the Rules and Terms box. Nothing is charged without it. */
+  acceptedTermsAt: Timestamp | null;
+
   /** Set when a refund or a lost dispute took this payment's rank back. */
   reversal?: {
     reason: "refund" | "dispute";
@@ -146,6 +149,9 @@ export type SpotlightBookingDoc = {
   status: SpotlightStatus;
   /** Set when a payment arrived after the hold lapsed and the slot was already taken. */
   refundRequired?: boolean;
+
+  /** When the buyer ticked the Rules and Terms box. Nothing is charged without it. */
+  acceptedTermsAt: Timestamp | null;
 
   createdAt: Timestamp;
 };
