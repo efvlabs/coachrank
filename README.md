@@ -749,9 +749,15 @@ to confirm payments are landing.
 
 ### Connecting coachrank.lol (bought at GoDaddy)
 
-**1. Add the domain in Firebase.** Console → **App Hosting** → your backend → **Custom
-domains → Add domain**. Enter `coachrank.lol`. Firebase will offer to add `www.coachrank.lol`
-too — take it, with `www` redirecting to the apex.
+**1. Add the domain in Firebase.** Console → **App Hosting** → **Settings → Domains → Add
+custom domain**, then enter `coachrank.lol`. Firebase will offer `www.coachrank.lol` too —
+take it, with `www` redirecting to the apex.
+
+> **Check the backend selector first.** A Firebase project can host several App Hosting
+> backends, and the Settings page shows whichever one is selected in the dropdown beside
+> **Backend** at the top. If the project also runs another site, adding the domain while the
+> wrong backend is selected points coachrank.lol at that other app. Confirm the dropdown
+> reads `coachrank` before clicking Add.
 
 **2. Firebase shows you the records to create.** There are usually two rounds: first a `TXT`
 record to prove you own the domain, then the `A` records that point traffic at Firebase. Read
