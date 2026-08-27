@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
   const body = await readJson<Body>(request);
   if (body?.acceptedTerms !== true) {
-    return jsonError("Tick the box to confirm you agree to the Rules and Terms.", 400, {
+    return jsonError("Tick the box to agree to the Terms of Service.", 400, {
       field: "terms",
     });
   }

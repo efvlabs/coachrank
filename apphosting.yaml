@@ -69,6 +69,14 @@ env:
 
   # ---- Payments ------------------------------------------------------------------------
   #
+  # Dodo returns MERCHANT_NOT_LIVE until account verification is approved, so a live
+  # checkout button would fail for every visitor. Flip this to "true" the moment
+  # verification clears - the secrets below are already in place, so nothing else changes.
+  - variable: PAYMENTS_ENABLED
+    value: "false"
+    availability: [RUNTIME]
+
+  #
   # App Hosting validates every `secret:` reference at rollout time, so a reference to a
   # secret that does not exist yet FAILS THE DEPLOY. All three below exist in Secret
   # Manager with the App Hosting service account granted access.

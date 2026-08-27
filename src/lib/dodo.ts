@@ -34,7 +34,18 @@ export function requireDodoClient(): DodoPayments {
   return c;
 }
 
+/**
+ * A switch that turns checkout off without touching the secrets. Dodo refuses live
+ * payments until merchant verification is approved, and an outage is possible after that,
+ * so there has to be a way to close the till and leave the board running - which is
+ * exactly what the site already does when payments are unavailable.
+ */
+export function paymentsDisabled(): boolean {
+  return process.env.PAYMENTS_ENABLED === "false";
+}
+
 export function isDodoConfigured(): boolean {
+  if (paymentsDisabled()) return false;
   return Boolean(process.env.DODO_PAYMENTS_API_KEY && bidProductId());
 }
 
