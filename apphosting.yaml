@@ -64,38 +64,40 @@ env:
 
   # ---- Server-only ---------------------------------------------------------------------
   - variable: DODO_PAYMENTS_ENVIRONMENT
-    value: test_mode
+    value: live_mode
     availability: [RUNTIME]
 
-  # ---- PHASE 2: uncomment each line below only AFTER creating that secret ---------------
+  # ---- Payments ------------------------------------------------------------------------
   #
   # App Hosting validates every `secret:` reference at rollout time, so a reference to a
-  # secret that does not exist yet FAILS THE DEPLOY. That is why these start commented out:
-  # the site deploys and runs fine without them — checkout simply reports that it is
-  # unavailable, and nothing can be charged.
+  # secret that does not exist yet FAILS THE DEPLOY. All three below exist in Secret
+  # Manager with the App Hosting service account granted access.
   #
-  # Create each secret, then uncomment its block and push:
+  # These three are what turn checkout on. Without them the site still runs and the board
+  # is still live - the claim button simply reports that checkout is unavailable, and
+  # nothing can be charged.
+  - variable: DODO_PAYMENTS_API_KEY
+    secret: DODO_PAYMENTS_API_KEY
+    availability: [RUNTIME]
+
+  # The signature key for /api/webhooks/dodo. Without it every delivery is rejected as
+  # unsigned, so a buyer would be charged and never ranked - it is not optional.
+  - variable: DODO_PAYMENTS_WEBHOOK_KEY
+    secret: DODO_PAYMENTS_WEBHOOK_KEY
+    availability: [RUNTIME]
+
+  - variable: DODO_BID_PRODUCT_ID
+    secret: DODO_BID_PRODUCT_ID
+    availability: [RUNTIME]
+
+  # ---- Admin ---------------------------------------------------------------------------
   #
-  #   firebase apphosting:secrets:set ADMIN_EMAILS               # you@example.com
-  #   firebase apphosting:secrets:set DODO_PAYMENTS_API_KEY
-  #   firebase apphosting:secrets:set DODO_PAYMENTS_WEBHOOK_KEY
-  #   firebase apphosting:secrets:set DODO_BID_PRODUCT_ID
+  # ADMIN_EMAILS gates /admin, where listings are hidden for impersonation and Spotlights
+  # are reviewed. It is not a credential, but it controls access and is a personal address,
+  # so it stays out of the repo. Create it, then uncomment:
   #
-  # ADMIN_EMAILS gates /admin. It is not a credential, but it is a personal address and it
-  # controls access, so it stays out of the repo.
+  #   firebase apphosting:secrets:set ADMIN_EMAILS
   #
   # - variable: ADMIN_EMAILS
   #   secret: ADMIN_EMAILS
-  #   availability: [RUNTIME]
-  #
-  # - variable: DODO_PAYMENTS_API_KEY
-  #   secret: DODO_PAYMENTS_API_KEY
-  #   availability: [RUNTIME]
-  #
-  # - variable: DODO_PAYMENTS_WEBHOOK_KEY
-  #   secret: DODO_PAYMENTS_WEBHOOK_KEY
-  #   availability: [RUNTIME]
-  #
-  # - variable: DODO_BID_PRODUCT_ID
-  #   secret: DODO_BID_PRODUCT_ID
   #   availability: [RUNTIME]
