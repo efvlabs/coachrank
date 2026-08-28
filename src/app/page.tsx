@@ -19,8 +19,8 @@ import { priceToClaimTopCents, topStandingBidCents } from "@/lib/ranking";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "CoachRank - the paid leaderboard for coaches",
-  description: SITE.description,
+  title: SITE.title,
+  description: SITE.searchDescription,
   alternates: { canonical: "/" },
 };
 

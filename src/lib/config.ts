@@ -25,7 +25,17 @@ export const SITE = {
   name: "CoachRank.lol",
   shortName: "CoachRank",
   tagline: "Coaches betting on themselves.",
+  /** The <title>, and the blue line in a search result. Brand first, promise second. */
+  title: "CoachRank - Coaches betting on themselves.",
+  /** Link previews stay on the tagline; it is a hook, not an explanation. */
   description: "Coaches betting on themselves.",
+  /**
+   * The grey line under a search result. Google writes its own when ours is too thin to
+   * be useful - which is how a snippet ends up reading "$99 for 24 hours. The amount is
+   * the entire". Long enough to answer "what is this and why would I click".
+   */
+  searchDescription:
+    "A public leaderboard of coaches ranked only by what each has paid to be there. No reviews, no algorithm - the bid is the ranking. Browse by category, or claim your place from $5.",
   url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   twitter: "@coachranklol",
   contactEmail: "contact@coachrank.lol",
