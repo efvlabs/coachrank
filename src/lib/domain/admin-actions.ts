@@ -115,6 +115,63 @@ export async function setListingStatusAction(formData: FormData): Promise<Action
   return ok(status === "hidden" ? "Listing hidden." : "Listing restored.");
 }
 
+/**
+ * Removes a listing nobody ever paid for. Every abandoned checkout leaves one behind, so
+ * without this they accumulate for the life of the site.
+ *
+ * A listing with money behind it is never deletable here, and that is the point: the board
+ * is the public record of what was paid, and the payments are its audit trail. Hide those
+ * instead - hiding is reversible and leaves the record intact.
+ */
+export async function deleteUnpaidListingAction(formData: FormData): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+  } catch {
+    return fail("Not authorised.");
+  }
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return fail("Invalid request.");
+
+  try {
+    const db = requireDb();
+    const ref = db.collection(COLLECTIONS.listings).doc(id);
+    const snap = await ref.get();
+    if (!snap.exists) return fail("Listing not found.");
+
+    const listing = snap.data() as { standingBidCents?: number; status?: ListingStatus };
+    if ((listing.standingBidCents ?? 0) > 0 || listing.status === "active") {
+      return fail("That listing has money behind it. Hide it instead.");
+    }
+
+    // The listing's own counter is not the authority here - the payment ledger is. A
+    // reversed payment counts too: the money moved, even though it moved back.
+    const payments = await db
+      .collection(COLLECTIONS.bidPayments)
+      .where("listingId", "==", id)
+      .get();
+    const settled = payments.docs.some((d) => {
+      const status = (d.data() as { status?: string }).status;
+      return status === "paid" || status === "reversed";
+    });
+    if (settled) return fail("That listing has a settled payment. Hide it instead.");
+
+    // Checkouts that never completed are not an audit trail - nothing happened.
+    const batch = db.batch();
+    payments.docs.forEach((doc) => batch.delete(doc.ref));
+    batch.delete(ref);
+    await batch.commit();
+  } catch (error) {
+    console.error("[admin] deleteUnpaidListing failed:", error);
+    return fail(error instanceof Error ? error.message : "Could not delete that listing.");
+  }
+
+  revalidatePath("/admin/coaches");
+  revalidatePath("/admin");
+  revalidatePath("/");
+  return ok("Listing deleted.");
+}
+
 // ---------------------------------------------------------------------------
 // Blog
 // ---------------------------------------------------------------------------

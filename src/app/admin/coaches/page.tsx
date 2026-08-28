@@ -1,6 +1,10 @@
 import { AdminForm } from "@/components/admin/AdminForm";
 import { CATEGORIES } from "@/lib/categories";
-import { setListingStatusAction, updateListingAction } from "@/lib/domain/admin-actions";
+import {
+  deleteUnpaidListingAction,
+  setListingStatusAction,
+  updateListingAction,
+} from "@/lib/domain/admin-actions";
 import { listAllListings } from "@/lib/domain/listings";
 import { formatCents, formatCount } from "@/lib/money";
 import { prettyWebsite } from "@/lib/url";
@@ -98,9 +102,20 @@ export default async function AdminCoachesPage() {
                   </button>
                 </AdminForm>
               ) : (
-                <p className="mt-2 text-[12px] text-ink-3">
-                  Awaiting a verified payment - it will publish itself.
-                </p>
+                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <p className="text-[12px] text-ink-3">
+                    Awaiting a verified payment - it will publish itself.
+                  </p>
+                  <AdminForm action={deleteUnpaidListingAction}>
+                    <input type="hidden" name="id" value={listing.id} />
+                    <button
+                      type="submit"
+                      className="btn btn-ghost px-4 py-1.5 text-[12.5px] text-flag"
+                    >
+                      Delete
+                    </button>
+                  </AdminForm>
+                </div>
               )}
             </li>
           ))}
