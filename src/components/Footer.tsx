@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Logo } from "./Logo";
 import { CATEGORIES } from "@/lib/categories";
-import { SITE } from "@/lib/config";
+import { BLOG_ENABLED, SITE } from "@/lib/config";
 
 const YEAR = new Date().getFullYear();
 
@@ -68,6 +68,7 @@ export function Footer() {
               {[
                 { href: "/rules", label: "Rules" },
                 { href: "/rules#pricing", label: "Pricing" },
+                ...(BLOG_ENABLED ? [{ href: "/blog", label: "Blog" }] : []),
                 { href: "/about", label: "About" },
                 { href: "/terms", label: "Terms" },
                 { href: "/terms#refunds", label: "Refunds" },

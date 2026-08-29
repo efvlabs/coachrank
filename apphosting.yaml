@@ -72,6 +72,10 @@ env:
   # Account verification is approved, so live checkout works. Set this to "false" to close
   # the till without touching the secrets: the board stays live, the claim button says
   # checkout opens shortly, and the checkout routes answer 503 rather than reaching Dodo.
+  - variable: NEXT_PUBLIC_ENABLE_BLOG
+    value: "true"
+    availability: [BUILD, RUNTIME]
+
   - variable: PAYMENTS_ENABLED
     value: "true"
     availability: [RUNTIME]

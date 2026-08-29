@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { BLOG_ENABLED } from "@/lib/config";
+
 import { BoardSwitch } from "./BoardSwitch";
 import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
@@ -7,6 +9,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const NAV = [
   { href: "/categories", label: "Categories" },
+  ...(BLOG_ENABLED ? [{ href: "/blog", label: "Blog" }] : []),
   { href: "/rules", label: "Rules" },
   { href: "/about", label: "About" },
 ] as const;

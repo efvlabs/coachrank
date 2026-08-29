@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 import { SITE } from "@/lib/config";
 
 export const runtime = "nodejs";
-export const alt = "CoachRank - the paid leaderboard for coaches";
+export const alt = SITE.title;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -35,7 +35,7 @@ export default function OpenGraphImage() {
             marginTop: 26,
           }}
         >
-          Pay more.
+          Every ranking
         </div>
         <div
           style={{
@@ -46,10 +46,10 @@ export default function OpenGraphImage() {
             color: "#a8baff",
           }}
         >
-          Rank higher.
+          here is paid.
         </div>
         <div style={{ display: "flex", fontSize: 30, color: "#9aa0b0", marginTop: 34 }}>
-          {SITE.tagline}
+          And we show you how much.
         </div>
       </div>
     ),
