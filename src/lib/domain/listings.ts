@@ -58,24 +58,6 @@ export const getListedCoaches = cache(async (limit = 500): Promise<Listing[]> =>
   }
 });
 
-/**
- * The private link a coach uses to edit their own listing. Admin-only: it is the whole
- * authorisation, so it is never rendered on a public page.
- */
-export async function getEditLink(listingId: string): Promise<string | null> {
-  const ref = listingsRef();
-  if (!ref) return null;
-  try {
-    const snap = await ref.doc(listingId).get();
-    const doc = snap.data() as { slug?: string; editToken?: string } | undefined;
-    if (!doc?.slug || !doc.editToken) return null;
-    return `/r/${doc.slug}/edit?t=${doc.editToken}`;
-  } catch (error) {
-    console.error("[listings] getEditLink failed:", error);
-    return null;
-  }
-}
-
 /** The approval queue: everyone who enrolled and is waiting on us. */
 export async function getSubmittedListings(limit = 200): Promise<Listing[]> {
   const ref = listingsRef();

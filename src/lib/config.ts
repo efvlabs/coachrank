@@ -11,12 +11,12 @@ function envDollarsToCents(key: string, fallbackDollars: number): number {
 }
 
 export const PRICING_DEFAULTS = {
-  minNewBidCents: envDollarsToCents("DEFAULT_MIN_NEW_BID_USD", 5),
+  minNewBidCents: envDollarsToCents("DEFAULT_MIN_NEW_BID_USD", 2),
   maxBidCents: envDollarsToCents("DEFAULT_MAX_BID_USD", 999_999),
   topPositionIncrementCents: envDollarsToCents("DEFAULT_TOP_POSITION_INCREMENT_USD", 5),
   standardIncrementCents: envDollarsToCents("DEFAULT_STANDARD_INCREMENT_USD", 5),
-  premiumSpotlightCents: envDollarsToCents("DEFAULT_PREMIUM_SPOTLIGHT_USD", 99),
-  standardSpotlightCents: envDollarsToCents("DEFAULT_STANDARD_SPOTLIGHT_USD", 99),
+  premiumSpotlightCents: envDollarsToCents("DEFAULT_PREMIUM_SPOTLIGHT_USD", 29),
+  standardSpotlightCents: envDollarsToCents("DEFAULT_STANDARD_SPOTLIGHT_USD", 29),
 } as const;
 
 export type Pricing = { -readonly [K in keyof typeof PRICING_DEFAULTS]: number };

@@ -5,7 +5,6 @@ import { getListingByNormalizedWebsite } from "@/lib/domain/listings";
 import { listingIdForWebsite } from "@/lib/domain/payments";
 import { getDb, isFirebaseConfigured } from "@/lib/firebase/admin";
 import { MODERATION_MESSAGE, NAME_MESSAGE, screenWebsite, validateName } from "@/lib/moderation";
-import { newEditToken } from "@/lib/domain/profile";
 import { buildListingSlug } from "@/lib/slug";
 import { normalizeWebsite, URL_MESSAGE } from "@/lib/url";
 import { Timestamp } from "firebase-admin/firestore";
@@ -80,7 +79,6 @@ export async function POST(request: Request) {
         totalClicks: 0,
         status: "submitted",
         enrolledAt: now,
-        editToken: newEditToken(),
         createdAt: now,
         updatedAt: now,
       });

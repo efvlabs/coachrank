@@ -85,17 +85,13 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
             value: `#${ranks.categoryRank}`,
             accent: false,
           },
-        ]
-      : [{ label: "Listed in", value: categoryLabel(listing.category), accent: false }]),
-    ...(ranked
-      ? [
           {
             label: "Standing bid",
             value: formatCents(listing.standingBidCents),
             accent: false,
           },
         ]
-      : []),
+      : [{ label: "Listed in", value: categoryLabel(listing.category), accent: false }]),
     {
       label: "Clicks sent",
       value: formatCount(listing.totalClicks),
@@ -139,18 +135,15 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-ink-3">
           {categoryNoun(listing.category)}
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <h1 className="display mt-3 flex items-center gap-3 text-[clamp(2.25rem,7vw,4rem)]">
           <CoachAvatar
             name={listing.name}
             displayWebsite={listing.displayWebsite}
-            listingId={listing.id}
-            size={96}
-            className="rounded-2xl"
+            size={44}
+            className="rounded-xl"
           />
-          <h1 className="display min-w-0 text-[clamp(2.1rem,6.4vw,3.6rem)] leading-none">
-            {listing.name}
-          </h1>
-        </div>
+          {listing.name}
+        </h1>
 
         {listing.bio ? (
           <p className="mt-5 max-w-[48ch] text-[16px] leading-[1.55] text-ink-2">

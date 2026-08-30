@@ -64,7 +64,6 @@ export default async function CategoriesPage() {
                     <CoachAvatar
                       name={summary.leader.name}
                       displayWebsite={summary.leader.displayWebsite}
-                      listingId={summary.leader.id}
                       size={22}
                       className="rounded-md"
                     />

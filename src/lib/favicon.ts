@@ -5,14 +5,12 @@ import { initials } from "./format";
  * their website, and falls back to a generated initials avatar - both served through our
  * own /api/icon route so the <img> always resolves and there is no client-side fallback JS.
  */
-export function iconUrl(host: string, name: string, size = 64, listingId?: string): string {
+export function iconUrl(host: string, name: string, size = 64): string {
   const params = new URLSearchParams({
     host,
     n: initials(name),
     s: String(size),
   });
-  // Passing the listing lets the endpoint prefer the coach's own photo over a favicon.
-  if (listingId) params.set("l", listingId);
   return `/api/icon?${params.toString()}`;
 }
 

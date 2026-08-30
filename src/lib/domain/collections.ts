@@ -16,7 +16,6 @@ import type {
 
 export const COLLECTIONS = {
   listings: "listings",
-  listingPhotos: "listingPhotos",
   bidPayments: "bidPayments",
   activityEvents: "activityEvents",
   spotlightBookings: "spotlightBookings",
@@ -52,7 +51,6 @@ export function toListing(id: string, doc: ListingDoc): Listing {
     totalClicks: doc.totalClicks ?? 0,
     status: doc.status,
     enrolled: Boolean(doc.enrolledAt),
-    hasPhoto: Boolean(doc.photoUpdatedAt),
     createdAtMs: ms(doc.createdAt) ?? 0,
     updatedAtMs: ms(doc.updatedAt) ?? 0,
   };

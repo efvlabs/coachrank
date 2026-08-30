@@ -14,7 +14,6 @@ import { listingIdForWebsite } from "./payments";
 import { MODERATION_MESSAGE, NAME_MESSAGE, screenWebsite, validateName } from "../moderation";
 import { COLLECTIONS } from "./collections";
 import { setActivityVisibilityForListing } from "./activity";
-import { newEditToken } from "./profile";
 import { createPost, deletePost, updatePost, validateBlogInput } from "./blog";
 import { updatePricing } from "./settings";
 import type { ListingStatus } from "./types";
@@ -168,7 +167,6 @@ export async function addCoachAction(formData: FormData): Promise<ActionResult> 
         totalClicks: 0,
         status: "listed",
         enrolledAt: now,
-        editToken: newEditToken(),
         createdAt: now,
         updatedAt: now,
       });

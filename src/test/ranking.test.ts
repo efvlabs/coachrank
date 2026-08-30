@@ -25,7 +25,6 @@ function listing(overrides: Partial<Listing> & { id: string }): Listing {
     totalClicks: 0,
     status: "active",
     enrolled: false,
-    hasPhoto: false,
     createdAtMs: 0,
     updatedAtMs: 0,
     ...overrides,
@@ -106,7 +105,7 @@ describe("claim prices", () => {
   });
 
   it("costs the minimum new bid on an empty board", () => {
-    expect(priceToClaimTopCents(0, pricing)).toBe(5 * DOLLAR);
+    expect(priceToClaimTopCents(0, pricing)).toBe(pricing.minNewBidCents);
   });
 
   it("needs one standard increment more to take any position other than #1", () => {
@@ -133,7 +132,7 @@ describe("bid validation", () => {
 
   it("rejects a new listing below the minimum", () => {
     const result = validateTargetBid({
-      targetStandingBidCents: 4 * DOLLAR,
+      targetStandingBidCents: pricing.minNewBidCents - 1,
       currentStandingBidCents: 0,
       currentTopCents: 0,
       pricing,
