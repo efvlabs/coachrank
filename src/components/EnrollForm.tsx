@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { MAX_BIO_CHARS } from "@/lib/bio";
 import { CATEGORIES, type CategorySlug } from "@/lib/categories";
 
 type State = "idle" | "sending" | "submitted" | "already";
@@ -14,6 +15,7 @@ export function EnrollForm() {
   const [name, setName] = useState("");
   const [website, setWebsite] = useState("");
   const [category, setCategory] = useState<CategorySlug | "">("");
+  const [bio, setBio] = useState("");
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +27,7 @@ export function EnrollForm() {
       const response = await fetch("/api/enroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, website, category }),
+        body: JSON.stringify({ name, website, category, bio }),
       });
       const data = await response.json();
       if (!response.ok || !data?.ok) {
@@ -98,6 +100,20 @@ export function EnrollForm() {
         </select>
       </label>
 
+      <label className="mt-3 block">
+        <span className="eyebrow">About you</span>
+        <textarea
+          value={bio}
+          onChange={(e) => setBio(e.target.value.slice(0, MAX_BIO_CHARS))}
+          rows={5}
+          placeholder="Who you work with, what you help them do, and anything someone searching your name should know."
+          className="field mt-1 resize-none"
+        />
+      </label>
+      <p className="meta mt-1.5 text-right">
+        {bio.length} / {MAX_BIO_CHARS}
+      </p>
+
       {error ? (
         <p role="alert" className="mt-3 text-[13.5px] font-medium text-flag">
           {error}
@@ -113,7 +129,8 @@ export function EnrollForm() {
       </button>
 
       <p className="meta mt-3 text-center">
-        Reviewed by a person, and it costs nothing. Being listed is not a rank - ranking is bought.
+        Reviewed by a person, and it costs nothing. Your words go on your own page, which is
+        what people find when they search your name.
       </p>
     </form>
   );

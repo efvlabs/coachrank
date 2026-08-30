@@ -100,8 +100,10 @@ describe("ranking order", () => {
 });
 
 describe("claim prices", () => {
-  it("requires $5 more than the current #1 to take the top spot", () => {
-    expect(priceToClaimTopCents(500 * DOLLAR, pricing)).toBe(505 * DOLLAR);
+  it("requires one top increment more than the current #1 to take the top spot", () => {
+    expect(priceToClaimTopCents(500 * DOLLAR, pricing)).toBe(
+      500 * DOLLAR + pricing.topPositionIncrementCents,
+    );
   });
 
   it("costs the minimum new bid on an empty board", () => {
@@ -115,19 +117,25 @@ describe("claim prices", () => {
   });
 
   it("uses the top increment when the position being claimed is #1", () => {
-    expect(priceToClaimRankCents(500 * DOLLAR, 1, pricing)).toBe(505 * DOLLAR);
+    expect(priceToClaimRankCents(500 * DOLLAR, 1, pricing)).toBe(
+      500 * DOLLAR + pricing.topPositionIncrementCents,
+    );
   });
 });
 
 describe("bid validation", () => {
-  it("accepts a new listing at the $5 minimum", () => {
+  it("accepts a new listing at exactly the minimum", () => {
     const result = validateTargetBid({
-      targetStandingBidCents: 5 * DOLLAR,
+      targetStandingBidCents: pricing.minNewBidCents,
       currentStandingBidCents: 0,
       currentTopCents: 0,
       pricing,
     });
-    expect(result).toEqual({ ok: true, incrementCents: 5 * DOLLAR, targetStandingBidCents: 5 * DOLLAR });
+    expect(result).toEqual({
+      ok: true,
+      incrementCents: pricing.minNewBidCents,
+      targetStandingBidCents: pricing.minNewBidCents,
+    });
   });
 
   it("rejects a new listing below the minimum", () => {
@@ -142,24 +150,28 @@ describe("bid validation", () => {
   });
 
   it("rejects the dead zone just above #1", () => {
+    const top = 500 * DOLLAR;
     const result = validateTargetBid({
-      targetStandingBidCents: 502 * DOLLAR,
+      targetStandingBidCents: top + pricing.topPositionIncrementCents - 1,
       currentStandingBidCents: 0,
-      currentTopCents: 500 * DOLLAR,
+      currentTopCents: top,
       pricing,
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.code).toBe("top_gap");
-      if (result.error.code === "top_gap") expect(result.error.minimumCents).toBe(505 * DOLLAR);
+      if (result.error.code === "top_gap") {
+        expect(result.error.minimumCents).toBe(top + pricing.topPositionIncrementCents);
+      }
     }
   });
 
   it("accepts exactly the #1 threshold", () => {
+    const top = 500 * DOLLAR;
     const result = validateTargetBid({
-      targetStandingBidCents: 505 * DOLLAR,
+      targetStandingBidCents: top + pricing.topPositionIncrementCents,
       currentStandingBidCents: 0,
-      currentTopCents: 500 * DOLLAR,
+      currentTopCents: top,
       pricing,
     });
     expect(result.ok).toBe(true);

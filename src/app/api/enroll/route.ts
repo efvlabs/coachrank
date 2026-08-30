@@ -1,4 +1,5 @@
 import { jsonError, jsonOk, rateLimited, readJson } from "@/lib/api";
+import { BIO_REJECTION_MESSAGE, validateBio } from "@/lib/bio";
 import { isCategorySlug } from "@/lib/categories";
 import { COLLECTIONS } from "@/lib/domain/collections";
 import { getListingByNormalizedWebsite } from "@/lib/domain/listings";
@@ -12,7 +13,7 @@ import { Timestamp } from "firebase-admin/firestore";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-type Body = { name?: string; website?: string; category?: string };
+type Body = { name?: string; website?: string; category?: string; bio?: string };
 
 /**
  * Free enrolment. Nothing here reaches the leaderboard - a submission waits for a human,
@@ -48,6 +49,16 @@ export async function POST(request: Request) {
     return jsonError("Pick a category from the list.", 400, { field: "category" });
   }
 
+  // A bio is optional, but if one is offered it is screened before it is stored.
+  let bio = "";
+  if (body.bio && body.bio.trim()) {
+    const result = validateBio(body.bio);
+    if (!result.ok) {
+      return jsonError(BIO_REJECTION_MESSAGE[result.reason], 400, { field: "bio" });
+    }
+    bio = result.value;
+  }
+
   const existing = await getListingByNormalizedWebsite(parsed.value.normalized);
   if (existing) {
     if (existing.status === "submitted") {
@@ -73,7 +84,7 @@ export async function POST(request: Request) {
         normalizedWebsite: parsed.value.normalized,
         displayWebsite: parsed.value.display,
         category: body.category,
-        bio: "",
+        bio,
         standingBidCents: 0,
         standingBidReachedAt: now,
         totalClicks: 0,

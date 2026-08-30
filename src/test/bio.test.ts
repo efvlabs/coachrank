@@ -1,20 +1,28 @@
 import { describe, expect, it } from "vitest";
 
-import { MAX_BIO_WORDS, countWords, validateBio } from "@/lib/bio";
+import { MAX_BIO_CHARS, bioParagraphs, countWords, validateBio } from "@/lib/bio";
 
-const words = (n: number) => Array.from({ length: n }, (_, i) => `word${i + 1}`).join(" ");
-
-describe("30-word bio", () => {
-  it("accepts exactly 30 words", () => {
-    const result = validateBio(words(MAX_BIO_WORDS));
-    expect(result.ok).toBe(true);
-    if (result.ok) expect(result.words).toBe(30);
+describe("a bio is plain text", () => {
+  it("accepts a bio at the character limit", () => {
+    expect(validateBio("a".repeat(MAX_BIO_CHARS)).ok).toBe(true);
   });
 
-  it("rejects 31 words", () => {
-    const result = validateBio(words(MAX_BIO_WORDS + 1));
+  it("rejects one character more", () => {
+    const result = validateBio("a".repeat(MAX_BIO_CHARS + 1));
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.reason).toBe("too_many_words");
+    if (!result.ok) expect(result.reason).toBe("too_long");
+  });
+
+  it("keeps paragraph breaks and collapses everything else", () => {
+    const result = validateBio("I help   founders\tship.\n\n\n\nTwenty  years of it.");
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toBe("I help founders ship.\n\nTwenty years of it.");
+      expect(bioParagraphs(result.value)).toEqual([
+        "I help founders ship.",
+        "Twenty years of it.",
+      ]);
+    }
   });
 
   it("counts words the same way the live counter does", () => {
@@ -23,16 +31,7 @@ describe("30-word bio", () => {
     expect(countWords("\n\t")).toBe(0);
   });
 
-  it("collapses whitespace so padding cannot smuggle in extra words", () => {
-    const result = validateBio("I   help\n\nfounders\tship faster");
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value).toBe("I help founders ship faster");
-      expect(result.words).toBe(5);
-    }
-  });
-
-  it("rejects anything containing markup", () => {
+  it("refuses anything that could become markup", () => {
     for (const bad of [
       "<script>alert(1)</script>",
       "I help founders <b>win</b>",

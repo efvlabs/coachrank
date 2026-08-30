@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CoachAvatar } from "@/components/CoachAvatar";
 import { RankBadge } from "@/components/RankBadge";
 import { ShareRank } from "@/components/ShareRank";
+import { bioParagraphs } from "@/lib/bio";
 import { categoryLabel, categoryNoun } from "@/lib/categories";
 import { SITE, absoluteUrl } from "@/lib/config";
 import {
@@ -24,16 +25,34 @@ export async function generateMetadata({
 }: PageProps<"/r/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const listing = await getListingBySlug(slug);
-  if (!listing || listing.status !== "active") {
+  // A listed coach is public and indexable too - noindexing them would waste the whole
+  // point of giving them a page.
+  if (!listing || (listing.status !== "active" && listing.status !== "listed")) {
     return { title: "Not found", robots: { index: false, follow: false } };
   }
 
-  const ranks = await computeRanks(listing);
-  const title = `${listing.name} - #${ranks.overallRank} on CoachRank`;
-  const description = `${listing.name} holds #${ranks.overallRank} overall and #${ranks.categoryRank} in ${categoryLabel(listing.category)} with a standing bid of ${formatCents(listing.standingBidCents)}. Rank reflects money bid only.`;
+  const ranked = listing.status === "active";
+  const ranks = ranked
+    ? await computeRanks(listing)
+    : { overallRank: 0, categoryRank: 0 };
+
+  const title = ranked
+    ? `${listing.name} - #${ranks.overallRank} on CoachRank`
+    : `${listing.name} - ${categoryNoun(listing.category)} on CoachRank`;
+
+  // Their own words beat anything we could generate, and are what a search result should
+  // show someone looking them up by name.
+  const rankLine = ranked
+    ? `${listing.name} holds #${ranks.overallRank} overall and #${ranks.categoryRank} in ${categoryLabel(listing.category)} with a standing bid of ${formatCents(listing.standingBidCents)}. Rank reflects money bid only.`
+    : `${listing.name} is listed on CoachRank under ${categoryLabel(listing.category)}. Listing is not a rank - rank is bought.`;
+  const description = listing.bio
+    ? listing.bio.replace(/\s+/g, " ").slice(0, 300)
+    : rankLine;
 
   return {
-    title,
+    // Absolute, because the title already names CoachRank and the layout template would
+    // otherwise append it a second time.
+    title: { absolute: title },
     description,
     alternates: { canonical: `/r/${listing.slug}` },
     openGraph: {
@@ -146,9 +165,11 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         </h1>
 
         {listing.bio ? (
-          <p className="mt-5 max-w-[48ch] text-[16px] leading-[1.55] text-ink-2">
-            {listing.bio}
-          </p>
+          <div className="mt-5 max-w-[62ch] space-y-3.5 text-[16px] leading-[1.6] text-ink-2">
+            {bioParagraphs(listing.bio).map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
+          </div>
         ) : null}
 
         <dl

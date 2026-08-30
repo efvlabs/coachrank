@@ -1,5 +1,4 @@
-export const MAX_BIO_WORDS = 30;
-export const MAX_BIO_CHARS = 400;
+export const MAX_BIO_CHARS = 1000;
 
 /** Words are whitespace-delimited runs. Used identically on the client and the server. */
 export function countWords(text: string): number {
@@ -8,27 +7,37 @@ export function countWords(text: string): number {
   return trimmed.split(/\s+/).length;
 }
 
-export type BioRejectionReason = "empty" | "too_many_words" | "too_long" | "markup";
+export type BioRejectionReason = "empty" | "too_long" | "markup";
 
 /** Replace C0/C1 control characters with a space so they cannot hide inside a bio. */
 function stripControlChars(input: string): string {
   let out = "";
   for (const ch of input) {
     const code = ch.codePointAt(0) ?? 0;
-    out += code < 0x20 || (code >= 0x7f && code <= 0x9f) ? " " : ch;
+    const control = (code < 0x20 && ch !== "\n") || (code >= 0x7f && code <= 0x9f);
+    out += control ? " " : ch;
   }
   return out;
 }
 
 /**
- * Bios are stored and rendered as plain text. We strip control characters and collapse
- * whitespace, and reject anything containing markup so nothing can smuggle HTML through.
+ * Bios are plain text, deliberately.
+ *
+ * A coach filling in a form on their phone will not write markdown, bold adds nothing to
+ * what a search engine indexes, and an open link field on a site with any PageRank is the
+ * first thing an SEO spammer looks for. Paragraph breaks are the one bit of structure a
+ * bio actually needs, so they survive and nothing else does.
+ *
+ * Angle brackets are refused outright, which means no HTML reaches a renderer at all -
+ * cheaper to be certain of than any allowlist.
  */
 export function validateBio(
   input: string | null | undefined,
 ): { ok: true; value: string; words: number } | { ok: false; reason: BioRejectionReason } {
   const raw = stripControlChars(input ?? "")
-    .replace(/\s+/g, " ")
+    // Collapse runs of spaces and tabs, but keep paragraph breaks.
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
 
   if (!raw) return { ok: false, reason: "empty" };
@@ -37,15 +46,22 @@ export function validateBio(
     return { ok: false, reason: "markup" };
   }
 
-  const words = countWords(raw);
-  if (words > MAX_BIO_WORDS) return { ok: false, reason: "too_many_words" };
-
-  return { ok: true, value: raw, words };
+  return { ok: true, value: raw, words: countWords(raw) };
 }
 
 export const BIO_REJECTION_MESSAGE: Record<BioRejectionReason, string> = {
   empty: "Add a short bio.",
-  too_many_words: `Keep it to ${MAX_BIO_WORDS} words or fewer.`,
-  too_long: "That bio is too long.",
+  too_long: `Keep it to ${MAX_BIO_CHARS} characters or fewer.`,
   markup: "Plain text only - no HTML or angle brackets.",
 };
+
+/**
+ * A validated bio, split for rendering. Paragraphs only - React escapes the text like any
+ * other string, so there is nothing here that can become markup.
+ */
+export function bioParagraphs(bio: string): string[] {
+  return (bio ?? "")
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+}
