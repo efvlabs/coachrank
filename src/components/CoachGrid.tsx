@@ -25,7 +25,7 @@ export function CoachGrid({ coaches, source, hideCategory = false }: Props) {
     <section aria-labelledby="coaches" className="mt-14">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h2 id="coaches" className="display text-[22px] leading-none">
-          Also on CoachRank
+          Featured Coaches
         </h2>
         <p className="text-[12.5px] text-ink-3">
           {coaches.length} listed · unranked · <Link href="/enroll" className="hover:text-ink">add yourself</Link>
