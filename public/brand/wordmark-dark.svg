@@ -5,5 +5,5 @@
   <rect x="22.4" y="14" width="13.125" height="34.125" rx="3.5" fill="#FFFFFF"/>
   <rect x="36.925" y="32.375" width="13.125" height="15.75" rx="3.5" fill="#FFFFFF" opacity="0.55"/>
   </g>
-  <text x="74" y="41" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="30" font-weight="700" fill="#101218">CoachRank</text>
+  <text x="74" y="41" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="30" font-weight="700" fill="#F2F3F6">CoachRank</text>
 </svg>

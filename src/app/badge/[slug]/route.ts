@@ -1,3 +1,4 @@
+import { podiumRects } from "@/lib/brand";
 import { categoryLabel } from "@/lib/categories";
 import { computeRanks, getListingBySlug } from "@/lib/domain/listings";
 
@@ -60,10 +61,8 @@ function svg(rank: string | null, category: string | null, theme: keyof typeof T
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${H}" viewBox="0 0 ${width} ${H}" role="img" aria-label="${escapeXml(label)}">
   <title>${escapeXml(label)}</title>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${H - 1}" rx="${H / 2}" fill="${t.bg}" stroke="${t.border}"/>
-  <g fill="${t.accent}">
-    <rect x="${barsX}" y="21" width="3.5" height="7" rx="1.4"/>
-    <rect x="${barsX + 5.5}" y="16" width="3.5" height="12" rx="1.4"/>
-    <rect x="${barsX + 11}" y="12" width="3.5" height="16" rx="1.4"/>
+  <g fill="${t.accent}" transform="translate(${barsX - 2.1} 9.5) scale(0.594)">
+    ${podiumRects({ fill: t.accent })}
   </g>
   <text x="${wordX}" y="${H / 2 + 4.5}" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="13.5" font-weight="700" fill="${t.ink}">${escapeXml(wordmark)}</text>
   ${rank ? `<line x1="${divX}" y1="11" x2="${divX}" y2="${H - 11}" stroke="${t.border}" stroke-width="1"/>
