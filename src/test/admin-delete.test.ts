@@ -125,3 +125,32 @@ describe("deleting a listing nobody paid for", () => {
     expect(result.ok).toBe(false);
   });
 });
+
+describe("deleting a coach who was listed rather than charged", () => {
+  it("removes them, because nobody ever paid for that listing", async () => {
+    const { listingId } = await ensureListing(SARAH);
+    await fakeDb.collection(COLLECTIONS.listings).doc(listingId).update({ status: "listed" });
+
+    const result = await deleteUnpaidListingAction(form(listingId));
+
+    expect(result.ok).toBe(true);
+    expect(listingExists(listingId)).toBe(false);
+  });
+
+  it("still refuses once they have paid their way onto the board", async () => {
+    const { listingId } = await ensureListing(SARAH);
+    await fakeDb.collection(COLLECTIONS.listings).doc(listingId).update({ status: "listed" });
+    const paymentId = await createPendingBidPayment({
+      listingId,
+      incrementCents: 500,
+      previousStandingBidCents: 0,
+      intendedStandingBidCents: 500,
+    });
+    await processVerifiedBidPayment({ internalPaymentId: paymentId, dodoPaymentId: "pay_1" });
+
+    const result = await deleteUnpaidListingAction(form(listingId));
+
+    expect(result.ok).toBe(false);
+    expect(listingExists(listingId)).toBe(true);
+  });
+});

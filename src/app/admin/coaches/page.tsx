@@ -1,4 +1,6 @@
 import { AdminForm } from "@/components/admin/AdminForm";
+import { AdminIcon } from "@/components/admin/AdminIcon";
+import { IconButton } from "@/components/admin/IconButton";
 import { CATEGORIES } from "@/lib/categories";
 import {
   addCoachAction,
@@ -109,100 +111,126 @@ export default async function AdminCoachesPage() {
       <h2 className="mt-10 text-[15px] font-semibold">Everyone</h2>
 
       {listings.length === 0 ? (
-        <p className="card mt-6 p-6 text-[14px] text-ink-3">No listings yet.</p>
+        <p className="card mt-4 p-6 text-[14px] text-ink-3">No listings yet.</p>
       ) : (
-        <ul className="mt-6 space-y-3">
+        <ul className="mt-4 divide-y divide-line overflow-hidden rounded-card border border-line">
           {listings.map((listing) => (
-            <li key={listing.id} className="card p-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <p className="text-[15px] font-bold">{listing.name}</p>
-                <span className="flex items-center gap-2 text-[12px] text-ink-3">
-                  <span
-                    className={`pill ${
-                      listing.status === "active"
-                        ? "border-accent"
-                        : listing.status === "hidden"
-                          ? "border-line-2"
-                          : ""
-                    }`}
-                  >
-                    {listing.status}
-                  </span>
-                  <span className="tnum">{formatCents(listing.standingBidCents)}</span>
-                  <span className="tnum">{formatCount(listing.totalClicks)} clicks</span>
-                </span>
-              </div>
-
-              <p className="mt-1 text-[12.5px] text-ink-3">
-                {prettyWebsite(listing.displayWebsite)} · /r/{listing.slug}
-              </p>
-
-              <AdminForm action={updateListingAction} className="mt-3">
-                <input type="hidden" name="id" value={listing.id} />
-                <div className="grid gap-2 sm:grid-cols-[1fr_180px]">
-                  <label className="sr-only" htmlFor={`name-${listing.id}`}>
-                    Name
-                  </label>
-                  <input
-                    id={`name-${listing.id}`} name="name"
-                    className="field"
-                    defaultValue={listing.name}
-                  />
-                  <label className="sr-only" htmlFor={`cat-${listing.id}`}>
-                    Category
-                  </label>
-                  <select
-                    id={`cat-${listing.id}`} name="category"
-                    className="field"
-                    defaultValue={listing.category}
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c.slug} value={c.slug}>
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <label className="sr-only" htmlFor={`bio-${listing.id}`}>
-                  Bio
-                </label>
-                <textarea
-                  id={`bio-${listing.id}`} name="bio"
-                  rows={2}
-                  className="field mt-2 resize-none"
-                  defaultValue={listing.bio}
-                />
-                <button type="submit" className="btn btn-ghost mt-2 px-4 py-1.5 text-[12.5px]">
-                  Save
-                </button>
-              </AdminForm>
-
-              {listing.status !== "pending" ? (
-                <AdminForm action={setListingStatusAction} className="mt-2">
-                  <input type="hidden" name="id" value={listing.id} />
-                  <input type="hidden" name="status"
-                    value={listing.status === "hidden" ? "active" : "hidden"}
-                  />
-                  <button type="submit" className="btn btn-ghost px-4 py-1.5 text-[12.5px]">
-                    {listing.status === "hidden" ? "Restore" : "Hide"}
-                  </button>
-                </AdminForm>
-              ) : (
-                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-                  <p className="text-[12px] text-ink-3">
-                    Awaiting a verified payment - it will publish itself.
+            <li key={listing.id} className="bg-card">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5">
+                <div className="min-w-0 flex-1">
+                  <p className="flex items-center gap-2 text-[14px] font-semibold leading-tight">
+                    <span className="truncate">{listing.name}</span>
+                    <span
+                      className={`shrink-0 rounded-full border px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide ${
+                        listing.status === "active"
+                          ? "border-accent text-accent"
+                          : listing.status === "hidden"
+                            ? "border-flag text-flag"
+                            : "border-line-2 text-ink-3"
+                      }`}
+                    >
+                      {listing.status}
+                    </span>
                   </p>
+                  <p className="mt-0.5 truncate text-[12px] text-ink-3">
+                    {prettyWebsite(listing.displayWebsite)}
+                    {" · "}
+                    {CATEGORIES.find((c) => c.slug === listing.category)?.label ?? listing.category}
+                  </p>
+                </div>
+
+                <span className="tnum shrink-0 text-[12.5px] text-ink-3">
+                  {formatCents(listing.standingBidCents)} · {formatCount(listing.totalClicks)} clicks
+                </span>
+
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <a
+                    href={`/r/${listing.slug}`}
+                    target="_blank"
+                    rel="noopener"
+                    title="Open the public page"
+                    aria-label="Open the public page"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-line text-ink-3 transition-colors hover:border-line-2 hover:text-ink"
+                  >
+                    <AdminIcon name="external" />
+                  </a>
+
+                  {listing.status !== "pending" ? (
+                    <AdminForm action={setListingStatusAction}>
+                      <input type="hidden" name="id" value={listing.id} />
+                      <input
+                        type="hidden"
+                        name="status"
+                        value={listing.status === "hidden" ? "active" : "hidden"}
+                      />
+                      <IconButton
+                        icon={listing.status === "hidden" ? "restore" : "hide"}
+                        label={listing.status === "hidden" ? "Restore" : "Hide"}
+                      />
+                    </AdminForm>
+                  ) : null}
+
                   <AdminForm action={deleteUnpaidListingAction}>
                     <input type="hidden" name="id" value={listing.id} />
-                    <button
-                      type="submit"
-                      className="btn btn-ghost px-4 py-1.5 text-[12.5px] text-flag"
-                    >
-                      Delete
-                    </button>
+                    <IconButton
+                      icon="trash"
+                      danger
+                      label="Delete"
+                      confirm={`Delete ${listing.name}? This cannot be undone. Only a listing nobody paid for can be removed.`}
+                    />
                   </AdminForm>
                 </div>
-              )}
+              </div>
+
+              <details className="group border-t border-line/60 px-4 py-2">
+                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-[12px] text-ink-3 hover:text-ink">
+                  <AdminIcon name="edit" />
+                  Edit
+                </summary>
+
+                <AdminForm action={updateListingAction} className="pb-2 pt-3">
+                  <input type="hidden" name="id" value={listing.id} />
+                  <div className="grid gap-2 sm:grid-cols-[1fr_180px]">
+                    <label className="sr-only" htmlFor={`name-${listing.id}`}>
+                      Name
+                    </label>
+                    <input
+                      id={`name-${listing.id}`}
+                      name="name"
+                      className="field"
+                      defaultValue={listing.name}
+                    />
+                    <label className="sr-only" htmlFor={`cat-${listing.id}`}>
+                      Category
+                    </label>
+                    <select
+                      id={`cat-${listing.id}`}
+                      name="category"
+                      className="field"
+                      defaultValue={listing.category}
+                    >
+                      {CATEGORIES.map((c) => (
+                        <option key={c.slug} value={c.slug}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <label className="sr-only" htmlFor={`bio-${listing.id}`}>
+                    Bio
+                  </label>
+                  <textarea
+                    id={`bio-${listing.id}`}
+                    name="bio"
+                    rows={2}
+                    className="field mt-2 resize-none"
+                    defaultValue={listing.bio}
+                  />
+                  <button type="submit" className="btn btn-ghost mt-2 px-4 py-1.5 text-[12.5px]">
+                    Save
+                  </button>
+                </AdminForm>
+              </details>
             </li>
           ))}
         </ul>
