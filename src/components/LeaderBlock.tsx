@@ -28,6 +28,7 @@ export function LeaderBlock({ listing, claimCents, source }: Props) {
         <CoachAvatar
           name={listing.name}
           displayWebsite={listing.displayWebsite}
+          listingId={listing.id}
           size={40}
           className="hidden rounded-xl sm:block"
         />

@@ -29,6 +29,7 @@ export function TodayInsert({ entries, seeAllHref = "/today" }: Props) {
               <CoachAvatar
                 name={entry.listing.name}
                 displayWebsite={entry.listing.displayWebsite}
+                listingId={entry.listing.id}
                 size={26}
                 className="rounded-md"
               />

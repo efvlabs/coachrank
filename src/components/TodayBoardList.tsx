@@ -37,6 +37,7 @@ export function TodayBoardList({ entries, pricing, source, nowMs }: Props) {
                 <CoachAvatar
                   name={listing.name}
                   displayWebsite={listing.displayWebsite}
+                  listingId={listing.id}
                   size={18}
                   className="translate-y-[0.08em]"
                 />

@@ -37,6 +37,7 @@ export function SpotlightCard({ slot, booking, priceCents, nowMs }: Props) {
           <CoachAvatar
             name={booking.advertiser.name}
             displayWebsite={booking.advertiser.displayWebsite}
+            listingId={booking.listingId ?? undefined}
             size={28}
             className="rounded-lg"
           />
