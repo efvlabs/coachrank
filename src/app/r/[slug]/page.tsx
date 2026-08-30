@@ -77,17 +77,25 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
   const shareUrl = absoluteUrl(`/r/${listing.slug}`);
 
   const facts = [
-    { label: "Overall", value: ranked ? `#${ranks.overallRank}` : "-", accent: ranked },
-    {
-      label: categoryLabel(listing.category),
-      value: ranked ? `#${ranks.categoryRank}` : "-",
-      accent: false,
-    },
-    {
-      label: "Standing bid",
-      value: formatCents(listing.standingBidCents),
-      accent: false,
-    },
+    ...(ranked
+      ? [
+          { label: "Overall", value: `#${ranks.overallRank}`, accent: true },
+          {
+            label: categoryLabel(listing.category),
+            value: `#${ranks.categoryRank}`,
+            accent: false,
+          },
+        ]
+      : [{ label: "Listed in", value: categoryLabel(listing.category), accent: false }]),
+    ...(ranked
+      ? [
+          {
+            label: "Standing bid",
+            value: formatCents(listing.standingBidCents),
+            accent: false,
+          },
+        ]
+      : []),
     {
       label: "Clicks sent",
       value: formatCount(listing.totalClicks),
@@ -131,15 +139,18 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-ink-3">
           {categoryNoun(listing.category)}
         </p>
-        <h1 className="display mt-3 flex items-center gap-3 text-[clamp(2.25rem,7vw,4rem)]">
+        <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-4">
           <CoachAvatar
             name={listing.name}
             displayWebsite={listing.displayWebsite}
-            size={44}
-            className="rounded-xl"
+            listingId={listing.id}
+            size={96}
+            className="rounded-2xl"
           />
-          {listing.name}
-        </h1>
+          <h1 className="display min-w-0 text-[clamp(2.1rem,6.4vw,3.6rem)] leading-none">
+            {listing.name}
+          </h1>
+        </div>
 
         {listing.bio ? (
           <p className="mt-5 max-w-[48ch] text-[16px] leading-[1.55] text-ink-2">
@@ -148,9 +159,9 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         ) : null}
 
         <dl
-          className={`grid grid-cols-2 gap-px overflow-hidden rounded-card bg-line sm:grid-cols-4 ${
-            listing.bio ? "mt-7" : "mt-8"
-          }`}
+          className={`grid grid-cols-2 gap-px overflow-hidden rounded-card bg-line ${
+            ranked ? "sm:grid-cols-4" : "sm:grid-cols-2"
+          } ${listing.bio ? "mt-7" : "mt-8"}`}
         >
           {facts.map((fact) => (
             <div key={fact.label} className="bg-card px-4 py-4">
@@ -212,10 +223,12 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
           )}
         </p>
         <Link
-          href={`/?claim=${outbidCents}#claim`}
+          href={`/?claim=${ranked ? outbidCents : pricing.minNewBidCents}#claim`}
           className="btn btn-primary mt-5 px-7 py-3"
         >
-          Outbid · {formatCents(outbidCents)}
+          {ranked
+            ? `Outbid · ${formatCents(outbidCents)}`
+            : `Claim a rank · ${formatCents(pricing.minNewBidCents)}`}
         </Link>
       </section>
 
@@ -227,11 +240,13 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         categoryLabel={categoryLabel(listing.category)}
       />
 
-      <RankBadge
-        slug={listing.slug}
-        siteUrl={SITE.url}
-        categoryLabel={categoryLabel(listing.category)}
-      />
+      {ranked ? (
+        <RankBadge
+          slug={listing.slug}
+          siteUrl={SITE.url}
+          categoryLabel={categoryLabel(listing.category)}
+        />
+      ) : null}
 
       <p className="meta mt-10">
         Rank reflects the amount bid and nothing else. It is not a review,

@@ -31,6 +31,15 @@ export type ListingDoc = {
   /** Set when a coach enrolled for free rather than arriving through checkout. */
   enrolledAt?: Timestamp | null;
 
+  /**
+   * The secret in the coach's own edit link. It is how someone proves a listing is theirs
+   * without us running accounts, so it is never rendered anywhere public.
+   */
+  editToken?: string;
+
+  /** Set when a photo exists, so the board knows without reading the photo itself. */
+  photoUpdatedAt?: Timestamp | null;
+
   createdAt: Timestamp;
   updatedAt: Timestamp;
 };
@@ -49,6 +58,7 @@ export type Listing = {
   totalClicks: number;
   status: ListingStatus;
   enrolled: boolean;
+  hasPhoto: boolean;
   createdAtMs: number;
   updatedAtMs: number;
 };

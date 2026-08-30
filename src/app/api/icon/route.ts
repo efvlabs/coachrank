@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { faviconSources, initialsSvg } from "@/lib/favicon";
+import { getListingPhoto } from "@/lib/domain/profile";
 import { normalizeWebsite } from "@/lib/url";
 
 export const runtime = "nodejs";
@@ -25,6 +26,21 @@ export async function GET(request: NextRequest) {
   const rawHost = (params.get("host") ?? "").trim().toLowerCase();
   const text = (params.get("n") ?? "?").slice(0, 2);
   const size = Math.min(256, Math.max(16, Number(params.get("s")) || 64));
+  const listingId = (params.get("l") ?? "").trim();
+
+  // A coach's own photo outranks anything we could scrape from their website.
+  if (listingId) {
+    const photo = await getListingPhoto(listingId);
+    if (photo) {
+      return new NextResponse(new Uint8Array(photo.buffer), {
+        headers: {
+          "Content-Type": photo.contentType,
+          // Shorter than a favicon's week: a coach who changes their photo should see it.
+          "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      });
+    }
+  }
 
   // Reuse the submission-time normaliser so this endpoint cannot be pointed at arbitrary hosts.
   const parsed = normalizeWebsite(rawHost);

@@ -25,6 +25,7 @@ function listing(overrides: Partial<Listing> & { id: string }): Listing {
     totalClicks: 0,
     status: "active",
     enrolled: false,
+    hasPhoto: false,
     createdAtMs: 0,
     updatedAtMs: 0,
     ...overrides,

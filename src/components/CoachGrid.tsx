@@ -39,6 +39,7 @@ export function CoachGrid({ coaches, source, hideCategory = false }: Props) {
               <CoachAvatar
                 name={coach.name}
                 displayWebsite={coach.displayWebsite}
+                listingId={coach.id}
                 size={34}
                 className="shrink-0 rounded-lg"
               />

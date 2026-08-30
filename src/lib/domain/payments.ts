@@ -108,6 +108,7 @@ function materialise(id: string, doc: ListingDoc): Listing {
     totalClicks: doc.totalClicks ?? 0,
     status: doc.status,
     enrolled: Boolean(doc.enrolledAt),
+    hasPhoto: Boolean(doc.photoUpdatedAt),
     createdAtMs: doc.createdAt?.toMillis?.() ?? Date.now(),
     updatedAtMs: doc.updatedAt?.toMillis?.() ?? Date.now(),
   };

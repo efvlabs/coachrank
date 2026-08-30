@@ -18,6 +18,7 @@ function board(count: number): Listing[] {
     totalClicks: 0,
     status: "active" as const,
     enrolled: false,
+    hasPhoto: false,
     createdAtMs: 0,
     updatedAtMs: 0,
   }));

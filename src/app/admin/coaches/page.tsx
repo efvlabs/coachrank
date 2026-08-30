@@ -1,5 +1,6 @@
 import { AdminForm } from "@/components/admin/AdminForm";
 import { AdminIcon } from "@/components/admin/AdminIcon";
+import { CopyLink } from "@/components/admin/CopyLink";
 import { IconButton } from "@/components/admin/IconButton";
 import { CATEGORIES } from "@/lib/categories";
 import {
@@ -9,7 +10,7 @@ import {
   setListingStatusAction,
   updateListingAction,
 } from "@/lib/domain/admin-actions";
-import { getSubmittedListings, listAllListings } from "@/lib/domain/listings";
+import { getEditLink, getSubmittedListings, listAllListings } from "@/lib/domain/listings";
 import { formatCents, formatCount } from "@/lib/money";
 import { prettyWebsite } from "@/lib/url";
 
@@ -17,6 +18,12 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminCoachesPage() {
   const [listings, queue] = await Promise.all([listAllListings(300), getSubmittedListings()]);
+  // The edit link is the coach's own; the admin needs it to paste into a reply.
+  const editLinks = new Map(
+    await Promise.all(
+      listings.map(async (l) => [l.id, await getEditLink(l.id)] as const),
+    ),
+  );
 
   return (
     <div>
@@ -132,10 +139,16 @@ export default async function AdminCoachesPage() {
                       {listing.status}
                     </span>
                   </p>
-                  <p className="mt-0.5 truncate text-[12px] text-ink-3">
-                    {prettyWebsite(listing.displayWebsite)}
-                    {" · "}
-                    {CATEGORIES.find((c) => c.slug === listing.category)?.label ?? listing.category}
+                  <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-ink-3">
+                    <span className="truncate">
+                      {prettyWebsite(listing.displayWebsite)}
+                      {" · "}
+                      {CATEGORIES.find((c) => c.slug === listing.category)?.label ?? listing.category}
+                    </span>
+                    {listing.hasPhoto ? null : <span className="text-ink-3">no photo</span>}
+                    {editLinks.get(listing.id) ? (
+                      <CopyLink href={editLinks.get(listing.id)!} label="Copy edit link" />
+                    ) : null}
                   </p>
                 </div>
 

@@ -45,6 +45,7 @@ export function LotRow({ listing, claimCents, source, podium = false, topBidCent
       <CoachAvatar
         name={listing.name}
         displayWebsite={listing.displayWebsite}
+        listingId={listing.id}
         size={36}
         className="hidden rounded-lg sm:block"
       />
