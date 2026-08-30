@@ -50,6 +50,7 @@ export function toListing(id: string, doc: ListingDoc): Listing {
     standingBidReachedAtMs: ms(doc.standingBidReachedAt) ?? ms(doc.createdAt) ?? 0,
     totalClicks: doc.totalClicks ?? 0,
     status: doc.status,
+    enrolled: Boolean(doc.enrolledAt),
     createdAtMs: ms(doc.createdAt) ?? 0,
     updatedAtMs: ms(doc.updatedAt) ?? 0,
   };

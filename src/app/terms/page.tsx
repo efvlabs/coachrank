@@ -53,9 +53,13 @@ export default function TermsPage() {
 
       <h2>What the service is</h2>
       <p>
-        CoachRank is a paid public ranking. You may pay to list a coaching website and to occupy a
-        position based on the amount paid. <strong>Listings are advertisements</strong> - not
-        editorial reviews, certifications, endorsements or independent rankings.
+        CoachRank is a directory of coaches with a paid public ranking on top of it. Anyone may
+        ask to be listed for free, and we decide by hand whether to accept; a listed coach appears
+        in the directory holding no rank. Paying is what buys a position on the leaderboard, and
+        the position is decided by the amount. <strong>Both listings and rankings are
+        advertisements</strong> - not editorial reviews, certifications, endorsements or
+        independent rankings. Accepting a free listing is not an endorsement, and declining one is
+        not a judgement about the coach.
       </p>
       <p>
         A payment buys the position that amount supports at the moment it is fulfilled. It does not

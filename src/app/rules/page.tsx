@@ -106,6 +106,16 @@ export default async function RulesPage() {
 
       <h2>A listing</h2>
       <p>A listing is three things: a name, a website and a category. Nothing else is collected.</p>
+      <p>
+        Being listed is free. Ask through <Link href="/enroll">the form</Link> and a person reads
+        it; if we accept, the coach appears in the directory under the board, unranked and in
+        alphabetical order, which says nothing about them either. We can decline without giving a
+        reason, and we do not publish a coach who has asked not to be there.
+      </p>
+      <p>
+        A listing is not a rank. The leaderboard above it is bought, position is the amount paid,
+        and a listed coach joins it the moment they pay anything at all.
+      </p>
 
       <h2>What can be listed</h2>
       <ul>
@@ -166,7 +176,7 @@ export default async function RulesPage() {
 
       <h2>Payments</h2>
       <p>
-        Only a verified successful payment changes anything. Reaching a success page proves nothing:
+        Only a verified successful payment changes a rank. Reaching a success page proves nothing:
         a listing is published, a standing bid moves and a spotlight activates only after our
         payment provider confirms the charge to our server.
       </p>

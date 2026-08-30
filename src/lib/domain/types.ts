@@ -1,7 +1,17 @@
 import type { Timestamp } from "firebase-admin/firestore";
 import type { CategorySlug } from "../categories";
 
-export type ListingStatus = "pending" | "active" | "hidden";
+/**
+ * Awaiting payment and awaiting approval are different things, and conflating them causes
+ * real damage: an approved coach who has not paid is not an abandoned checkout.
+ *
+ *   submitted - enrolled, waiting on us
+ *   listed    - approved, in the grid, holding no rank because they paid nothing
+ *   pending   - reached checkout, never paid
+ *   active    - paid, on the leaderboard
+ *   hidden    - taken down by moderation
+ */
+export type ListingStatus = "submitted" | "listed" | "pending" | "active" | "hidden";
 
 export type ListingDoc = {
   name: string;
@@ -17,6 +27,9 @@ export type ListingDoc = {
   totalClicks: number;
 
   status: ListingStatus;
+
+  /** Set when a coach enrolled for free rather than arriving through checkout. */
+  enrolledAt?: Timestamp | null;
 
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -35,6 +48,7 @@ export type Listing = {
   standingBidReachedAtMs: number;
   totalClicks: number;
   status: ListingStatus;
+  enrolled: boolean;
   createdAtMs: number;
   updatedAtMs: number;
 };

@@ -121,3 +121,13 @@ export function normalizeWebsite(
 export function prettyWebsite(displayWebsite: string): string {
   return displayWebsite.replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
 }
+
+/** Why a website was refused, in words a person can act on. */
+export const URL_MESSAGE: Record<string, string> = {
+  empty: "Add your website.",
+  malformed: "That does not look like a website address.",
+  unsupported_scheme: "Only http and https websites can be listed.",
+  no_public_host: "Enter a public website, like yourname.com.",
+  shortener: "Link your real website, not a shortened link.",
+  too_long: "That address is too long.",
+};

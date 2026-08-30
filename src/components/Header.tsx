@@ -8,6 +8,7 @@ import { MobileMenu } from "./MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
 const NAV = [
+  { href: "/enroll", label: "Get listed" },
   { href: "/categories", label: "Categories" },
   ...(BLOG_ENABLED ? [{ href: "/blog", label: "Blog" }] : []),
   { href: "/rules", label: "Rules" },

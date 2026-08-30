@@ -9,7 +9,8 @@ import { requestNowMs } from "@/lib/clock";
 import { LEADERBOARD_PAGE_SIZE, SITE, absoluteUrl } from "@/lib/config";
 import { isDodoConfigured } from "@/lib/dodo";
 import { getRecentActivity } from "@/lib/domain/activity";
-import { getRankedBoard, paginate } from "@/lib/domain/listings";
+import { CoachGrid } from "@/components/CoachGrid";
+import { getListedCoaches, getRankedBoard, paginate } from "@/lib/domain/listings";
 import { getPricing } from "@/lib/domain/settings";
 import { getSpotlights } from "@/lib/domain/spotlight";
 import { getOnlineCount, getSiteStats } from "@/lib/domain/stats";
@@ -46,6 +47,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
 
   const [
     board,
+    listedCoaches,
     pricing,
     spotlights,
     stats,
@@ -54,6 +56,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
     activity,
   ] = await Promise.all([
     getRankedBoard(),
+    getListedCoaches(),
     getPricing(),
     getSpotlights(),
     getSiteStats(),
@@ -123,6 +126,8 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
           activity={activity}
         />
       </SpotlightRail>
+
+      <CoachGrid coaches={listedCoaches} source="leaderboard" />
 
       <section aria-labelledby="how" className="mt-16 pt-6">
         <div className="flex items-baseline justify-between gap-4">

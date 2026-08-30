@@ -46,6 +46,11 @@ export function Footer() {
             </h2>
             <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5">
               <li>
+                <Link href="/enroll" className="meta text-ink-2 hover:text-ink">
+                  Get listed
+                </Link>
+              </li>
+              <li>
                 <Link href="/today" className="meta text-ink-2 hover:text-ink">
                   Today
                 </Link>

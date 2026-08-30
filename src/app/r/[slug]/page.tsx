@@ -55,15 +55,18 @@ export async function generateMetadata({
 export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
   const { slug } = await params;
   const listing = await getListingBySlug(slug);
-  if (!listing || listing.status !== "active") notFound();
+  if (!listing || (listing.status !== "active" && listing.status !== "listed")) notFound();
+
+  // A listed coach paid nothing, so they hold no rank and we do not compute one for them.
+  const ranked = listing.status === "active";
 
   const [ranks, pricing, topExcludingSelf] = await Promise.all([
-    computeRanks(listing),
+    ranked ? computeRanks(listing) : Promise.resolve({ overallRank: 0, categoryRank: 0 }),
     getPricing(),
     getTopStandingBidExcludingCents(listing.id),
   ]);
 
-  const isLeader = ranks.overallRank === 1;
+  const isLeader = ranked && ranks.overallRank === 1;
   const outbidCents = isLeader
     ? Math.max(
         listing.standingBidCents + pricing.topPositionIncrementCents,
@@ -74,10 +77,10 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
   const shareUrl = absoluteUrl(`/r/${listing.slug}`);
 
   const facts = [
-    { label: "Overall", value: `#${ranks.overallRank}`, accent: true },
+    { label: "Overall", value: ranked ? `#${ranks.overallRank}` : "-", accent: ranked },
     {
       label: categoryLabel(listing.category),
-      value: `#${ranks.categoryRank}`,
+      value: ranked ? `#${ranks.categoryRank}` : "-",
       accent: false,
     },
     {
@@ -176,7 +179,7 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
           </a>
           <span className="meta">{prettyWebsite(listing.displayWebsite)}</span>
           <span className="meta ml-auto">
-            Raised{" "}
+            {ranked ? "Raised " : "Listed "}
             <time
               dateTime={new Date(listing.standingBidReachedAtMs).toISOString()}
             >
@@ -188,15 +191,25 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
 
       <section className="card mt-8 bg-tint p-6 text-center sm:p-8">
         <h2 className="display text-[clamp(1.35rem,3.6vw,1.85rem)]">
-          Think you belong above {firstName}?
+          {ranked ? `Think you belong above ${firstName}?` : `${firstName} is listed, not ranked`}
         </h2>
         <p className="mx-auto mt-3 max-w-[42ch] text-[14.5px] leading-[1.55] text-ink-2">
-          {isLeader ? "Taking #1" : `Passing ${firstName}`} needs a standing bid
-          of{" "}
-          <span className="tnum font-semibold text-accent">
-            {formatCents(outbidCents)}
-          </span>
-          . Already listed? You pay only the difference.
+          {ranked ? (
+            <>
+              {isLeader ? "Taking #1" : `Passing ${firstName}`} needs a standing bid of{" "}
+              <span className="tnum font-semibold text-accent">{formatCents(outbidCents)}</span>.
+              Already listed? You pay only the difference.
+            </>
+          ) : (
+            <>
+              Being listed is free and says nothing about rank. A place on the leaderboard starts
+              at{" "}
+              <span className="tnum font-semibold text-accent">
+                {formatCents(pricing.minNewBidCents)}
+              </span>
+              , and the amount is the entire ranking.
+            </>
+          )}
         </p>
         <Link
           href={`/?claim=${outbidCents}#claim`}

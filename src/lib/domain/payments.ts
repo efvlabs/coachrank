@@ -107,6 +107,7 @@ function materialise(id: string, doc: ListingDoc): Listing {
     standingBidReachedAtMs: doc.standingBidReachedAt?.toMillis?.() ?? Date.now(),
     totalClicks: doc.totalClicks ?? 0,
     status: doc.status,
+    enrolled: Boolean(doc.enrolledAt),
     createdAtMs: doc.createdAt?.toMillis?.() ?? Date.now(),
     updatedAtMs: doc.updatedAt?.toMillis?.() ?? Date.now(),
   };
@@ -458,11 +459,14 @@ export async function reverseBidPayment(args: {
       // A refund we issue is a proportionate adjustment: take the money back, and drop the
       // coach only if nothing paid for is left. A chargeback is a breach of the Terms, so
       // the whole listing goes regardless of what else they paid.
+      // A refund that empties the standing bid returns an enrolled coach to the grid they
+      // came from, and everyone else to pending. Neither is an abandoned checkout.
+      const emptied: ListingStatus = listing.enrolledAt ? "listed" : "pending";
       const status: ListingStatus =
         args.reason === "dispute"
           ? "hidden"
           : remaining === 0 && wasOnTheBoard
-            ? "pending"
+            ? emptied
             : listing.status;
 
       tx.update(listingRef, {

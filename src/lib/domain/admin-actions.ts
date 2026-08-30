@@ -8,7 +8,10 @@ import { isCategorySlug } from "../categories";
 import { validateBio } from "../bio";
 import { requireDb } from "../firebase/admin";
 import { parseDollarsToCents } from "../money";
-import { validateName } from "../moderation";
+import { normalizeWebsite } from "../url";
+import { buildListingSlug } from "../slug";
+import { listingIdForWebsite } from "./payments";
+import { MODERATION_MESSAGE, NAME_MESSAGE, screenWebsite, validateName } from "../moderation";
 import { COLLECTIONS } from "./collections";
 import { setActivityVisibilityForListing } from "./activity";
 import { createPost, deletePost, updatePost, validateBlogInput } from "./blog";
@@ -91,18 +94,19 @@ export async function setListingStatusAction(formData: FormData): Promise<Action
       if (!snap.exists) throw new Error("Listing not found.");
       const current = snap.data() as { status: ListingStatus; standingBidCents?: number };
 
-      // A listing with no verified payment cannot be published by an admin either.
-      if (status === "active" && (current.standingBidCents ?? 0) <= 0) {
-        throw new Error("That listing has no verified payment behind it.");
-      }
+      // Restoring someone who never paid puts them back in the grid, not on the board.
+      const restoreTo =
+        status === "active" && (current.standingBidCents ?? 0) <= 0 ? "listed" : status;
       if (current.status === status) return;
 
-      tx.update(ref, { status, updatedAt: Timestamp.now() });
-      tx.set(
-        db.collection(COLLECTIONS.stats).doc("site"),
-        { listedCoaches: FieldValue.increment(status === "active" ? 1 : -1) },
-        { merge: true },
-      );
+      tx.update(ref, { status: restoreTo, updatedAt: Timestamp.now() });
+      if (current.status === "active" || restoreTo === "active") {
+        tx.set(
+          db.collection(COLLECTIONS.stats).doc("site"),
+          { listedCoaches: FieldValue.increment(restoreTo === "active" ? 1 : -1) },
+          { merge: true },
+        );
+      }
     });
     await setActivityVisibilityForListing(id, status === "active");
   } catch (error) {
@@ -113,6 +117,109 @@ export async function setListingStatusAction(formData: FormData): Promise<Action
   revalidatePath("/admin/coaches");
   revalidatePath("/");
   return ok(status === "hidden" ? "Listing hidden." : "Listing restored.");
+}
+
+/**
+ * Adds a coach directly, skipping the queue - for people approached personally rather
+ * than people who found the enrolment form.
+ *
+ * They land in the grid, not on the leaderboard, because rank is the amount paid and they
+ * have paid nothing. Paying moves them across on its own.
+ */
+export async function addCoachAction(formData: FormData): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+  } catch {
+    return fail("Not authorised.");
+  }
+
+  const parsed = normalizeWebsite(String(formData.get("website") ?? ""));
+  if (!parsed.ok) return fail("Enter a valid website.");
+
+  const siteFlag = screenWebsite(parsed.value.host);
+  if (siteFlag) return fail(MODERATION_MESSAGE[siteFlag]);
+
+  const nameResult = validateName(String(formData.get("name") ?? ""));
+  if (!nameResult.ok) return fail(NAME_MESSAGE[nameResult.reason]);
+
+  const category = String(formData.get("category") ?? "");
+  if (!isCategorySlug(category)) return fail("Pick a category.");
+
+  try {
+    const db = requireDb();
+    const id = listingIdForWebsite(parsed.value.normalized);
+    const ref = db.collection(COLLECTIONS.listings).doc(id);
+    const now = Timestamp.now();
+
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      if (snap.exists) throw new Error("That website is already listed.");
+
+      tx.create(ref, {
+        name: nameResult.value,
+        slug: buildListingSlug(nameResult.value),
+        normalizedWebsite: parsed.value.normalized,
+        displayWebsite: parsed.value.display,
+        category,
+        bio: "",
+        standingBidCents: 0,
+        standingBidReachedAt: now,
+        totalClicks: 0,
+        status: "listed",
+        enrolledAt: now,
+        createdAt: now,
+        updatedAt: now,
+      });
+    });
+  } catch (error) {
+    console.error("[admin] createFoundingListing failed:", error);
+    return fail(error instanceof Error ? error.message : "Could not add that coach.");
+  }
+
+  revalidatePath("/admin/coaches");
+  revalidatePath("/admin");
+  revalidatePath("/");
+  return ok("Coach added to the grid.");
+}
+
+/**
+ * Decides an enrolment. Approving puts a coach in the grid; declining hides them, which
+ * keeps the record rather than deleting it so the same website cannot quietly re-apply
+ * over and over.
+ */
+export async function decideEnrolmentAction(formData: FormData): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+  } catch {
+    return fail("Not authorised.");
+  }
+
+  const id = String(formData.get("id") ?? "");
+  const decision = String(formData.get("decision") ?? "");
+  if (!id || (decision !== "approve" && decision !== "decline")) return fail("Invalid request.");
+
+  try {
+    const db = requireDb();
+    const ref = db.collection(COLLECTIONS.listings).doc(id);
+    const snap = await ref.get();
+    if (!snap.exists) return fail("That enrolment is gone.");
+    if ((snap.data() as { status?: ListingStatus }).status !== "submitted") {
+      return fail("That enrolment has already been decided.");
+    }
+
+    await ref.update({
+      status: decision === "approve" ? "listed" : "hidden",
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error("[admin] decideEnrolment failed:", error);
+    return fail("Could not update that enrolment.");
+  }
+
+  revalidatePath("/admin/coaches");
+  revalidatePath("/admin");
+  revalidatePath("/");
+  return ok(decision === "approve" ? "Approved - they are in the grid." : "Declined.");
 }
 
 /**
@@ -140,6 +247,8 @@ export async function deleteUnpaidListingAction(formData: FormData): Promise<Act
     if (!snap.exists) return fail("Listing not found.");
 
     const listing = snap.data() as { standingBidCents?: number; status?: ListingStatus };
+    // Only a listing that reached the board has money behind it. Everything else -
+    // submitted, listed, an abandoned checkout - never cost anyone anything.
     if ((listing.standingBidCents ?? 0) > 0 || listing.status === "active") {
       return fail("That listing has money behind it. Hide it instead.");
     }

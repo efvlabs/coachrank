@@ -19,7 +19,7 @@ import { getPricing } from "@/lib/domain/settings";
 import { formatCents, parseDollarsToCents } from "@/lib/money";
 import { MODERATION_MESSAGE, NAME_MESSAGE, screenBio, screenWebsite, validateName } from "@/lib/moderation";
 import { bidValidationMessage, validateTargetBid } from "@/lib/ranking";
-import { normalizeWebsite } from "@/lib/url";
+import { URL_MESSAGE, normalizeWebsite } from "@/lib/url";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,15 +32,6 @@ type Body = {
   amount?: string | number;
   email?: string;
   acceptedTerms?: boolean;
-};
-
-const URL_MESSAGE: Record<string, string> = {
-  empty: "Add your website.",
-  malformed: "That does not look like a website address.",
-  unsupported_scheme: "Only http and https websites can be listed.",
-  no_public_host: "Enter a public website, like yourname.com.",
-  shortener: "Link your real website, not a shortened link.",
-  too_long: "That address is too long.",
 };
 
 export async function POST(request: Request) {

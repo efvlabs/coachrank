@@ -17,6 +17,7 @@ function board(count: number): Listing[] {
     standingBidReachedAtMs: 1000 + i,
     totalClicks: 0,
     status: "active" as const,
+    enrolled: false,
     createdAtMs: 0,
     updatedAtMs: 0,
   }));
