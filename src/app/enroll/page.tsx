@@ -7,13 +7,13 @@ import { SITE, absoluteUrl } from "@/lib/config";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Get listed on CoachRank - free",
+  title: "Get listed on CoachRank",
   description:
-    "Add your coaching practice to CoachRank for free. A permanent page that ranks for your name, a live badge for your own site, and no payment unless you want to rank.",
+    "Add your coaching practice to CoachRank. A permanent page that ranks for your name, a live badge for your own site, and no payment unless you want to rank on the leaderboard.",
   alternates: { canonical: "/enroll" },
   openGraph: {
-    title: "Get listed on CoachRank - free",
-    description: "A permanent page, a badge for your site, and no payment unless you want to rank.",
+    title: "Coaches who back themselves",
+    description: "A permanent page that ranks for your name, and a badge for your site.",
     url: absoluteUrl("/enroll"),
     siteName: SITE.name,
   },
@@ -29,7 +29,9 @@ export default function EnrollPage() {
   return (
     <div className="mx-auto max-w-3xl px-5 py-14 sm:px-8">
       <header className="text-center">
-        <h1 className="display text-[clamp(2rem,6vw,3rem)] leading-none">Get listed. Free.</h1>
+        <h1 className="display text-[clamp(2rem,6vw,3rem)] leading-none">
+          Coaches who back themselves.
+        </h1>
         <p className="mx-auto mt-4 max-w-[52ch] text-[15px] leading-relaxed text-ink-2">
           CoachRank lists coaches and ranks the ones who pay. Being listed is free and always
           will be - you appear in the directory, unranked, with a page of your own.

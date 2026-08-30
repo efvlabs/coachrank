@@ -109,11 +109,11 @@ export function EnrollForm() {
         disabled={state === "sending"}
         className="btn btn-primary mt-5 w-full px-6 py-3"
       >
-        {state === "sending" ? "Sending…" : "Get listed - free"}
+        {state === "sending" ? "Sending…" : "Add my practice"}
       </button>
 
       <p className="meta mt-3 text-center">
-        Free, and reviewed by a person. Being listed is not a rank - ranking is bought.
+        Reviewed by a person, and it costs nothing. Being listed is not a rank - ranking is bought.
       </p>
     </form>
   );

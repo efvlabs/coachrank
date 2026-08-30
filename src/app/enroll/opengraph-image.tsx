@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "nodejs";
-export const alt = "Get listed on CoachRank - free";
+export const alt = "Coaches who back themselves - CoachRank";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -32,24 +32,24 @@ export default function EnrollOpenGraphImage() {
         <div
           style={{
             display: "flex",
-            fontSize: 112,
+            fontSize: 92,
             fontWeight: 800,
-            letterSpacing: -5,
+            letterSpacing: -4,
             marginTop: 26,
           }}
         >
-          Get listed.
+          Coaches who
         </div>
         <div
           style={{
             display: "flex",
-            fontSize: 112,
+            fontSize: 92,
             fontWeight: 800,
-            letterSpacing: -5,
+            letterSpacing: -4,
             color: "#a8baff",
           }}
         >
-          Free.
+          back themselves.
         </div>
         <div style={{ display: "flex", fontSize: 29, color: "#9aa0b0", marginTop: 32 }}>
           A page that ranks for your name, and a badge for your site.
