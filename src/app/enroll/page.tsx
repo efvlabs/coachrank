@@ -7,7 +7,8 @@ import { SITE, absoluteUrl } from "@/lib/config";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Get listed on CoachRank",
+  // Absolute: the layout template appends the brand, and this title already names it.
+  title: { absolute: "Get listed on CoachRank" },
   description:
     "Add your coaching practice to CoachRank. A permanent page that ranks for your name, a live badge for your own site, and no payment unless you want to rank on the leaderboard.",
   alternates: { canonical: "/enroll" },

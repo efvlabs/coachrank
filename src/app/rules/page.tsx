@@ -53,8 +53,8 @@ export default async function RulesPage() {
       <h2>Taking #1</h2>
       <p>
         To take the top position your standing bid must exceed the current #1 by at least{" "}
-        {cents(pricing.topPositionIncrementCents)}. If #1 sits at $500, the smallest bid that claims
-        it is $505.
+        {cents(pricing.topPositionIncrementCents)}. If #1 sits at {cents(50000)}, the smallest bid
+        that claims it is {cents(50000 + pricing.topPositionIncrementCents)}.
       </p>
       <p>
         You cannot land in between. An amount above the current #1 but below that threshold is
@@ -64,14 +64,15 @@ export default async function RulesPage() {
       <h2>Taking any other position</h2>
       <p>
         Everywhere else, {cents(pricing.standardIncrementCents)} more than the holder is enough. If
-        #7 sits at $50, a standing bid of $51 takes that spot.
+        #7 sits at {cents(5000)}, a standing bid of{" "}
+        {cents(5000 + pricing.standardIncrementCents)} takes that spot.
       </p>
 
       <h2>Raising your own bid</h2>
       <p>
         Enter the same website again and choose a higher number. Checkout charges only the
-        difference: from $500 to $510 you pay $10, not $510. Money already on the board stays on the
-        board.
+        difference: from {cents(50000)} to {cents(51000)} you pay {cents(1000)}, not{" "}
+        {cents(51000)}. Money already on the board stays on the board.
       </p>
       <p>
         A raise must be at least {cents(pricing.standardIncrementCents)} above your current standing
