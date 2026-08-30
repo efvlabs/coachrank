@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CoachAvatar } from "@/components/CoachAvatar";
+import { RankBadge } from "@/components/RankBadge";
 import { ShareRank } from "@/components/ShareRank";
 import { categoryLabel, categoryNoun } from "@/lib/categories";
 import { SITE, absoluteUrl } from "@/lib/config";
@@ -210,6 +211,12 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         name={listing.name}
         overallRank={ranks.overallRank}
         categoryRank={ranks.categoryRank}
+        categoryLabel={categoryLabel(listing.category)}
+      />
+
+      <RankBadge
+        slug={listing.slug}
+        siteUrl={SITE.url}
         categoryLabel={categoryLabel(listing.category)}
       />
 
