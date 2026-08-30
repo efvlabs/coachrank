@@ -47,9 +47,18 @@ export const SITE = {
   twitter: "@coachranklol",
   contactEmail: "contact@coachrank.lol",
   socials: [
-    { label: "X", href: "https://x.com/coachranklol" },
-    { label: "Instagram", href: "https://www.instagram.com/coachranklol/" },
-  ],
+    { label: "X", icon: "x", href: "https://x.com/coachranklol" },
+    {
+      label: "LinkedIn",
+      icon: "linkedin",
+      href: "https://www.linkedin.com/in/coachranklol/",
+    },
+    {
+      label: "Instagram",
+      icon: "instagram",
+      href: "https://www.instagram.com/coachranklol/",
+    },
+  ] as const,
 } as const;
 
 export function absoluteUrl(path: string): string {

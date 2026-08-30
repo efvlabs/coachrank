@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Logo } from "./Logo";
+import { SocialIcon } from "./SocialIcon";
 import { CATEGORIES } from "@/lib/categories";
 import { BLOG_ENABLED, SITE } from "@/lib/config";
 
@@ -19,16 +20,18 @@ export function Footer() {
             <p className="mt-2 max-w-[34ch] text-[13.5px] leading-relaxed text-ink-3">
               {SITE.tagline}
             </p>
-            <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+            <p className="mt-3 flex flex-wrap items-center gap-2.5">
               {SITE.socials.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="me noopener"
-                  className="meta text-ink-2 hover:text-ink"
+                  aria-label={s.label}
+                  title={s.label}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink-3 transition-colors hover:border-line-2 hover:text-ink"
                 >
-                  {s.label}
+                  <SocialIcon name={s.icon} />
                 </a>
               ))}
             </p>
