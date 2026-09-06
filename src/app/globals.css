@@ -1093,3 +1093,4 @@
 #get-assessment { scroll-margin-top:130px; }
 @media(max-width:1050px) { .journal-topic-directory > div:last-child { grid-template-columns:repeat(3,1fr); } .journal-topic-directory > div:last-child > a { border:1px solid var(--line); } }
 @media(max-width:700px) { .journal-topic-directory > div:last-child { grid-template-columns:1fr; } .journal-topic-directory > div:last-child > a { padding:20px; border:0; border-top:1px solid var(--line); } .journal-topic-directory > div:last-child > a:first-child { border-top:0; } .journal-topic-directory h3 { margin:10px 0; font-size:28px; } }
+@media(max-width:360px) { .site-signature svg { height:24px; } }
