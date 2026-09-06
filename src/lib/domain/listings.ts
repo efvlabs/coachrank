@@ -39,40 +39,6 @@ export const getRankedBoard = cache(async (): Promise<RankedListing[]> => {
   }
 });
 
-/**
- * Coaches who enrolled and were approved, listed under the board rather than on it. They
- * hold no rank because they paid nothing, and a leaderboard that ranked them would be
- * lying about what a rank means. Paying moves them onto the board on their own.
- */
-export const getListedCoaches = cache(async (limit = 500): Promise<Listing[]> => {
-  const ref = listingsRef();
-  if (!ref) return [];
-  try {
-    const snap = await ref.where("status", "==", "listed").limit(limit).get();
-    return snap.docs
-      .map((d) => toListing(d.id, d.data() as ListingDoc))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  } catch (error) {
-    console.error("[listings] getListedCoaches failed:", error);
-    return [];
-  }
-});
-
-/** The approval queue: everyone who enrolled and is waiting on us. */
-export async function getSubmittedListings(limit = 200): Promise<Listing[]> {
-  const ref = listingsRef();
-  if (!ref) return [];
-  try {
-    const snap = await ref.where("status", "==", "submitted").limit(limit).get();
-    return snap.docs
-      .map((d) => toListing(d.id, d.data() as ListingDoc))
-      .sort((a, b) => a.createdAtMs - b.createdAtMs);
-  } catch (error) {
-    console.error("[listings] getSubmittedListings failed:", error);
-    return [];
-  }
-}
-
 export async function getBoardForCategory(category: CategorySlug): Promise<RankedListing[]> {
   const board = await getRankedBoard();
   return board.filter((l) => l.category === category);

@@ -12,8 +12,7 @@ import { LEADERBOARD_PAGE_SIZE, SITE, absoluteUrl } from "@/lib/config";
 import { requestNowMs } from "@/lib/clock";
 import { isDodoConfigured } from "@/lib/dodo";
 import { getRecentActivity } from "@/lib/domain/activity";
-import { CoachGrid } from "@/components/CoachGrid";
-import { getListedCoaches, getRankedBoard, paginate } from "@/lib/domain/listings";
+import { getRankedBoard, paginate } from "@/lib/domain/listings";
 import { getPricing } from "@/lib/domain/settings";
 import { getSpotlights } from "@/lib/domain/spotlight";
 import { getOnlineCount, getSiteStats } from "@/lib/domain/stats";
@@ -65,7 +64,6 @@ export default async function CategoryPage({
 
   const [
     board,
-    listedCoaches,
     pricing,
     spotlights,
     stats,
@@ -74,7 +72,6 @@ export default async function CategoryPage({
     activity,
   ] = await Promise.all([
     getRankedBoard(),
-    getListedCoaches(),
     getPricing(),
     getSpotlights(),
     getSiteStats(),
@@ -85,7 +82,6 @@ export default async function CategoryPage({
 
   const nowMs = requestNowMs();
   const inCategory = board.filter((l) => l.category === slug);
-  const listedInCategory = listedCoaches.filter((l) => l.category === slug);
   const currentTopCents = topStandingBidCents(board);
   const claimTopCents = priceToClaimTopCents(currentTopCents, pricing);
   const categoryTopCents = topStandingBidCents(inCategory);
@@ -193,8 +189,6 @@ export default async function CategoryPage({
           headingLabel={`${category.label} coaches, all-time`}
         />
       </SpotlightRail>
-
-      <CoachGrid coaches={listedInCategory} source="category" hideCategory />
 
       <script
         type="application/ld+json"

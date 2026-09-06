@@ -24,7 +24,6 @@ function listing(overrides: Partial<Listing> & { id: string }): Listing {
     standingBidReachedAtMs: 1_000,
     totalClicks: 0,
     status: "active",
-    enrolled: false,
     createdAtMs: 0,
     updatedAtMs: 0,
     ...overrides,

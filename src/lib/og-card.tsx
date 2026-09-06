@@ -1,12 +1,6 @@
 import { SITE } from "./config";
 
-/**
- * The share card, in one place.
- *
- * The homepage and the enrolment page carry the same picture on purpose: a stranger who
- * finds us and a coach we invited should meet the same brand, and two cards that say
- * almost the same thing drift apart the moment one of them is edited.
- */
+/** The share card. One picture, wherever the site is shared. */
 export function brandCard() {
   return (
     <div

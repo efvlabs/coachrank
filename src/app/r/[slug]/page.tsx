@@ -25,29 +25,18 @@ export async function generateMetadata({
 }: PageProps<"/r/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const listing = await getListingBySlug(slug);
-  // A listed coach is public and indexable too - noindexing them would waste the whole
-  // point of giving them a page.
-  if (!listing || (listing.status !== "active" && listing.status !== "listed")) {
+  if (!listing || listing.status !== "active") {
     return { title: "Not found", robots: { index: false, follow: false } };
   }
 
-  const ranked = listing.status === "active";
-  const ranks = ranked
-    ? await computeRanks(listing)
-    : { overallRank: 0, categoryRank: 0 };
-
-  const title = ranked
-    ? `${listing.name} - #${ranks.overallRank} on CoachRank`
-    : `${listing.name} - ${categoryNoun(listing.category)} on CoachRank`;
+  const ranks = await computeRanks(listing);
+  const title = `${listing.name} - #${ranks.overallRank} on CoachRank`;
 
   // Their own words beat anything we could generate, and are what a search result should
   // show someone looking them up by name.
-  const rankLine = ranked
-    ? `${listing.name} holds #${ranks.overallRank} overall and #${ranks.categoryRank} in ${categoryLabel(listing.category)} with a standing bid of ${formatCents(listing.standingBidCents)}. Rank reflects money bid only.`
-    : `${listing.name} is listed on CoachRank under ${categoryLabel(listing.category)}. Listing is not a rank - rank is bought.`;
   const description = listing.bio
     ? listing.bio.replace(/\s+/g, " ").slice(0, 300)
-    : rankLine;
+    : `${listing.name} holds #${ranks.overallRank} overall and #${ranks.categoryRank} in ${categoryLabel(listing.category)} with a standing bid of ${formatCents(listing.standingBidCents)}. Rank reflects money bid only.`;
 
   return {
     // Absolute, because the title already names CoachRank and the layout template would
@@ -74,18 +63,15 @@ export async function generateMetadata({
 export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
   const { slug } = await params;
   const listing = await getListingBySlug(slug);
-  if (!listing || (listing.status !== "active" && listing.status !== "listed")) notFound();
-
-  // A listed coach paid nothing, so they hold no rank and we do not compute one for them.
-  const ranked = listing.status === "active";
+  if (!listing || listing.status !== "active") notFound();
 
   const [ranks, pricing, topExcludingSelf] = await Promise.all([
-    ranked ? computeRanks(listing) : Promise.resolve({ overallRank: 0, categoryRank: 0 }),
+    computeRanks(listing),
     getPricing(),
     getTopStandingBidExcludingCents(listing.id),
   ]);
 
-  const isLeader = ranked && ranks.overallRank === 1;
+  const isLeader = ranks.overallRank === 1;
   const outbidCents = isLeader
     ? Math.max(
         listing.standingBidCents + pricing.topPositionIncrementCents,
@@ -96,21 +82,17 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
   const shareUrl = absoluteUrl(`/r/${listing.slug}`);
 
   const facts = [
-    ...(ranked
-      ? [
-          { label: "Overall", value: `#${ranks.overallRank}`, accent: true },
-          {
-            label: categoryLabel(listing.category),
-            value: `#${ranks.categoryRank}`,
-            accent: false,
-          },
-          {
-            label: "Standing bid",
-            value: formatCents(listing.standingBidCents),
-            accent: false,
-          },
-        ]
-      : [{ label: "Listed in", value: categoryLabel(listing.category), accent: false }]),
+    { label: "Overall", value: `#${ranks.overallRank}`, accent: true },
+    {
+      label: categoryLabel(listing.category),
+      value: `#${ranks.categoryRank}`,
+      accent: false,
+    },
+    {
+      label: "Standing bid",
+      value: formatCents(listing.standingBidCents),
+      accent: false,
+    },
     {
       label: "Clicks sent",
       value: formatCount(listing.totalClicks),
@@ -173,9 +155,9 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         ) : null}
 
         <dl
-          className={`grid grid-cols-2 gap-px overflow-hidden rounded-card bg-line ${
-            ranked ? "sm:grid-cols-4" : "sm:grid-cols-2"
-          } ${listing.bio ? "mt-7" : "mt-8"}`}
+          className={`grid grid-cols-2 gap-px overflow-hidden rounded-card bg-line sm:grid-cols-4 ${
+            listing.bio ? "mt-7" : "mt-8"
+          }`}
         >
           {facts.map((fact) => (
             <div key={fact.label} className="bg-card px-4 py-4">
@@ -204,7 +186,7 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
           </a>
           <span className="meta">{prettyWebsite(listing.displayWebsite)}</span>
           <span className="meta ml-auto">
-            {ranked ? "Raised " : "Listed "}
+            Raised{" "}
             <time
               dateTime={new Date(listing.standingBidReachedAtMs).toISOString()}
             >
@@ -216,33 +198,18 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
 
       <section className="card mt-8 bg-tint p-6 text-center sm:p-8">
         <h2 className="display text-[clamp(1.35rem,3.6vw,1.85rem)]">
-          {ranked ? `Think you belong above ${firstName}?` : `${firstName} is listed, not ranked`}
+          Think you belong above {firstName}?
         </h2>
         <p className="mx-auto mt-3 max-w-[42ch] text-[14.5px] leading-[1.55] text-ink-2">
-          {ranked ? (
-            <>
-              {isLeader ? "Taking #1" : `Passing ${firstName}`} needs a standing bid of{" "}
-              <span className="tnum font-semibold text-accent">{formatCents(outbidCents)}</span>.
-              Already listed? You pay only the difference.
-            </>
-          ) : (
-            <>
-              Being listed is free and says nothing about rank. A place on the leaderboard starts
-              at{" "}
-              <span className="tnum font-semibold text-accent">
-                {formatCents(pricing.minNewBidCents)}
-              </span>
-              , and the amount is the entire ranking.
-            </>
-          )}
+          {isLeader ? "Taking #1" : `Passing ${firstName}`} needs a standing bid of{" "}
+          <span className="tnum font-semibold text-accent">{formatCents(outbidCents)}</span>.
+          Already listed? You pay only the difference.
         </p>
         <Link
-          href={`/?claim=${ranked ? outbidCents : pricing.minNewBidCents}#claim`}
+          href={`/?claim=${outbidCents}#claim`}
           className="btn btn-primary mt-5 px-7 py-3"
         >
-          {ranked
-            ? `Outbid · ${formatCents(outbidCents)}`
-            : `Claim a rank · ${formatCents(pricing.minNewBidCents)}`}
+          Outbid · {formatCents(outbidCents)}
         </Link>
       </section>
 
@@ -254,13 +221,11 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         categoryLabel={categoryLabel(listing.category)}
       />
 
-      {ranked ? (
-        <RankBadge
-          slug={listing.slug}
-          siteUrl={SITE.url}
-          categoryLabel={categoryLabel(listing.category)}
-        />
-      ) : null}
+      <RankBadge
+        slug={listing.slug}
+        siteUrl={SITE.url}
+        categoryLabel={categoryLabel(listing.category)}
+      />
 
       <p className="meta mt-10">
         Rank reflects the amount bid and nothing else. It is not a review,
