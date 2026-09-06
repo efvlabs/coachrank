@@ -15,14 +15,15 @@ export async function EditorialHome({ topic }: { topic?: EditorialTopic }) {
 
   return (
     <div className="journal-shell">
-      <header className="journal-intro"><h1>{topic ? `${topicLabel(topic)} perspectives` : "An independent editorial for ambitious people."}</h1><p>Curiosity. Craft. A little perspective.</p></header>
+      <header className={`journal-opening${topic ? " journal-opening-topic" : ""}`}>
+        <div><p className="journal-label"><span className="journal-status-dot" /> An independent editorial</p><h1>{topic ? <>{topicLabel(topic)}<span>.</span></> : <>Greatness has<br />a backstory<span>.</span></>}</h1></div>
+        <div className="journal-opening-dek"><p>{topic ? EDITORIAL_TOPICS.find(item => item.slug === topic)?.description : "The ideas, decisions and daily work behind people who do remarkable things."}</p><p>{topic ? "A little perspective. Something to put to work." : "Perspectives on performance, business, creativity, growth and coaching. For ambitious people building something of their own."}</p><Link href={topic ? "/" : "/about"}>{topic ? "All perspectives" : "Inside CoachRank"} <span aria-hidden="true">↗</span></Link></div>
+      </header>
       <nav aria-label="Editorial topics" className="journal-topics">
         <Link href="/" aria-current={!topic ? "page" : undefined}>The latest <span>↗</span></Link>
         {EDITORIAL_TOPICS.map((item) => <Link key={item.slug} href={`/topics/${item.slug}`} aria-current={topic === item.slug ? "page" : undefined}>{item.label}</Link>)}
         <Link href="/tools" className="journal-board-link">Tools for your next step ↗</Link>
       </nav>
-
-      {topic ? <div className="journal-topic-intro"><p className="journal-label">Explore the editorial</p><h2>{topicLabel(topic)}<span>.</span></h2><p>{EDITORIAL_TOPICS.find(item => item.slug === topic)?.description}</p></div> : null}
 
       {lead ? <section className="journal-lead" aria-label="Lead story">
         <Link href={`/blog/${lead.slug}`} className="journal-lead-story">
@@ -64,7 +65,7 @@ export async function EditorialHome({ topic }: { topic?: EditorialTopic }) {
       </section> : null}
       <section className="journal-tool-feature"><div><p className="journal-label">From perspective to progress · CoachRank Tools</p><h2>Your next chapter starts<br />with a clearer brand.</h2><p>Your next three moves. A seven-day clarity plan. A visual report you can return to and compare, whenever you need a fresh perspective.</p></div><div><p className="journal-tool-price">$9 <span>USD · one time</span></p><Link href="/tools/brand-clarity" className="tool-button">Discover your brand gaps ↗</Link><Link href="/tools/brand-clarity/sample" className="tool-text-link">Explore a sample report</Link></div></section>
       {!topic ? <section className="journal-topic-directory"><div className="journal-section-title"><h2>Find your perspective<span>.</span></h2><p>Five ways into the work.</p></div><div>{EDITORIAL_TOPICS.map(item=><Link key={item.slug} href={`/topics/${item.slug}`}><span>{allPosts.filter(post=>post.topic===item.slug).length} articles</span><h3>{item.label}<span>↗</span></h3><p>{item.description}</p></Link>)}</div></section> : null}
-      <section className="journal-manifesto"><p className="journal-label">The CoachRank point of view</p><p>Greatness has a backstory.<br /><span>Let’s understand it.</span></p><Link href="/about">What we believe ↗</Link></section>
+      <section className="journal-manifesto"><p className="journal-label">The CoachRank point of view</p><p>Celebrating greatness.<br /><span>Understanding what builds it.</span></p><Link href="/about">What we believe ↗</Link></section>
     </div>
   );
 }

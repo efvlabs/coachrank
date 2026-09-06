@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const groups = [
-  { label:"Your publication", links:[{href:"/admin",label:"Overview",icon:"◫"},{href:"/admin/blog",label:"Editorial desk",icon:"▤"},{href:"/admin/tools",label:"Tools & feedback",icon:"◇"}] },
+  { label:"Your publication", links:[{href:"/admin",label:"Overview",icon:"◫"},{href:"/admin/blog",label:"Editorial desk",icon:"▤"},{href:"/admin/tools",label:"Tools & feedback",icon:"◇"},{href:"/admin/social",label:"Social desk",icon:"◎"}] },
   { label:"The business", links:[{href:"/admin/coaches",label:"Coach rankings",icon:"↗"},{href:"/admin/payments",label:"Board payments",icon:"≋"},{href:"/admin/settings",label:"Settings",icon:"⊙"},{href:"/admin/spotlights",label:"Spotlight archive",icon:"□"}] },
 ];
 export function AdminNav() {
