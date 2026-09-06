@@ -5,6 +5,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { isCategorySlug } from "../categories";
 import { getDb, requireDb } from "../firebase/admin";
 import { slugifyTitle } from "../markdown";
+import { editorialDefaults, isEditorialTopic, safeEditorialUrl, type EditorialFields } from "../editorial";
 import { COLLECTIONS, toBlogPost } from "./collections";
 import type { BlogPost, BlogPostDoc, BlogStatus } from "./types";
 
@@ -63,7 +64,7 @@ export async function getPostById(id: string): Promise<BlogPost | null> {
   return toBlogPost(snap.id, snap.data() as BlogPostDoc);
 }
 
-export type BlogInput = {
+export type BlogInput = EditorialFields & {
   title: string;
   slug?: string;
   excerpt: string;
@@ -95,11 +96,30 @@ export function validateBlogInput(
   if (excerpt.length > 320) errors.push({ field: "excerpt", message: "Excerpt is too long." });
   const metaDescription = (input.metaDescription ?? excerpt).trim().slice(0, 200);
 
+  const editorial = editorialDefaults(input);
+  for (const field of ["authorName", "authorBio", "authorUrl", "coverUrl", "coverAlt", "coverCredit", "keyAnswer"] as const) {
+    editorial[field] = editorial[field].trim();
+  }
+  if (input.topic && !isEditorialTopic(input.topic)) errors.push({ field: "topic", message: "Choose an editorial topic." });
+  if (editorial.coverUrl && !safeEditorialUrl(editorial.coverUrl, true)) errors.push({ field: "coverUrl", message: "Cover image must use HTTPS or a local image path." });
+  if (editorial.authorUrl && !safeEditorialUrl(editorial.authorUrl, true)) errors.push({ field: "authorUrl", message: "Author link must use HTTPS or a local path." });
+  if (editorial.coverUrl && !editorial.coverAlt) errors.push({ field: "coverAlt", message: "Describe the cover image for readers who cannot see it." });
+  if (editorial.keyAnswer.length > 700) errors.push({ field: "keyAnswer", message: "Keep the key answer under 700 characters." });
+  if (!Array.isArray(editorial.faqs) || editorial.faqs.length > 10 || editorial.faqs.some((faq) => !faq || typeof faq.question !== "string" || typeof faq.answer !== "string" || !faq.question.trim() || !faq.answer.trim())) {
+    errors.push({ field: "faqs", message: "Add complete questions and answers (up to 10)." });
+  }
+  if (!Array.isArray(editorial.sources) || editorial.sources.length > 25 || editorial.sources.some((source) => !source || typeof source.title !== "string" || !source.title.trim() || typeof source.url !== "string" || !safeEditorialUrl(source.url))) {
+    errors.push({ field: "sources", message: "Each source needs a title and HTTPS link (up to 25)." });
+  }
+  if (!Array.isArray(editorial.tags) || editorial.tags.some((tag) => typeof tag !== "string")) errors.push({ field: "tags", message: "Tags must be text." });
+
   if (errors.length) return { ok: false, errors };
+  editorial.tags = [...new Set(editorial.tags.map((tag) => tag.trim()).filter(Boolean))].slice(0, 12);
 
   return {
     ok: true,
     value: {
+      ...editorial,
       title,
       slug,
       excerpt,
@@ -126,6 +146,7 @@ export async function createPost(input: BlogInput): Promise<string> {
 
   const now = Timestamp.now();
   const doc: BlogPostDoc = {
+    ...editorialDefaults(input),
     title: input.title,
     slug: input.slug!,
     excerpt: input.excerpt,
@@ -146,6 +167,7 @@ export async function updatePost(id: string, input: BlogInput): Promise<void> {
   const db = requireDb();
   const existing = await getPostById(id);
   if (!existing) throw new Error("Post not found.");
+  if (existing.publishedAtMs && input.slug !== existing.slug) throw new Error("Keep the published URL unchanged. Create a new draft for a different URL.");
 
   const taken = await slugTakenBy(input.slug!);
   if (taken && taken !== id) throw new Error("That slug is already used by another post.");
@@ -153,6 +175,7 @@ export async function updatePost(id: string, input: BlogInput): Promise<void> {
   const now = Timestamp.now();
   const publishing = input.status === "published";
   const patch: Partial<BlogPostDoc> = {
+    ...editorialDefaults(input),
     title: input.title,
     slug: input.slug!,
     excerpt: input.excerpt,
@@ -162,10 +185,8 @@ export async function updatePost(id: string, input: BlogInput): Promise<void> {
     ctaCategory: isCategorySlug(input.ctaCategory) ? input.ctaCategory : null,
     status: input.status,
     updatedAt: now,
-    // Keep the original publication date across edits; clear it when unpublishing.
-    publishedAt: publishing
-      ? (existing.publishedAtMs ? Timestamp.fromMillis(existing.publishedAtMs) : now)
-      : null,
+    // Preserve the original date even across unpublishing and republishing.
+    publishedAt: existing.publishedAtMs ? Timestamp.fromMillis(existing.publishedAtMs) : publishing ? now : null,
   };
   await db.collection(COLLECTIONS.blogPosts).doc(id).update(patch);
 }

@@ -4,6 +4,7 @@ import DodoPayments from "dodopayments";
 import type { UnwrapWebhookEvent } from "dodopayments/resources/webhooks/webhooks";
 
 import { absoluteUrl } from "./config";
+import { BRAND_ASSESSMENT } from "./brand-assessment";
 
 export type DodoEnvironment = "test_mode" | "live_mode";
 
@@ -62,6 +63,28 @@ export function spotlightProductId(): string | null {
   return process.env.DODO_SPOTLIGHT_PRODUCT_ID || bidProductId();
 }
 
+export function assessmentProductId(): string | null {
+  return process.env.DODO_BRAND_CLARITY_PRODUCT_ID || null;
+}
+
+export function isAssessmentCheckoutConfigured(): boolean {
+  return !paymentsDisabled() && Boolean(process.env.DODO_PAYMENTS_API_KEY && process.env.DODO_PAYMENTS_WEBHOOK_KEY && assessmentProductId());
+}
+
+export async function createAssessmentCheckout(orderId: string, productId: string): Promise<CheckoutResult> {
+  const session = await requireDodoClient().checkoutSessions.create({
+    product_cart: [{ product_id: productId, quantity: 1 }],
+    billing_currency: "USD",
+    metadata: { cr_payment_id: orderId, cr_kind: "assessment", cr_amount_cents: BRAND_ASSESSMENT.priceCents },
+    return_url: absoluteUrl("/tools/brand-clarity/assessment?checkout=returned"),
+    cancel_url: absoluteUrl("/tools/brand-clarity?checkout=cancelled"),
+    feature_flags: { allow_discount_code: false, allow_currency_selection: false },
+    customization: { show_order_details: true, theme: "system" },
+  });
+  if (!session.checkout_url) throw new Error("Dodo returned no checkout URL.");
+  return { checkoutUrl: session.checkout_url, sessionId: session.session_id };
+}
+
 export type CheckoutRequest = {
   productId: string;
   amountCents: number;
@@ -96,7 +119,7 @@ export async function createCheckoutSession(req: CheckoutRequest): Promise<Check
       cr_amount_cents: req.amountCents,
     },
     return_url: req.returnUrl,
-    cancel_url: req.cancelUrl ?? absoluteUrl("/"),
+    cancel_url: req.cancelUrl ?? absoluteUrl("/rankings"),
     customer:
       req.customerEmail
         ? { email: req.customerEmail, name: req.customerName ?? undefined }
@@ -131,7 +154,7 @@ export function verifyWebhook(rawBody: string, headers: DodoWebhookHeaders): Unw
 
 export type CheckoutMetadata = {
   internalPaymentId: string | null;
-  kind: "bid" | "spotlight" | null;
+  kind: "bid" | "spotlight" | "assessment" | null;
   listingId: string | null;
 };
 
@@ -143,7 +166,7 @@ export function readCheckoutMetadata(metadata: Record<string, unknown> | null | 
   const kind = get("cr_kind");
   return {
     internalPaymentId: get("cr_payment_id"),
-    kind: kind === "bid" || kind === "spotlight" ? kind : null,
+    kind: kind === "bid" || kind === "spotlight" || kind === "assessment" ? kind : null,
     listingId: get("cr_listing_id"),
   };
 }

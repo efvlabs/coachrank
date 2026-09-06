@@ -1,5 +1,5 @@
 import { jsonError, jsonOk, rateLimited, readJson } from "@/lib/api";
-import { absoluteUrl } from "@/lib/config";
+import { absoluteUrl, SPOTLIGHTS_ENABLED } from "@/lib/config";
 import { createCheckoutSession, isDodoConfigured, spotlightProductId } from "@/lib/dodo";
 import { isCategorySlug } from "@/lib/categories";
 import { getListingByNormalizedWebsite } from "@/lib/domain/listings";
@@ -31,6 +31,7 @@ type Body = {
 };
 
 export async function POST(request: Request) {
+  if (!SPOTLIGHTS_ENABLED) return jsonError("Spotlight bookings are paused.", 503);
   if (rateLimited(request, "spotlight-checkout", 8, 60_000)) {
     return jsonError("Too many attempts. Give it a moment.", 429);
   }
@@ -129,7 +130,7 @@ export async function POST(request: Request) {
       kind: "spotlight",
       listingId: listing?.id ?? "",
       returnUrl: absoluteUrl(`/success?s=${bookingId}`),
-      cancelUrl: absoluteUrl("/#board"),
+      cancelUrl: absoluteUrl("/rankings#board"),
       customerEmail: typeof body.email === "string" && body.email.includes("@") ? body.email : null,
       customerName: advertiser.name,
     });

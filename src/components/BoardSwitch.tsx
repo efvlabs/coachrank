@@ -10,7 +10,7 @@ export function BoardSwitch({ className = "" }: { className?: string }) {
   const onToday = pathname.endsWith("/today");
 
   const items = [
-    { href: category ? `/coaches/${category}` : "/", label: "All-time", active: !onToday },
+    { href: category ? `/coaches/${category}` : "/rankings", label: "All-time", active: !onToday },
     { href: category ? `/coaches/${category}/today` : "/today", label: "Today", active: onToday },
   ];
 

@@ -60,8 +60,8 @@ export function AdminLogin() {
 
   return (
     <form onSubmit={signIn} className="card p-6">
-      <h1 className="text-xl font-semibold tracking-tight">CoachRank admin</h1>
-      <p className="mt-1 text-[13px] text-ink-3">Restricted to configured administrators.</p>
+      <h1 className="text-xl font-semibold tracking-tight">Welcome to the studio.</h1>
+      <p className="mt-1 text-[13px] text-ink-3">Sign in to shape the next chapter of CoachRank.</p>
 
       <label htmlFor="admin-email" className="mt-5 block text-[13px] font-medium">
         Email

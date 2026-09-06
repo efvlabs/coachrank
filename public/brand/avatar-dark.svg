@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" role="img" aria-label="CoachRank">
   <rect width="1024" height="1024" rx="256" fill="#12141A"/>
-  <rect x="144" y="480" width="240" height="400" rx="64" fill="#A8BAFF" opacity="0.55"/>
-  <rect x="409.6" y="256" width="240" height="624" rx="64" fill="#A8BAFF"/>
-  <rect x="675.2" y="592" width="240" height="288" rx="64" fill="#A8BAFF" opacity="0.55"/>
+  <rect x="128" y="512" width="224" height="352" rx="40" fill="#A8BAFF"/>
+  <rect x="400" y="192" width="224" height="672" rx="40" fill="#A8BAFF"/>
+  <rect x="672" y="384" width="224" height="480" rx="40" fill="#A8BAFF"/>
 </svg>

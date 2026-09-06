@@ -6,17 +6,19 @@ marked.setOptions({ gfm: true, breaks: false });
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
     "h2", "h3", "h4", "p", "ul", "ol", "li", "blockquote", "pre", "code",
-    "strong", "em", "a", "hr", "br", "table", "thead", "tbody", "tr", "th", "td",
+    "strong", "em", "a", "hr", "br", "table", "thead", "tbody", "tr", "th", "td", "img",
   ],
   allowedAttributes: {
     a: ["href", "title", "rel", "target"],
     th: ["align"],
     td: ["align"],
+    img: ["src", "alt", "title", "width", "height", "loading"],
   },
   allowedSchemes: ["http", "https", "mailto"],
   transformTags: {
     // Demote h1 - the page already owns the single top-level heading.
     h1: "h2",
+    img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: "lazy" } }),
     a: (tagName, attribs) => {
       const href = attribs.href ?? "";
       const external = /^https?:\/\//i.test(href) && !href.includes("coachrank.lol");
@@ -34,6 +36,22 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
 export function renderMarkdown(markdown: string): string {
   const html = marked.parse(markdown ?? "", { async: false });
   return sanitizeHtml(html, SANITIZE_OPTIONS);
+}
+
+/** Stable, deduplicated section anchors built from sanitized article HTML. */
+export function renderArticle(markdown: string) {
+  const headings: { id: string; text: string }[] = [];
+  const counts = new Map<string, number>();
+  const html = renderMarkdown(markdown).replace(/<h2>([\s\S]*?)<\/h2>/g, (_match, content: string) => {
+    const text = sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} });
+    const base = slugifyTitle(text) || "section";
+    const count = (counts.get(base) || 0) + 1;
+    counts.set(base, count);
+    const id = `section-${base}${count > 1 ? `-${count}` : ""}`;
+    headings.push({ id, text });
+    return `<h2 id="${id}">${content}</h2>`;
+  });
+  return { html, headings };
 }
 
 /** ~200 words per minute, rounded up, minimum 1. */

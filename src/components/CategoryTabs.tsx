@@ -17,7 +17,7 @@ type Props = { active: CategorySlug | "all"; board: "all-time" | "today" };
 export function CategoryTabs({ active, board }: Props) {
   const suffix = board === "today" ? "/today" : "";
   const tabs = [
-    { key: "all" as const, label: "All", href: board === "today" ? "/today" : "/" },
+    { key: "all" as const, label: "All", href: board === "today" ? "/today" : "/rankings" },
     ...CATEGORIES.map((c) => ({ key: c.slug, label: c.label, href: `/coaches/${c.slug}${suffix}` })),
   ];
 

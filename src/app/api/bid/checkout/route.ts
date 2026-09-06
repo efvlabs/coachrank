@@ -167,7 +167,7 @@ export async function POST(request: Request) {
       kind: "bid",
       listingId: ensured.listingId,
       returnUrl: absoluteUrl(`/success?p=${paymentId}`),
-      cancelUrl: absoluteUrl(`/?claim=${validation.targetStandingBidCents}#claim`),
+      cancelUrl: absoluteUrl(`/rankings?claim=${validation.targetStandingBidCents}#claim`),
       customerEmail: typeof body.email === "string" && body.email.includes("@") ? body.email : null,
       customerName: name,
     });

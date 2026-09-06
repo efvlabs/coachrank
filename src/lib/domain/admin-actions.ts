@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 
 import { requireAdmin } from "../admin-auth";
@@ -179,7 +180,24 @@ export async function deleteUnpaidListingAction(formData: FormData): Promise<Act
 // ---------------------------------------------------------------------------
 
 function blogInputFrom(formData: FormData) {
+  const parseList = (field: string) => {
+    try { return JSON.parse(String(formData.get(field) || "[]")); }
+    catch { return "invalid"; }
+  };
   return {
+    topic: String(formData.get("topic") || "coaching") as import("../editorial").EditorialTopic,
+    authorName: String(formData.get("authorName") ?? ""),
+    authorBio: String(formData.get("authorBio") ?? ""),
+    authorUrl: String(formData.get("authorUrl") ?? ""),
+    coverUrl: String(formData.get("coverUrl") ?? ""),
+    coverAlt: String(formData.get("coverAlt") ?? ""),
+    coverCredit: String(formData.get("coverCredit") ?? ""),
+    keyAnswer: String(formData.get("keyAnswer") ?? ""),
+    faqs: parseList("faqs"),
+    sources: parseList("sources"),
+    tags: String(formData.get("tags") ?? "").split(",").map((tag) => tag.trim()).filter(Boolean),
+    featured: formData.get("featured") === "on",
+    noindex: formData.get("noindex") === "on",
     title: String(formData.get("title") ?? ""),
     slug: String(formData.get("slug") ?? ""),
     excerpt: String(formData.get("excerpt") ?? ""),
@@ -204,10 +222,11 @@ export async function savePostAction(formData: FormData): Promise<ActionResult> 
   if (!parsed.ok) return fail(parsed.errors.map((e) => e.message).join(" "));
 
   const id = String(formData.get("id") ?? "");
+  let createdId: string | null = null;
 
   try {
     if (id) await updatePost(id, parsed.value);
-    else await createPost(parsed.value);
+    else createdId = await createPost(parsed.value);
   } catch (error) {
     console.error("[admin] savePost failed:", error);
     return fail(error instanceof Error ? error.message : "Could not save that post.");
@@ -215,7 +234,9 @@ export async function savePostAction(formData: FormData): Promise<ActionResult> 
 
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  revalidatePath("/");
   revalidatePath(`/blog/${parsed.value.slug}`);
+  if (createdId) redirect(`/admin/blog/${createdId}`);
   return ok(parsed.value.status === "published" ? "Published." : "Draft saved.");
 }
 
@@ -238,6 +259,7 @@ export async function deletePostAction(formData: FormData): Promise<ActionResult
 
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
+  revalidatePath("/");
   return ok("Post deleted.");
 }
 

@@ -85,7 +85,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
             ? "This is taking longer than usual. Your payment is safe - if it succeeded, the board updates itself the moment we receive confirmation."
             : "A listing is published only once Dodo confirms the charge to our server. This usually takes a few seconds."}
         </p>
-        <Link href="/" className="btn btn-quiet mt-7 px-6 py-3">
+        <Link href="/rankings" className="btn btn-quiet mt-7 px-6 py-3">
           View the board
         </Link>
       </div>
@@ -103,7 +103,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
             The slot was taken before your payment cleared. It is flagged for a refund - nothing
             was double-booked.
           </p>
-          <Link href="/" className="btn btn-quiet mt-7 px-6 py-3">
+          <Link href="/rankings" className="btn btn-quiet mt-7 px-6 py-3">
             Back to the board
           </Link>
         </div>
@@ -121,7 +121,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
             "Running for the next 24 hours"
           )}
         </p>
-        <Link href="/" className="btn btn-primary mt-7 px-6 py-3">
+        <Link href="/rankings" className="btn btn-primary mt-7 px-6 py-3">
           See it on the board
         </Link>
       </div>
@@ -137,7 +137,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
         <p className="mx-auto mt-4 max-w-[40ch] text-[14.5px] leading-[1.55] text-ink-2">
           The money went back, so the rank it bought came off the board with it.
         </p>
-        <Link href="/#claim" className="btn btn-primary mt-7 px-6 py-3">
+        <Link href="/rankings#claim" className="btn btn-primary mt-7 px-6 py-3">
           Claim a rank
         </Link>
       </div>
@@ -153,7 +153,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
         <p className="mx-auto mt-4 max-w-[40ch] text-[14.5px] leading-[1.55] text-ink-2">
           Nothing was charged and nothing changed on the board.
         </p>
-        <Link href="/#claim" className="btn btn-primary mt-7 px-6 py-3">
+        <Link href="/rankings#claim" className="btn btn-primary mt-7 px-6 py-3">
           Try again
         </Link>
       </div>
@@ -161,7 +161,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
   }
 
   const isTop = state.overallRank === 1;
-  const shareUrl = state.slug ? absoluteUrl(`/r/${state.slug}`) : absoluteUrl("/");
+  const shareUrl = state.slug ? absoluteUrl(`/r/${state.slug}`) : absoluteUrl("/rankings");
 
   return (
     <>
@@ -198,7 +198,7 @@ export function PaymentResult({ paymentId, bookingId, initial, coachName, catego
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link
-            href="/"
+            href="/rankings"
             className="btn btn-on-deep px-6 py-3"
           >
             View the board

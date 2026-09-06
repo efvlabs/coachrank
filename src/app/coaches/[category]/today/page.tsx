@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { BoardSwitch } from "@/components/BoardSwitch";
 import { BidPanel } from "@/components/BidPanel";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { EmptyBoard } from "@/components/EmptyBoard";
 import { SpotlightRail } from "@/components/SpotlightRail";
-import { StatsPill } from "@/components/StatsPill";
 import { TodayBoardList } from "@/components/TodayBoardList";
 import { CATEGORIES, getCategory, isCategorySlug } from "@/lib/categories";
 import { requestNowMs } from "@/lib/clock";
@@ -13,7 +13,6 @@ import { isDodoConfigured } from "@/lib/dodo";
 import { getRankedBoard } from "@/lib/domain/listings";
 import { getPricing } from "@/lib/domain/settings";
 import { getSpotlights } from "@/lib/domain/spotlight";
-import { getOnlineCount, getSiteStats } from "@/lib/domain/stats";
 import { getTodayBoardForCategory } from "@/lib/domain/today-board";
 import { priceToClaimTopCents, topStandingBidCents } from "@/lib/ranking";
 
@@ -44,14 +43,12 @@ export default async function CategoryTodayPage({
   if (!isCategorySlug(slug)) notFound();
   const category = getCategory(slug)!;
 
-  const [entries, pricing, board, spotlights, stats, onlineCount] =
+  const [entries, pricing, board, spotlights] =
     await Promise.all([
       getTodayBoardForCategory(slug),
       getPricing(),
       getRankedBoard(),
       getSpotlights(),
-      getSiteStats(),
-      getOnlineCount(),
     ]);
 
   const nowMs = requestNowMs();
@@ -60,8 +57,7 @@ export default async function CategoryTodayPage({
 
   return (
     <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-      <div className="pt-7">
-        <StatsPill stats={stats} onlineCount={onlineCount} />
+      <div className="flex flex-wrap items-center justify-between gap-4 pt-7"><BoardSwitch className="flex" />
       </div>
 
       <div className="pt-7 pb-12 sm:pt-8 sm:pb-14">

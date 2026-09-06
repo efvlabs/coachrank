@@ -7,11 +7,10 @@ import { useEffect, useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const LINKS = [
-  { href: "/", label: "Leaderboard" },
-  { href: "/today", label: "Today" },
+  { href: "/", label: "Editorial" },
+  { href: "/tools", label: "Tools" },
+  { href: "/rankings", label: "Rankings" },
   { href: "/categories", label: "Categories" },
-  { href: "/rules", label: "Rules" },
-  { href: "/about", label: "About" },
 ] as const;
 
 export function MobileMenu() {

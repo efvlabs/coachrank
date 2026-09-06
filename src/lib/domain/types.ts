@@ -1,5 +1,6 @@
 import type { Timestamp } from "firebase-admin/firestore";
 import type { CategorySlug } from "../categories";
+import type { EditorialFields } from "../editorial";
 
 /**
  *   pending - reached checkout, never paid
@@ -192,7 +193,7 @@ export type ActiveSpotlight = SpotlightBooking;
 
 export type BlogStatus = "draft" | "published";
 
-export type BlogPostDoc = {
+export type BlogPostDoc = EditorialFields & {
   title: string;
   slug: string;
   excerpt: string;
@@ -207,7 +208,7 @@ export type BlogPostDoc = {
   createdAt: Timestamp;
 };
 
-export type BlogPost = {
+export type BlogPost = Required<EditorialFields> & {
   id: string;
   title: string;
   slug: string;
@@ -228,6 +229,11 @@ export type SiteStats = {
   listedCoaches: number;
   leaderboardRevenueCents: number;
   spotlightRevenueCents: number;
+};
+
+export type PublicStatsSnapshot = {
+  stats: Pick<SiteStats, "visitors" | "outboundClicks" | "leaderboardRevenueCents">;
+  onlineCount: number | null;
 };
 
 export type TodayEntry = {

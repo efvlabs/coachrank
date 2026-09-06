@@ -104,7 +104,7 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Board", item: SITE.url },
+      { "@type": "ListItem", position: 1, name: "Board", item: absoluteUrl("/rankings") },
       {
         "@type": "ListItem",
         position: 2,
@@ -121,7 +121,7 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
         aria-label="Breadcrumb"
         className="flex items-center gap-2 text-[12.5px] text-ink-3"
       >
-        <Link href="/" className="hover:text-ink">
+        <Link href="/rankings" className="hover:text-ink">
           Board
         </Link>
         <span aria-hidden="true" className="text-line-2">
@@ -206,7 +206,7 @@ export default async function RankPage({ params }: PageProps<"/r/[slug]">) {
           Already listed? You pay only the difference.
         </p>
         <Link
-          href={`/?claim=${outbidCents}#claim`}
+          href={`/rankings?claim=${outbidCents}#claim`}
           className="btn btn-primary mt-5 px-7 py-3"
         >
           Outbid · {formatCents(outbidCents)}

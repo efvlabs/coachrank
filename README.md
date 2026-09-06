@@ -1,14 +1,17 @@
 # CoachRank.lol
 
-**The global paid leaderboard for coaches.** Coaches bid for ranking positions. The more money
-behind a name, the higher it ranks.
+**Celebrating greatness. Understanding what builds it.**
+
+An independent editorial for ambitious people, with practical tools and transparent paid coach rankings.
+
+The homepage is the editorial. Articles cover Performance, Business, Creativity, Growth and Coaching. Branding and productivity remain useful tags. Each topic has a dedicated `/topics/[topic]` archive.
+The paid board lives at `/rankings`; `/blog` redirects to `/`, while existing `/blog/[slug]`
+article URLs stay unchanged. Spotlight placements and new Spotlight checkouts are paused.
 
 > **Rank = bid. Nothing else.**
 
-Rankings on CoachRank are not reviews, ratings, editorial recommendations, endorsements,
-qualifications, popularity or verified outcomes. That disclosure is repeated in the footer, on
-`/rules`, on `/about`, on every rank page and in the ranking copy itself, and the moderation layer
-actively rejects bios that claim otherwise.
+Paid rankings remain advertising, separate from editorial selection. They do not measure
+qualifications, reviews or verified outcomes.
 
 ---
 
@@ -40,7 +43,7 @@ actively rejects bios that claim otherwise.
 | Framework | Next.js 16 (App Router), React 19, TypeScript strict |
 | Styling | Tailwind CSS v4, CSS custom properties for the light/dark palette. Bricolage Grotesque (display) + Inter (UI) |
 | Data | Cloud Firestore via `firebase-admin` (server) + `firebase` web SDK (read-only, live feed + admin sign-in) |
-| Payments | Dodo Payments (`dodopayments` official Node SDK), one-time pay-what-you-want products |
+| Payments | Dodo Payments (`dodopayments` official Node SDK), one-time paid ranking bids and a separate fixed-price $9 assessment |
 | Auth | Firebase Authentication — **admin only**. Coaches never get an account. |
 | Rendering | Server Components by default; client components only where there is real interactivity |
 
@@ -63,21 +66,22 @@ Brand assets live in `public/brand/`:
 | `wordmark.svg` | mark plus wordmark, for docs and decks |
 | `src/app/icon.svg`, `src/app/apple-icon.png` | favicon and iOS icon, wired up by Next.js |
 
-The mark is three ascending bars — a leaderboard where the tallest one was paid for. It stays
-legible at 16px, which is what a favicon and a social avatar actually need.
+The Rise mark uses three solid forms around one clear summit. Its single-color geometry links
+aspiration, progress and the ranking heritage; use the cobalt tile with the CoachRank wordmark.
+The `.lol` domain fits the editorial line: serious about growth, light on the ego.
 
 ### Directory map
 
 ```
 src/
   app/
-    page.tsx                     All-time leaderboard (home)
+    page.tsx                     Editorial homepage
+    rankings/page.tsx            All-time paid coach leaderboard
     today/page.tsx               Today board (rolling 24h)
     coaches/[category]/          Category boards + /today variant
     categories/                  Category index
     r/[slug]/                    Shareable rank + detail page, with dynamic OG image
-    blog/, blog/[slug]/          Blog — built and editable in /admin, hidden from the
-                                 public site until NEXT_PUBLIC_ENABLE_BLOG=true
+    blog/, blog/[slug]/          /blog redirects home; existing article URLs are preserved
     rules/ about/ terms/ privacy/
     success/                     Post-payment screen (waits for verified webhook)
     admin/                       Firebase-auth admin: coaches, payments, spotlights, blog, settings
@@ -258,7 +262,8 @@ Full annotated list in [`.env.example`](./.env.example). Summary:
 | `DODO_PAYMENTS_ENVIRONMENT` | yes | `test_mode` or `live_mode`. |
 | `DODO_PAYMENTS_WEBHOOK_KEY` | yes | Without it **every webhook is rejected** and nothing is ever credited. |
 | `DODO_BID_PRODUCT_ID` | yes | One-time product with pay-what-you-want enabled. |
-| `DODO_SPOTLIGHT_PRODUCT_ID` | no | Falls back to `DODO_BID_PRODUCT_ID`. |
+| `DODO_SPOTLIGHT_PRODUCT_ID` | no | Legacy Spotlight archive; checkout is paused. |
+| `DODO_BRAND_CLARITY_PRODUCT_ID` | for tools | Separate one-time USD $9 product, pay-what-you-want disabled. |
 | `ADMIN_EMAILS` | yes | Comma-separated allow-list for `/admin`. |
 | `FIREBASE_DATABASE_ID` / `NEXT_PUBLIC_FIREBASE_DATABASE_ID` | when sharing a project | `coachrank`. Both must match, or the browser reads a different database than the server. |
 | `DEFAULT_*_USD` | no | Build-time pricing fallbacks; Firestore settings win once written. |
@@ -410,6 +415,8 @@ rather than double-booking a paying advertiser.
 {
   title, slug, excerpt, markdownBody,
   seoTitle, metaDescription,
+  topic, authorName, authorBio, authorUrl, coverUrl, coverAlt, coverCredit,
+  keyAnswer, faqs: [{ question, answer }], sources: [{ title, url }], tags, featured, noindex,
   ctaCategory: CategorySlug | null,     // picks the end-of-article leaderboard CTA
   status: "draft" | "published",
   publishedAt: Timestamp | null, updatedAt, createdAt
@@ -663,14 +670,25 @@ Before the document exists, the `DEFAULT_*_USD` environment variables apply, the
 
 ## 13. Blog publishing
 
-`/admin/blog` → **New post**. Write Markdown, toggle **Preview**, then **Save draft** or
-**Publish**. Choosing a *Leaderboard CTA category* puts a targeted "Explore {Category} coaches →"
-and "Are you a {category} coach? Claim your rank →" block at the end of the article — the loop that
-turns search traffic into listings.
+`/admin/blog` is the **Editorial desk**. Create a new article or edit an existing one:
 
-Articles render as server-side HTML and are fully readable with JavaScript disabled. Markdown is
-converted server-side and sanitised to a strict tag allow-list; external links get
-`rel="nofollow noopener noreferrer"`.
+- Headline, standfirst, Markdown body, editorial topic, tags and live body preview.
+- Custom HTTPS cover image or bundled artwork, alt text and credit.
+- Author name, bio and optional profile link.
+- Visible key answer, reader questions, and sources with links.
+- Search title and description with illustrative preview and editing checks.
+- Featured placement, noindex, draft/publish controls, optional clearly labeled paid-directory link.
+
+Article pages render as sanitized server HTML with section navigation, author details,
+cover artwork, related reading, BlogPosting and breadcrumb structured data. No special
+markup or editing score guarantees SEO rankings or AI citations. Published slugs are locked
+and the original publication date survives unpublishing and republishing. Noindex articles
+are omitted from the sitemap. Existing Firestore articles receive editorial defaults without
+requiring a database migration. `NEXT_PUBLIC_ENABLE_BLOG` is no longer needed.
+
+Drafts remain private. The import script still imports Markdown as drafts; use the desk to
+add the new editorial fields before publishing. Buying a paid ranking never changes editorial
+placement. See `docs/editorial-art.md` for artwork provenance and prompts.
 
 **Content policy:** nothing auto-publishes. Write and review each article by hand. The seed script
 includes three complete articles as a starting point and as a format reference; they are dev seed
@@ -684,7 +702,7 @@ data, not something to push to production unreviewed.
 npm test
 ```
 
-100 tests across 12 files. Firestore-dependent logic runs against an in-memory Firestore fake
+The automated suite covers editorial publishing, private assessment access, fixed-price payment verification, refunds, scoring, saved progress, reassessment limits, PDF generation, public stats and the original ranking paths. Firestore-dependent logic runs against an in-memory Firestore fake
 (`src/test/fake-firestore.ts`) that implements documents, transactions, batches, queries, ordering,
 limits, count aggregations and the `FieldValue`/`Timestamp` sentinels — so the money paths are
 tested through the real application code, with no emulator required in CI.
@@ -712,7 +730,7 @@ Deployed with **Firebase App Hosting**, in the same `corporate-gupshup` project 
 `coachrank` Firestore database.
 
 ```bash
-npm run check                                   # lint + typecheck + 100 tests + build
+npm run check                                   # lint + typecheck + tests + build
 firebase deploy --only firestore:coachrank      # rules + indexes, coachrank database only
 ```
 
@@ -735,10 +753,9 @@ Rollouts then happen automatically on every push to that branch.
 **3. Deploy first, add payments later.** Dodo requires a working website before it will
 verify your business, so the first rollout deliberately needs **no secrets at all**.
 
-`apphosting.yaml` ships with every `secret:` reference commented out, because App Hosting
-validates those references at rollout time — pointing at a secret that does not exist yet
-fails the deploy. Without them the site is fully live: the board, categories, rules, terms
-and privacy all work, and checkout reports that it is not open yet. Nothing can be charged.
+The production `apphosting.yaml` already references the configured live payment secrets. App Hosting
+validates those references at rollout time. A fresh environment must create its own secrets before deployment.
+The Brand Clarity product ID is a public identifier, configured separately from the bid product.
 
 Once you have Dodo credentials, create each secret and uncomment its block in
 `apphosting.yaml`:
@@ -780,8 +797,9 @@ IAM.
 ### Rollbacks and logs
 
 ```bash
-firebase apphosting:rollouts:list --backend coachrank
-firebase apphosting:backends:get coachrank
+firebase apphosting:backends:get coachrank --project corporate-gupshup
+# Deploy a specific reviewed commit after pushing it:
+firebase apphosting:rollouts:create coachrank --git-commit <sha> --project corporate-gupshup --force
 ```
 
 Logs live in the Firebase console under App Hosting → your backend → Logs, and the webhook
@@ -889,3 +907,36 @@ duplicate content and gives every share a single canonical destination.
 **No fake anything.** There is no code path that fabricates a coach, a visitor, a bid, an activity
 event, revenue, a click or a Spotlight booking. Every number on the site is a counter, and where a
 figure is genuinely unavailable the UI omits that segment instead of inventing one.
+
+
+## 17. Brand Clarity Assessment
+
+`/tools/brand-clarity` is the $9 product page; `/sample` shows fictional answers and a real PDF download.
+Buyers complete 24 questions across six dimensions in `/tools/brand-clarity/assessment`.
+The report contains six scores, answer-based priorities, a seven-day plan and a downloadable PDF.
+One reassessment may be completed within 30 days of the first report, preserving both reports.
+This is an original business reflection tool, not a validated psychometric instrument or revenue prediction.
+
+The server creates a pending `assessmentOrders` record and a Dodo checkout for the fixed product.
+Only a signature-verified success event with the matching product, quantity and net $9 amount grants access.
+Refunds and reversals close access; transaction and reversal records handle retries and out-of-order events.
+Assessment purchases never change ranking bids, leaderboard revenue or activity counts.
+
+Access uses an HTTP-only cookie containing an order ID and random secret; only its hash is stored.
+A private URL carries the credential in its fragment to restore the cookie on another device.
+There is no buyer account or automatic report email. Save the private link; support can investigate a lost
+purchase using a Dodo receipt. Answers stay in CoachRank's private Firestore records, are never sent to Dodo
+or an AI service, and the public Firestore rules deny access. Saves reject stale concurrent revisions.
+
+`/admin/tools` provides a no-charge full assessment preview, clearly labeled and excluded from revenue.
+It shows the latest 100 orders, report completion and voluntary buyer feedback. Refunds are managed in Dodo.
+`/admin/blog` provides search, filters, drafts, publishing, author/source fields and SEO editing guidance.
+
+The five reviewed launch articles are versioned in `content/editorial-launch/`. Publish explicitly:
+
+```bash
+node scripts/publish-editorial-launch.mjs --project corporate-gupshup --database coachrank --account <authorized-gcloud-account> --publish
+```
+
+The script writes only blog posts, preserves existing slugs, and never seeds visitors, bids or revenue.
+See `docs/launch-plan.md` for the first-sale plan and unpublished X drafts.

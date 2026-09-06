@@ -1,14 +1,7 @@
-/**
- * The mark, in one place.
- *
- * A podium: three blocks with the tallest in the middle, which is what a podium is and
- * what a bar chart never is. Ascending bars read as analytics, and the two faded ones
- * disappeared at favicon size - the shape is asymmetric now so it stays identifiable at
- * 16px, and centre-weighted so a circular avatar crop does not leave a wedge of empty
- * tile in one corner.
- *
- * Every asset is generated from these numbers - the favicon, the header, the badge, the
- * social avatars - so the picture cannot drift between them.
+/** The Rise: three solid forms, one clear summit.
+ * The compact podium connects achievement with the steps behind it. Opaque shapes
+ * preserve the silhouette in monochrome and at small sizes. All applications share
+ * the same geometry; regenerate exports with scripts/generate-brand.mjs.
  */
 
 /** The tile and the bars are fixed colours in both themes: one picture everywhere. */
@@ -21,13 +14,13 @@ export const LOGO_FG_DARK = "#A8BAFF";
 
 /** Podium blocks on a 32-unit grid: [x, y, width, height, opacity]. */
 export const PODIUM: readonly (readonly [number, number, number, number, number])[] = [
-  [4.5, 15, 7.5, 12.5, 0.55],
-  [12.8, 8, 7.5, 19.5, 1],
-  [21.1, 18.5, 7.5, 9, 0.55],
+  [4, 16, 7, 11, 1],
+  [12.5, 6, 7, 21, 1],
+  [21, 12, 7, 15, 1],
 ] as const;
 
 /** Corner radius of a podium block, on the same 32-unit grid. */
-export const PODIUM_RADIUS = 2;
+export const PODIUM_RADIUS = 1.25;
 
 /** The blocks as SVG markup, scaled from the 32-unit grid to any canvas. */
 export function podiumRects(options: {

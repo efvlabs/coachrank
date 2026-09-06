@@ -13,7 +13,7 @@ export default async function EditPostPage({ params }: PageProps<"/admin/blog/[i
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Edit post</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Edit article</h1>
       <div className="mt-5">
         <PostEditor post={post} saveAction={savePostAction} deleteAction={deletePostAction} />
       </div>

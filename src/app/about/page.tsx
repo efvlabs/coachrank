@@ -1,79 +1,27 @@
 import Link from "next/link";
-
-import { SITE, absoluteUrl } from "@/lib/config";
+import { SITE } from "@/lib/config";
 
 export const metadata = {
-  title: "About",
-  description:
-    "CoachRank is a public paid leaderboard for coaches. Put money behind your name, move up the board, get seen. Rank = bid, nothing else.",
+  title: "About CoachRank",
+  description: "Celebrating greatness and understanding what builds it. Meet CoachRank, an independent editorial for ambitious people.",
   alternates: { canonical: "/about" },
-  openGraph: { title: `About · ${SITE.name}`, url: absoluteUrl("/about") },
 };
 
 export default function AboutPage() {
-  return (
-    <div className="mx-auto max-w-[1180px] px-5 py-14 sm:px-8">
-      <h1 className="display max-w-[16ch] text-[clamp(2.5rem,8vw,5rem)] leading-[0.95]">
-        Coaches tell people how to win.
-      </h1>
-      <p className="display mt-6 max-w-[22ch] text-[clamp(1.5rem,4vw,2.25rem)] leading-[1.05] text-accent">
-        So we made them compete.
-      </p>
-
-      <div className="mt-16 grid gap-x-16 gap-y-10 pt-10 sm:grid-cols-2">
-        <div>
-          <h2 className="eyebrow text-ink">What this is</h2>
-          <p className="mt-4 text-[16px] leading-[1.6] text-ink-2">
-            A public paid leaderboard. Pay to list, pay more to move up. The figure beside a name is
-            the total that coach has committed to their position, and that is the only thing it
-            measures.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="eyebrow text-ink">What it is not</h2>
-          <p className="mt-4 text-[16px] leading-[1.6] text-ink-2">
-            Not a review, a rating, an endorsement or a credential. We do not vet coaches and we
-            recommend nobody. A paid ranking that pretends to be a quality ranking is a lie; one that
-            says exactly what it is turns out to be useful.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="eyebrow text-ink">Why three fields</h2>
-          <p className="mt-4 text-[16px] leading-[1.6] text-ink-2">
-            A listing is a name, a website and a category. No photos, no rates, no calendars, no
-            reviews, no accounts. Anyone who wants more clicks straight through to your site.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="eyebrow text-ink">Why bids are permanent</h2>
-          <p className="mt-4 text-[16px] leading-[1.6] text-ink-2">
-            Your standing bid never expires. Raise it and you pay only the difference. Get outbid and
-            you keep every dollar - you move down, not off, until you decide to take the spot back.
-          </p>
-        </div>
-      </div>
-
-      <p className="display mt-20 text-[clamp(2rem,6vw,3.5rem)] leading-none">
-        Rank = bid. Nothing else.
-      </p>
-
-      <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
-        <Link href="/#claim" className="btn btn-primary px-7 py-3.5">
-          Claim a rank
-        </Link>
-        <Link href="/rules" className="buy">
-          Read the rules →
-        </Link>
-      </div>
-
-      <p className="meta mt-14">
-        <a href={`mailto:${SITE.contactEmail}`} className="text-accent hover:underline">
-          {SITE.contactEmail}
-        </a>
-      </p>
+  return <div className="journal-shell py-14">
+    <p className="journal-label">A little about us</p>
+    <h1 className="display mt-7 max-w-[18ch] text-[clamp(3rem,7vw,6rem)]">Celebrating greatness.<br /><span className="text-accent">Understanding what builds it.</span></h1>
+    <div className="article-prose prose-doc mt-12 max-w-[740px]">
+      <p>CoachRank is an independent editorial for ambitious people. We explore performance, business, creativity, growth and coaching: the practice, decisions and people behind exceptional work.</p>
+      <p>Our aim is simple: give you a useful idea, a clearer question, or something you can put to work. We value specific examples, transparent sources and writing that respects your time.</p>
+      <h2>Yes, the address ends in .lol.</h2>
+      <p>Building a business is serious work. Taking yourself too seriously is optional. The address is a small reminder to keep a sense of humor while doing work you care about.</p>
+      <h2>Editorial and rankings</h2>
+      <p>We celebrate achievement while making room for setbacks, collaborators and difficult choices. Our editorial covers ideas and practical topics. Payment does not determine what we write or which articles we feature.</p>
+      <p>The <Link href="/rankings">coach rankings</Link> are a separate advertising offering. Coaches bid for visibility; the cumulative amount paid determines their position. Those positions do not measure coaching quality, credentials, reviews or outcomes. We do not vet the coaches in the paid directory.</p>
+      <p>Every bid amount is visible. A paid rank is never an editorial endorsement. Read the <Link href="/rules">ranking rules</Link> for the full mechanics.</p>
+      <h2>Questions, ideas, corrections</h2>
+      <p>Something we should explore, or something we should put right? Write to <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
     </div>
-  );
+  </div>;
 }

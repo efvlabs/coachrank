@@ -22,42 +22,20 @@ export const PRICING_DEFAULTS = {
 export type Pricing = { -readonly [K in keyof typeof PRICING_DEFAULTS]: number };
 
 export const SITE = {
-  name: "CoachRank.lol",
+  name: "CoachRank",
   shortName: "CoachRank",
-  tagline: "Coaches who back themselves.",
-  /**
-   * The <title>, and the blue line in a search result. Client-facing verb, because the
-   * people search engines send here are looking for a coach, not selling coaching.
-   *
-   * Deliberately not "find better coaches": the Terms say a position is not our opinion
-   * of a coach and that we verify nothing, and a headline that promises curation would
-   * make a liar of every other page on the site.
-   */
-  title: "CoachRank - Find coaches who back themselves",
+  tagline: "Celebrating greatness. Understanding what builds it.",
+  /** Editorial identity; paid-board descriptions live on their own routes. */
+  title: "CoachRank — Celebrating Greatness",
   /** Link previews stay on the tagline; it is a hook, not an explanation. */
-  description: "Coaches who back themselves.",
-  /**
-   * The grey line under a search result. Google writes its own when ours is too thin to
-   * be useful - which is how a snippet ends up reading "$99 for 24 hours. The amount is
-   * the entire". Long enough to answer "what is this and why would I click".
-   */
+  description: "An independent editorial for ambitious people. Performance, business, creativity, growth and coaching.",
   searchDescription:
-    "Every ranking here was paid for, and we show you exactly how much. No reviews, no algorithm, no editorial picks - browse coaches by category and judge for yourself.",
+    "Celebrating greatness and understanding what builds it. Independent stories on performance, business, creativity, growth and coaching, plus practical tools for your next step.",
   url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   twitter: "@coachranklol",
   contactEmail: "contact@coachrank.lol",
   socials: [
     { label: "X", icon: "x", href: "https://x.com/coachranklol" },
-    {
-      label: "LinkedIn",
-      icon: "linkedin",
-      href: "https://www.linkedin.com/in/coachranklol/",
-    },
-    {
-      label: "Instagram",
-      icon: "instagram",
-      href: "https://www.instagram.com/coachranklol/",
-    },
   ] as const,
 } as const;
 
@@ -108,8 +86,8 @@ export function isAdminEmail(email: string | null | undefined): boolean {
 
 export const PRESENCE_ENABLED = process.env.NEXT_PUBLIC_ENABLE_PRESENCE !== "false";
 
-/**
- * The blog is built and editable in /admin, but hidden from the public site until it is
- * switched on. Nothing links to it, it is out of the sitemap, and the routes 404.
- */
-export const BLOG_ENABLED = process.env.NEXT_PUBLIC_ENABLE_BLOG === "true";
+/** The editorial is the public homepage. */
+export const BLOG_ENABLED = true;
+
+/** Pause new Spotlight sales while the editorial audience grows. */
+export const SPOTLIGHTS_ENABLED = false;

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { Timestamp } from "firebase-admin/firestore";
+import { editorialDefaults } from "../editorial";
 import type {
   ActivityEvent,
   ActivityEventDoc,
@@ -25,6 +26,8 @@ export const COLLECTIONS = {
   settings: "settings",
   presence: "presence",
   processedWebhooks: "processedWebhooks",
+  assessmentOrders: "assessmentOrders",
+  assessmentReversals: "assessmentReversals",
 } as const;
 
 export const STATS_DOC_ID = "site";
@@ -105,6 +108,7 @@ export function toSpotlightBooking(id: string, doc: SpotlightBookingDoc): Spotli
 
 export function toBlogPost(id: string, doc: BlogPostDoc): BlogPost {
   return {
+    ...editorialDefaults(doc),
     id,
     title: doc.title,
     slug: doc.slug,

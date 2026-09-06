@@ -1,5 +1,5 @@
 import { SpotlightCard } from "./SpotlightCard";
-import type { Pricing } from "@/lib/config";
+import { SPOTLIGHTS_ENABLED, type Pricing } from "@/lib/config";
 import type { ActiveSpotlight } from "@/lib/domain/types";
 
 type Props = {
@@ -20,6 +20,7 @@ type Props = {
  * earlier would float the ads above the board.
  */
 export function SpotlightRail({ spotlights, pricing, nowMs, toolbar, children }: Props) {
+  if (!SPOTLIGHTS_ENABLED) return <div className="mx-auto max-w-5xl"><div className="mb-6">{toolbar}</div>{children}</div>;
   return (
     <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-[196px_minmax(0,1fr)_196px]">
       {toolbar ? (

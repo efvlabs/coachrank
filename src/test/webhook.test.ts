@@ -33,6 +33,7 @@ vi.mock("next/headers", () => ({
 import { POST } from "@/app/api/webhooks/dodo/route";
 import { COLLECTIONS } from "@/lib/domain/collections";
 import { createPendingBidPayment, ensureListing } from "@/lib/domain/payments";
+import { createAssessmentOrder } from "@/lib/domain/assessments";
 import { fakeDb } from "./fake-firestore";
 
 const DOLLAR = 100;
@@ -76,6 +77,38 @@ beforeEach(() => {
 });
 
 describe("Dodo webhook", () => {
+  it("unlocks a taxed assessment once, independently of paid rankings, then revokes a refund", async () => {
+    const { order } = await createAssessmentOrder("brand-product");
+    verifyWebhook.mockReturnValue({
+      type: "payment.succeeded", data: {
+        payment_id: "pay_assessment", currency: "USD", total_amount: 1062, tax: 162,
+        product_cart: [{ product_id: "brand-product", quantity: 1 }],
+        metadata: { cr_kind: "assessment", cr_payment_id: order.id },
+      },
+    });
+    expect(await (await POST(post({}))).json()).toMatchObject({ outcome: "unlocked" });
+    expect(await (await POST(post({}))).json()).toMatchObject({ outcome: "already_processed" });
+    expect(fakeDb.peek(COLLECTIONS.assessmentOrders, order.id)).toMatchObject({ status: "paid" });
+    expect(fakeDb.all(COLLECTIONS.listings)).toHaveLength(0);
+    expect(fakeDb.all(COLLECTIONS.activityEvents)).toHaveLength(0);
+    verifyWebhook.mockReturnValue({ type: "refund.succeeded", data: { payment_id: "pay_assessment", refund_id: "ref_assessment" } });
+    expect(await (await POST(post({}))).json()).toMatchObject({ outcome: "reversed" });
+    expect(fakeDb.peek(COLLECTIONS.assessmentOrders, order.id)).toMatchObject({ status: "reversed" });
+  });
+
+  it("rejects a verified assessment payment with a mismatched amount", async () => {
+    const { order } = await createAssessmentOrder("brand-product");
+    verifyWebhook.mockReturnValue({
+      type: "payment.succeeded", data: {
+        payment_id: "pay_underpaid", currency: "USD", total_amount: 800,
+        product_cart: [{ product_id: "brand-product", quantity: 1 }],
+        metadata: { cr_kind: "assessment", cr_payment_id: order.id },
+      },
+    });
+    expect((await POST(post({}))).status).toBe(500);
+    expect(fakeDb.peek(COLLECTIONS.assessmentOrders, order.id)).toMatchObject({ status: "pending" });
+  });
+
   it("rejects a request with missing signature headers and credits nothing", async () => {
     const { listingId } = await seedPendingBid();
     headersRef.current = new Headers();

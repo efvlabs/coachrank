@@ -16,10 +16,10 @@ export function Logo({ size = 28, className = "" }: Props) {
   return (
     <span
       aria-hidden="true"
-      className={`grid shrink-0 place-items-center rounded-[8px] ${className}`}
+      className={`grid shrink-0 place-items-center rounded-[6px] ${className}`}
       style={{ width: size, height: size, background: LOGO_BG }}
     >
-      <svg width={size * 0.72} height={size * 0.72} viewBox="0 0 32 32" fill="none">
+      <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
         {PODIUM.map(([x, y, w, h, opacity]) => (
           <rect
             key={x}

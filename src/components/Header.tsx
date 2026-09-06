@@ -1,47 +1,23 @@
 import Link from "next/link";
-
-import { BLOG_ENABLED } from "@/lib/config";
-
-import { BoardSwitch } from "./BoardSwitch";
-import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
+import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
-
-const NAV = [
-  { href: "/categories", label: "Categories" },
-  ...(BLOG_ENABLED ? [{ href: "/blog", label: "Blog" }] : []),
-  { href: "/rules", label: "Rules" },
-  { href: "/about", label: "About" },
-] as const;
+import { LiveStatsPill } from "./LiveStatsPill";
 
 export function Header() {
-  return (
-    <header className="sticky top-0 z-30 bg-paper/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[1120px] items-center gap-4 px-5 sm:px-8">
-        <Link href="/" className="display flex items-center gap-2 text-[19px]">
-          <Logo size={28} />
-          CoachRank
-        </Link>
-
-        <BoardSwitch className="hidden sm:flex" />
-
-        <nav aria-label="Main" className="ml-auto hidden items-center gap-1 sm:flex">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-full px-3 py-1.5 text-[14px] font-medium text-ink-2 transition-colors hover:bg-tint hover:text-ink"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <ThemeToggle className="ml-1" />
-        </nav>
-
-        <div className="ml-auto sm:hidden">
-          <MobileMenu />
-        </div>
+  return <header className="sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur-md">
+    <div className="mx-auto grid max-w-[1360px] grid-cols-[1fr_auto] items-center gap-x-5 px-5 sm:px-10 xl:min-h-16 xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+      <Link href="/" className="display flex h-16 w-fit items-center gap-2.5 text-[20px]" aria-label="CoachRank home"><Logo size={25} />CoachRank</Link>
+      <div className="order-3 col-span-2 min-w-0 pb-3 xl:order-none xl:col-span-1 xl:max-w-[620px] xl:py-2">
+        <LiveStatsPill />
       </div>
-    </header>
-  );
+      <nav aria-label="Main" className="hidden items-center justify-self-end gap-5 sm:flex xl:gap-4">
+        <Link href="/tools" className="text-[14px] font-medium hover:text-accent">Tools</Link>
+        <Link href="/rankings" className="text-[14px] font-medium hover:text-accent">Rankings ↗</Link>
+        <Link href="/categories" className="text-[14px] font-medium hover:text-accent">Categories</Link>
+        <ThemeToggle />
+      </nav>
+      <div className="justify-self-end sm:hidden"><MobileMenu /></div>
+    </div>
+  </header>;
 }

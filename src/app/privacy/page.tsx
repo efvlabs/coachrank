@@ -16,10 +16,10 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy"
-      updated="August 2026"
+      updated="September 2026"
       intro={
         <p>
-          How CoachRank handles information when you visit, click a listing or pay for a position.
+          How CoachRank handles information when you read, use a tool, click a listing or make a purchase.
           It sits alongside the <Link href="/terms">Terms</Link>.
         </p>
       }
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
       </p>
 
       <h2>What we collect</h2>
-      <p>The site is deliberately small. We collect what it takes to run the board and nothing more.</p>
+      <p>We collect the information needed to operate the editorial, tools and paid rankings.</p>
       <ul>
         <li>
           <strong>Listing details.</strong> The name, website and category you submit. All three are
@@ -67,6 +67,11 @@ export default function PrivacyPage() {
       <p>
         Your browser may also store a theme preference locally. That never leaves your device.
       </p>
+
+      <h2>Assessment answers and reports</h2>
+      <p>For the Brand Clarity Assessment, we store your selected answers, completed reports, purchase reference and optional feedback in CoachRank’s Firestore database. We use them to save progress, generate your report, compare your included reassessment and improve the product. Recommendations are generated from CoachRank’s written scoring and guidance; no AI provider receives your answers.</p>
+      <p>The <code>cr_brand_access</code> cookie is a private, HTTP-only access credential that lasts up to one year. Your private recovery link restores access on another device; anyone holding it can view your answers and reports. We retain completed assessments to provide continued report access, or until you request deletion, subject to payment-record retention requirements. Authorized administrators can see purchase status and optional feedback. They can assist with access and deletion requests.</p>
+      <p>Assessment payment information is handled by Dodo Payments. Your answers are not sent to Dodo, and card details are not collected by CoachRank. Downloaded PDFs remain on your device and under your control.</p>
 
       <h2>Why we are allowed to</h2>
       <ul>

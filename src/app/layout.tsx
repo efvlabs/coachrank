@@ -32,6 +32,10 @@ export const metadata: Metadata = {
   description: SITE.searchDescription,
   applicationName: SITE.shortName,
   keywords: [
+    "coaching articles",
+    "business strategy",
+    "productivity",
+    "personal branding",
     "coach leaderboard",
     "business coach",
     "startup coach",
@@ -102,13 +106,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-dvh flex-col">
         <a
-          href="#board"
+          href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-3 focus:py-2 focus:text-paper"
         >
-          Skip to the board
+          Skip to content
         </a>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">{children}</main>
         <Footer />
         <VisitorBeacon />
         <script

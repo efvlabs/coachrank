@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { BoardSwitch } from "@/components/BoardSwitch";
 import { BidPanel } from "@/components/BidPanel";
 import { BoardSections } from "@/components/BoardSections";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { SpotlightRail } from "@/components/SpotlightRail";
-import { StatsPill } from "@/components/StatsPill";
 import { CATEGORIES, getCategory, isCategorySlug } from "@/lib/categories";
 import { LEADERBOARD_PAGE_SIZE, SITE, absoluteUrl } from "@/lib/config";
 import { requestNowMs } from "@/lib/clock";
@@ -15,7 +15,6 @@ import { getRecentActivity } from "@/lib/domain/activity";
 import { getRankedBoard, paginate } from "@/lib/domain/listings";
 import { getPricing } from "@/lib/domain/settings";
 import { getSpotlights } from "@/lib/domain/spotlight";
-import { getOnlineCount, getSiteStats } from "@/lib/domain/stats";
 import { getTodayBoardForCategory } from "@/lib/domain/today-board";
 import { formatCents } from "@/lib/money";
 import { priceToClaimTopCents, topStandingBidCents } from "@/lib/ranking";
@@ -66,16 +65,12 @@ export default async function CategoryPage({
     board,
     pricing,
     spotlights,
-    stats,
-    onlineCount,
     todayEntries,
     activity,
   ] = await Promise.all([
     getRankedBoard(),
     getPricing(),
     getSpotlights(),
-    getSiteStats(),
-    getOnlineCount(),
     getTodayBoardForCategory(slug),
     getRecentActivity(),
   ]);
@@ -96,7 +91,7 @@ export default async function CategoryPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Leaderboard", item: SITE.url },
+      { "@type": "ListItem", position: 1, name: "Leaderboard", item: absoluteUrl("/rankings") },
       {
         "@type": "ListItem",
         position: 2,
@@ -114,8 +109,7 @@ export default async function CategoryPage({
 
   return (
     <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-      <div className="pt-7">
-        <StatsPill stats={stats} onlineCount={onlineCount} />
+      <div className="flex flex-wrap items-center justify-between gap-4 pt-7"><BoardSwitch className="flex" />
       </div>
 
       <div className="pt-7 pb-12 sm:pt-8 sm:pb-14">
@@ -139,7 +133,7 @@ export default async function CategoryPage({
             aria-label="Breadcrumb"
             className="eyebrow flex items-center gap-2"
           >
-            <Link href="/" className="hover:text-ink">
+            <Link href="/rankings" className="hover:text-ink">
               Board
             </Link>
             <span aria-hidden="true" className="text-line-2">

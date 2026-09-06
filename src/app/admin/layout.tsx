@@ -1,59 +1,14 @@
 import Link from "next/link";
-
 import { AdminLogin } from "@/components/admin/AdminLogin";
 import { AdminSignOut } from "@/components/admin/AdminSignOut";
+import { AdminNav } from "@/components/admin/AdminNav";
+import { Logo } from "@/components/Logo";
 import { getAdminUser } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
-
-export const metadata = {
-  title: "Admin",
-  robots: { index: false, follow: false, nocache: true },
-};
-
-const NAV = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/coaches", label: "Coaches" },
-  { href: "/admin/payments", label: "Payments" },
-  { href: "/admin/spotlights", label: "Spotlights" },
-  { href: "/admin/blog", label: "Blog" },
-  { href: "/admin/settings", label: "Settings" },
-] as const;
-
+export const metadata = { title: "CoachRank Studio", robots: { index: false, follow: false, nocache: true } };
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
-  const user = await getAdminUser();
-
-  if (!user) {
-    return (
-      <div className="mx-auto max-w-sm px-4 py-20 sm:px-6">
-        <AdminLogin />
-      </div>
-    );
-  }
-
-  return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
-        <div>
-          <p className="text-lg font-semibold tracking-tight">Admin</p>
-          <p className="text-[12px] text-ink-3">{user.email}</p>
-        </div>
-        <AdminSignOut />
-      </header>
-
-      <nav aria-label="Admin" className="rail mt-4 py-1">
-        {NAV.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="rounded-full border border-line bg-paper px-3.5 py-1.5 text-[13px] font-semibold text-ink-2 hover:border-ink-muted hover:text-ink"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-
-      <div className="mt-8">{children}</div>
-    </div>
-  );
+  const user=await getAdminUser();
+  if (!user) return <div className="admin-login-shell"><div className="admin-login-story"><Logo size={42} /><p className="journal-label">CoachRank Studio</p><h1>Make something<br />worth reading.<br /><span>And returning to.</span></h1><p>Your editorial, your tools, your next chapter. A considered space to build CoachRank.</p><Link href="/" className="tool-text-link">Back to the editorial ↗</Link></div><div className="admin-login-form"><AdminLogin /></div></div>;
+  return <div className="admin-console"><aside className="admin-sidebar"><Link href="/admin" className="admin-studio-brand"><Logo size={30} /><span>CoachRank<small>STUDIO</small></span></Link><AdminNav /><div className="admin-sidebar-note"><p>Celebrating greatness.<br />Understanding what builds it.</p><Link href="/" className="tool-text-link">View publication ↗</Link></div></aside><div className="admin-main"><header className="admin-topline"><p>Independent thinking. Considered work.</p><div><span title={user.email}>{user.email}</span><AdminSignOut /></div></header><div className="admin-content">{children}</div></div></div>;
 }

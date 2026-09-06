@@ -1,84 +1,23 @@
 import Link from "next/link";
-
-import { getRankedBoard, listAllListings } from "@/lib/domain/listings";
-import { listRecentPayments } from "@/lib/domain/payments";
+import { listAllPosts } from "@/lib/domain/blog";
 import { getSiteStats } from "@/lib/domain/stats";
-import { isFirebaseConfigured } from "@/lib/firebase/admin";
-import { isDodoConfigured } from "@/lib/dodo";
+import { recentAssessmentOrders } from "@/lib/domain/assessments";
+import { getAdminUser } from "@/lib/admin-auth";
+import { isAssessmentCheckoutConfigured, isDodoConfigured } from "@/lib/dodo";
 import { formatCents, formatCount } from "@/lib/money";
+import { topicLabel } from "@/lib/editorial";
 
 export const dynamic = "force-dynamic";
-
 export default async function AdminOverviewPage() {
-  const [stats, board, all, payments] = await Promise.all([
-    getSiteStats(),
-    getRankedBoard(),
-    listAllListings(500),
-    listRecentPayments(50),
-  ]);
-
-  const pending = all.filter((l) => l.status === "pending").length;
-  const hidden = all.filter((l) => l.status === "hidden").length;
-  const paidCount = payments.filter((p) => p.status === "paid").length;
-
-  const tiles = [
-    { label: "Listed coaches", value: formatCount(board.length) },
-    { label: "Pending (unpaid)", value: formatCount(pending) },
-    { label: "Hidden", value: formatCount(hidden) },
-    { label: "Visitors", value: formatCount(stats.visitors) },
-    { label: "Outbound clicks", value: formatCount(stats.outboundClicks) },
-    { label: "Leaderboard revenue", value: formatCents(stats.leaderboardRevenueCents) },
-    { label: "Spotlight revenue", value: formatCents(stats.spotlightRevenueCents) },
-    { label: "Paid payments (last 50)", value: formatCount(paidCount) },
-  ];
-
-  return (
-    <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
-
-      <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {tiles.map((tile) => (
-          <li key={tile.label} className="card p-4">
-            <p className="text-[11.5px] font-semibold uppercase tracking-wider text-ink-3">
-              {tile.label}
-            </p>
-            <p className="tnum mt-1 text-2xl font-semibold text-ink">{tile.value}</p>
-          </li>
-        ))}
-      </ul>
-
-      <section className="card mt-6 p-5">
-        <h2 className="text-lg font-semibold tracking-tight">Configuration</h2>
-        <ul className="mt-3 space-y-2 text-[14px]">
-          <li className="flex items-center gap-2">
-            <StatusDot ok={isFirebaseConfigured()} />
-            Firebase Admin {isFirebaseConfigured() ? "connected" : "not configured"}
-          </li>
-          <li className="flex items-center gap-2">
-            <StatusDot ok={isDodoConfigured()} />
-            Dodo Payments {isDodoConfigured() ? "configured" : "not configured - checkout disabled"}
-          </li>
-          <li className="flex items-center gap-2">
-            <StatusDot ok={Boolean(process.env.DODO_PAYMENTS_WEBHOOK_KEY)} />
-            Webhook key {process.env.DODO_PAYMENTS_WEBHOOK_KEY ? "set" : "missing - webhooks rejected"}
-          </li>
-        </ul>
-      </section>
-
-      <p className="mt-6 text-[13px] text-ink-3">
-        Payments are read-only here by design.{" "}
-        <Link href="/admin/payments" className="text-accent hover:underline">
-          View the payment log →
-        </Link>
-      </p>
-    </div>
-  );
-}
-
-function StatusDot({ ok }: { ok: boolean }) {
-  return (
-    <span aria-hidden="true"
-      className={`inline-block h-2 w-2 shrink-0 rounded-full ${ok ? "bg-accent" : "bg-accent"}`}
-    />
-  );
+  if (!await getAdminUser()) return null;
+  const [stats,posts,orders]=await Promise.all([getSiteStats(),listAllPosts(200),recentAssessmentOrders()]);
+  const paid=orders.filter(order=>!order.preview && order.status==="paid");
+  const published=posts.filter(post=>post.status==="published");
+  const drafts=posts.filter(post=>post.status==="draft");
+  const feedback=paid.filter(order=>order.feedback);
+  const tiles=[{label:"Visitors since launch",value:formatCount(stats.visitors),detail:"Browsers counted by CoachRank"},{label:"Published stories",value:published.length,detail:`${drafts.length} drafts on your desk`},{label:"Assessment sales",value:paid.length,detail:"Paid orders in the latest 100"},{label:"Assessment revenue",value:formatCents(paid.reduce((sum,order)=>sum+order.priceCents,0)),detail:"Latest 100 orders · before tax and fees"}];
+  return <div><div className="admin-page-heading"><div><p className="journal-label">Your publication, at a glance</p><h1>Make the next chapter count.</h1><p>Good stories build an audience. Useful tools give them a next step.</p></div><Link href="/admin/blog/new" className="tool-button">Write an article ↗</Link></div><div className="admin-metrics">{tiles.map(item=><div className="admin-metric" key={item.label}><p>{item.label}</p><strong>{item.value}</strong><span>{item.detail}</span></div>)}</div>
+    <div className="admin-dashboard-grid"><section className="admin-launch-card"><p className="journal-label">The launch focus</p><h2>{paid.length ? "Someone chose clarity." : "One useful product. One first customer."}</h2><p>{paid.length ? "Your first product has paying customers. Their experience is the best guide to what you build next." : "Bring the right readers to the Brand Clarity Assessment. Help them understand the value before asking them to buy."}</p><ol><li><span>01</span><div><strong>Publish something worth reading</strong><p>{published.length} stories available to your readers.</p></div><Link href="/admin/blog">Open desk ↗</Link></li><li><span>02</span><div><strong>Make the product useful</strong><p>Review the assessment and downloadable report.</p></div><Link href="/admin/tools">Test it ↗</Link></li><li><span>03</span><div><strong>Listen to the first buyers</strong><p>{feedback.length ? `${feedback.length} buyers have left feedback.` : "Buyer feedback will appear in Tools & feedback."}</p></div><Link href="/admin/tools">Feedback ↗</Link></li></ol></section><section className="admin-health"><p className="journal-label">Ready for readers</p><h2>The essentials.</h2>{[{label:"Editorial homepage",ok:published.length>0,detail:published.length ? "Stories are published" : "Add your first story"},{label:"Brand Clarity checkout",ok:isAssessmentCheckoutConfigured(),detail:isAssessmentCheckoutConfigured() ? "$9 USD · one time" : "Payment setup needed"},{label:"Paid coach rankings",ok:isDodoConfigured(),detail:isDodoConfigured() ? "Checkout configured" : "Checkout paused"}].map(item=><div key={item.label}><span className={`admin-status-dot ${item.ok?"is-ready":""}`} /><div><strong>{item.label}</strong><p>{item.detail}</p></div></div>)}<Link href="/tools/brand-clarity/sample" className="tool-text-link">View the sample report ↗</Link></section></div>
+    <section className="admin-recent"><div className="admin-section-heading"><h2>On the editorial desk</h2><Link href="/admin/blog" className="tool-text-link">All articles ↗</Link></div>{posts.slice(0,5).map(post=><Link key={post.id} href={`/admin/blog/${post.id}`} className="admin-recent-row"><div><p>{topicLabel(post.topic)}</p><h3>{post.title}</h3></div><span className={`admin-badge ${post.status === "published" ? "is-published" : ""}`}>{post.status}</span><span aria-hidden="true">↗</span></Link>)}{!posts.length ? <p className="admin-empty">Your first story starts with a useful question. Open the editorial desk to begin.</p> : null}</section><div className="admin-board-summary"><span>Paid rankings</span><p>{formatCount(stats.outboundClicks)} outbound clicks</p><p>{formatCents(stats.leaderboardRevenueCents)} contributed to the board</p><Link href="/admin/payments" className="tool-text-link">Payment history ↗</Link></div>
+  </div>;
 }

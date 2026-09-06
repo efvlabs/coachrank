@@ -16,10 +16,10 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Terms"
-      updated="August 2026"
+      updated="September 2026"
       intro={
         <p>
-          These terms govern use of coachrank.lol - the public board, listing pages, checkout and
+          These terms govern use of coachrank.lol - the editorial, digital tools, public board, listing pages, checkout and
           everything around them. By using the site, creating a listing or completing a payment you
           agree to them and to the <Link href="/privacy">Privacy Policy</Link>. If you do not agree,
           do not list and do not pay.
@@ -53,7 +53,7 @@ export default function TermsPage() {
 
       <h2>What the service is</h2>
       <p>
-        CoachRank is a paid public ranking. You may pay to list a coaching website and to occupy a
+        CoachRank is an independent editorial with digital tools and a paid public ranking. You may pay to list a coaching website and to occupy a
         position based on the amount paid. <strong>Listings are advertisements</strong> - not
         editorial reviews, certifications, endorsements or independent rankings.
       </p>
@@ -90,7 +90,7 @@ export default function TermsPage() {
         server and written to the board.
       </p>
 
-      <h2 id="refunds">No refunds</h2>
+      <h2 id="refunds">Paid ranking refunds</h2>
       <p>
         Leaderboard payments are final. Placement is a digital service that begins the instant
         payment is confirmed: the listing is created or the standing bid is raised, and the amount
@@ -122,6 +122,12 @@ export default function TermsPage() {
         return the unused hours. A Spotlight is a 24-hour placement that begins as soon as the
         payment clears; it is not refundable once it is running.
       </p>
+
+      <h2 id="assessments">Digital assessments and tools</h2>
+      <p>The Brand Clarity Assessment is a one-time $9 USD digital product, plus any applicable tax shown at checkout. It includes 24 questions, a six-dimension report, three priorities, a seven-day action plan, a downloadable PDF and one reassessment completed within 30 days of the first report. Saved reports remain accessible while the service is available. There is no subscription.</p>
+      <p>Access opens after verified payment. Your answers and reports are private to your access link and browser session. Keep the link safe: anyone with it can access your assessment. Progress is saved after each section or when you select Save &amp; exit. If you lose access, contact {mail} with your payment receipt.</p>
+      <p>This is an original business self-assessment using transparent editorial scoring. It is not a validated psychometric test, an independent business audit, a certification or a promise of revenue. Recommendations reflect your answers and should be tested with customer evidence.</p>
+      <p>Your purchase is for your own business use. You may download and use your report, but may not resell or redistribute the assessment or offer it to clients as your own product. If access or delivery fails, contact {mail} so we can resolve the issue or arrange a refund when the product cannot be delivered. Any mandatory consumer rights remain unaffected. The paid-ranking refund provisions above describe ranking purchases, not this assessment. Refunded or reversed assessment purchases lose online access.</p>
 
       <h2>Your listing</h2>
       <p>By submitting a listing or a payment you represent that:</p>

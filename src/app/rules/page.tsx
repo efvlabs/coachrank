@@ -146,28 +146,8 @@ export default async function RulesPage() {
         distinct, so two coaches on different pages of the same platform hold separate ranks.
       </p>
 
-      <h2 id="spotlights">Spotlights</h2>
-      <p>
-        The two spotlights beside the board are advertisements, not rankings.{" "}
-        {pricing.premiumSpotlightCents === pricing.standardSpotlightCents ? (
-          <>Both cost {cents(pricing.premiumSpotlightCents)}</>
-        ) : (
-          <>
-            Spotlight I is {cents(pricing.premiumSpotlightCents)} and Spotlight II is{" "}
-            {cents(pricing.standardSpotlightCents)}
-          </>
-        )}{" "}
-        - each for exactly 24 hours from the moment payment is verified. Neither affects any position.
-        A Spotlight is an advertisement, so it does not require a rank: anyone can rent one, and the
-        name, website and category shown on it are screened the same way a listing is. A slot cannot
-        be double-booked - if a payment lands after its hold has lapsed and the slot is taken, that
-        payment is refunded.
-      </p>
-      <p>
-        A Spotlight starts the moment the payment clears, so it is not refundable once it is
-        running - not partway through, and not because the clicks were fewer than you hoped. You
-        can ask us to take it down early and we will, but the 24 hours are not returned as money.
-      </p>
+      <h2 id="spotlights">Spotlights are paused</h2>
+      <p>We are not accepting new Spotlight bookings while we build the editorial audience. Paid coach rankings remain available under the rules above.</p>
 
       <h2>Payments</h2>
       <p>

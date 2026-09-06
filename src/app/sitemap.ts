@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { EDITORIAL_TOPICS } from "@/lib/editorial";
+
 import { CATEGORIES } from "@/lib/categories";
 import { BLOG_ENABLED, SITE, absoluteUrl } from "@/lib/config";
 import { getPublishedPosts } from "@/lib/domain/blog";
@@ -13,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE.url, lastModified: now, changeFrequency: "hourly", priority: 1 },
+    { url: absoluteUrl("/rankings"), lastModified: now, changeFrequency: "hourly", priority: 0.8 },
     { url: absoluteUrl("/today"), lastModified: now, changeFrequency: "hourly", priority: 0.8 },
     { url: absoluteUrl("/categories"), lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: absoluteUrl("/rules"), lastModified: now, changeFrequency: "monthly", priority: 0.6 },
@@ -48,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+  const postRoutes: MetadataRoute.Sitemap = posts.filter(post => !post.noindex).map((post) => ({
     url: absoluteUrl(`/blog/${post.slug}`),
     lastModified: new Date(post.updatedAtMs || Date.now()),
     changeFrequency: "weekly",
@@ -57,10 +60,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogRoutes: MetadataRoute.Sitemap = BLOG_ENABLED
     ? [
-        { url: absoluteUrl("/blog"), lastModified: now, changeFrequency: "daily", priority: 0.7 },
         ...postRoutes,
       ]
     : [];
 
-  return [...staticRoutes, ...categoryRoutes, ...listingRoutes, ...blogRoutes];
+  const editorialRoutes: MetadataRoute.Sitemap = [...EDITORIAL_TOPICS.map(topic => `/topics/${topic.slug}`), "/tools", "/tools/brand-clarity"].map(path => ({ url: absoluteUrl(path), changeFrequency: "weekly", priority: 0.8 }));
+  return [...editorialRoutes, ...staticRoutes, ...categoryRoutes, ...listingRoutes, ...blogRoutes];
 }

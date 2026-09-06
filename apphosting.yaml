@@ -102,6 +102,11 @@ env:
     secret: DODO_BID_PRODUCT_ID
     availability: [RUNTIME]
 
+  # Fixed $9 digital assessment. Product IDs are public checkout identifiers.
+  - variable: DODO_BRAND_CLARITY_PRODUCT_ID
+    value: pdt_0Nn0ECClmkQSCiuYXdjLL
+    availability: [RUNTIME]
+
   # ---- Admin ---------------------------------------------------------------------------
   #
   # ADMIN_EMAILS gates /admin, where listings are hidden for impersonation and Spotlights

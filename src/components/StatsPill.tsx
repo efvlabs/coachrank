@@ -1,7 +1,7 @@
 import { formatCentsCompact, formatCount } from "@/lib/money";
-import type { SiteStats } from "@/lib/domain/types";
+import type { PublicStatsSnapshot } from "@/lib/domain/types";
 
-type Props = { stats: SiteStats; onlineCount: number | null; className?: string };
+type Props = PublicStatsSnapshot & { className?: string };
 
 /** Real counters only. A figure we cannot measure is dropped, never invented. */
 export function StatsPill({ stats, onlineCount, className = "" }: Props) {

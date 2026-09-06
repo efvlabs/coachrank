@@ -17,11 +17,11 @@ const LOGO_FG_DARK = "#A8BAFF";
 
 // Kept in step with src/lib/brand.ts. [x, y, width, height, opacity] on a 32-unit grid.
 const PODIUM = [
-  [4.5, 15, 7.5, 12.5, 0.55],
-  [12.8, 8, 7.5, 19.5, 1],
-  [21.1, 18.5, 7.5, 9, 0.55],
+  [4, 16, 7, 11, 1],
+  [12.5, 6, 7, 21, 1],
+  [21, 12, 7, 15, 1],
 ];
-const RADIUS = 2;
+const RADIUS = 1.25;
 
 const round = (v) => Number(v.toFixed(3));
 

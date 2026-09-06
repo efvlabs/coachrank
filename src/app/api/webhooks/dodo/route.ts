@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { netPaidUsdCents, readCheckoutMetadata, verifyWebhook } from "@/lib/dodo";
+import { markAssessmentFailed, processVerifiedAssessmentPayment, reverseAssessmentPayment } from "@/lib/domain/assessments";
 import {
   markBidPaymentFailed,
   processVerifiedBidPayment,
@@ -64,6 +65,11 @@ export async function POST(request: Request) {
         const paidAt = payment.created_at ? new Date(payment.created_at) : new Date();
         const safePaidAt = Number.isNaN(paidAt.getTime()) ? new Date() : paidAt;
 
+        if (meta.kind === "assessment") {
+          const result = await processVerifiedAssessmentPayment({ orderId: meta.internalPaymentId, dodoPaymentId: payment.payment_id, paidNetCents: netPaidUsdCents(payment), productCart: payment.product_cart });
+          return NextResponse.json({ received: true, outcome: result.outcome });
+        }
+
         if (meta.kind === "bid") {
           const result = await processVerifiedBidPayment({
             internalPaymentId: meta.internalPaymentId,
@@ -96,6 +102,7 @@ export async function POST(request: Request) {
         const meta = readCheckoutMetadata(payment.metadata);
         if (meta.internalPaymentId) {
           if (meta.kind === "bid") await markBidPaymentFailed(meta.internalPaymentId);
+          if (meta.kind === "assessment") await markAssessmentFailed(meta.internalPaymentId);
           // Otherwise the hold squats the slot until it lapses on its own.
           if (meta.kind === "spotlight") await abandonSpotlightBooking(meta.internalPaymentId);
         }
@@ -112,6 +119,9 @@ export async function POST(request: Request) {
         const dodoPaymentId = event.data.payment_id;
         const reference =
           event.type === "refund.succeeded" ? event.data.refund_id : event.data.dispute_id;
+
+        const assessment = await reverseAssessmentPayment(dodoPaymentId, reference);
+        if (assessment === "reversed") return NextResponse.json({ received: true, outcome: assessment });
 
         const bid = await reverseBidPayment({ dodoPaymentId, reason, reference });
         if (bid.outcome === "reversed" || bid.outcome === "already_reversed") {

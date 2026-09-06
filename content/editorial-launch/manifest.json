@@ -1,0 +1,73 @@
+[
+  {
+    "slug": "brand-clarity-before-brand-identity",
+    "title": "Before you redesign your brand, make it understandable.",
+    "topic": "business",
+    "excerpt": "A beautiful website can still leave people wondering what you sell. Start with the audience, offer and evidence—then give your design a clearer job.",
+    "seoTitle": "Brand Clarity Before Brand Identity: A Practical Guide",
+    "metaDescription": "Clarify your audience, offer and proof before redesigning your brand. Use a practical clarity exercise, customer questions and an offer-page checklist.",
+    "keyAnswer": "Brand clarity is how easily someone understands who you help, what they can buy and why your approach might fit. Start with a specific customer situation, put the offer in one place, support your claims and test whether intended customers can explain it back.",
+    "coverUrl": "/editorial/growth.webp",
+    "coverAlt": "An orange sphere at the top of a cobalt staircase, an original illustration of progress.",
+    "tags": ["Branding", "Positioning", "Customer research", "Independent business"],
+    "featured": true,
+    "sources": [{"title":"U.S. Small Business Administration: market research and competitive analysis","url":"https://www.sba.gov/counseling/plan-your-business/#market-research-and-competitive-analysis"}],
+    "faqs": [{"question":"What is the difference between brand clarity and brand identity?","answer":"Brand clarity concerns whether people understand your audience, offer and reason to choose you. Brand identity gives that meaning a recognizable visual and verbal expression."},{"question":"How can I test whether my offer is clear?","answer":"Show the offer to people resembling your intended customer, then ask them to explain who it is for, what they would receive and what happens next. Record misunderstandings and test a revision."}]
+  },
+  {
+    "slug": "practice-that-makes-you-better",
+    "title": "Greatness has a practice nobody sees.",
+    "topic": "performance",
+    "excerpt": "Behind the visible achievement is a quieter loop: attempt, observe, adjust. Here is how to make that loop useful in your own work.",
+    "seoTitle": "Practice That Makes You Better: Build a Useful Feedback Loop",
+    "metaDescription": "Move beyond repetition with a practical feedback loop: choose one skill, observe an attempt, make an adjustment and compare what changes.",
+    "keyAnswer": "A useful practice loop has a specific target, a small attempt, observable feedback, one adjustment and a planned revisit. Keep the first attempt so you can compare results. Practice supports learning but does not guarantee elite performance.",
+    "coverUrl": "/editorial/growth.webp",
+    "coverAlt": "A single orange sphere above ascending cobalt steps, illustrating the work behind progress.",
+    "tags": ["Deliberate practice", "Skill development", "Feedback", "Excellence"],
+    "sources": [{"title":"Ericsson and Harwell: deliberate practice and its definition","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6824411/"},{"title":"Macnamara and Maitra: revisiting deliberate practice research","url":"https://pmc.ncbi.nlm.nih.gov/articles/PMC6731745/"}],
+    "faqs": [{"question":"Is repetition the same as deliberate practice?","answer":"Repetition repeats an activity. Practice designed for improvement adds a specific target, information about the attempt and a reasoned adjustment. The precise research definition of deliberate practice is more specific and has been debated."},{"question":"How can I practice a skill at work?","answer":"Choose one small part of a recurring task, decide what a better attempt would look like, gather relevant feedback and make a second attempt with one change."}]
+  },
+  {
+    "slug": "creative-work-needs-a-better-feedback-loop",
+    "title": "Your best work needs better feedback, not more opinions.",
+    "topic": "creativity",
+    "excerpt": "A room full of reactions can leave a draft going nowhere. Give each review a purpose, ask for observations and keep responsibility for the work.",
+    "seoTitle": "A Better Creative Feedback Loop for Writers and Founders",
+    "metaDescription": "Make creative feedback more useful with a clear brief, specific observations and a decision log. A practical review method for drafts, designs and offers.",
+    "keyAnswer": "Useful creative feedback starts with what the current version needs to teach you. Explain the audience and constraints, collect specific observations, group comments by the underlying problem and choose changes to test. The creator remains responsible for a coherent result.",
+    "coverUrl": "/editorial/focus.webp",
+    "coverAlt": "An orange timer on folded cobalt paper, an original still-life illustration of focused work.",
+    "tags": ["Creative process", "Design", "Writing", "Feedback"],
+    "sources": [{"title":"Stanford d.school: an introduction to design thinking","url":"https://dschool.stanford.edu/s/Facilitators-Guide_Design-Thinking.pdf"}],
+    "faqs": [{"question":"How do I ask for better feedback on creative work?","answer":"Explain the audience, purpose, stage and constraints. Ask reviewers what they understood, where they became uncertain and which part of the work caused that reaction."},{"question":"Should I apply every reviewer suggestion?","answer":"No. Group suggestions by the problem they describe, consider their relevance to the brief and choose a coherent change to test. Record why you accepted or declined important suggestions."}]
+  },
+  {
+    "slug": "protect-your-attention-without-a-perfect-routine",
+    "title": "Protect your attention. Skip the perfect routine.",
+    "topic": "growth",
+    "excerpt": "Meaningful work needs usable attention. Start with one concrete output, a realistic focus block and a small agreement about what can wait.",
+    "seoTitle": "Protect Your Attention Without a Perfect Productivity Routine",
+    "metaDescription": "Create a realistic focus block, handle interruptions and leave useful restart notes. A practical attention experiment for founders and independent professionals.",
+    "keyAnswer": "Protect a small block for one concrete output, define urgent exceptions and leave a note describing the next action. Review what the arrangement helped you produce and what friction it caused. Adjust the experiment to your responsibilities rather than chasing a perfect routine.",
+    "coverUrl": "/editorial/focus.webp",
+    "coverAlt": "An orange timer resting on folded blue paper, illustrating a deliberate pause for focused work.",
+    "tags": ["Productivity", "Focus", "Attention", "Work habits"],
+    "sources": [{"title":"American Psychological Association: multitasking and switching costs","url":"https://www.apa.org/topics/research/multitasking?library=true"}],
+    "faqs": [{"question":"How long should a focus block be?","answer":"Choose a duration compatible with the task and your responsibilities. Thirty to forty-five minutes can be a starting experiment, but shorter blocks may fit better. Judge it by useful output and manageable disruption."},{"question":"What should I write before stopping a work session?","answer":"Record what you changed, what remains uncertain and the first action for the next session. A specific restart note preserves the state of the work."}]
+  },
+  {
+    "slug": "better-feedback-without-taking-over",
+    "title": "Help people think better. Leave room for their answer.",
+    "topic": "coaching",
+    "excerpt": "The urge to be helpful can turn every conversation into advice. Start by agreeing what kind of help is needed, then make the next step theirs.",
+    "seoTitle": "Coaching Conversations: Help Without Taking Over",
+    "metaDescription": "Improve everyday coaching conversations with a shared purpose, specific observations and a next step the other person owns. Includes example questions.",
+    "keyAnswer": "Agree on the purpose of the conversation, explore a specific situation, separate observation from interpretation and ask before offering advice. Help the other person choose a next step and a way to review it. Be explicit about role boundaries and confidentiality.",
+    "coverUrl": "/editorial/growth.webp",
+    "coverAlt": "An orange sphere and ascending blue steps, an original illustration of development and progress.",
+    "tags": ["Coaching conversations", "Leadership", "Mentorship", "Feedback"],
+    "sources": [{"title":"International Coaching Federation: coaching competencies","url":"https://coachingfederation.org/credentialing/coaching-competencies/"}],
+    "faqs": [{"question":"When should I give advice instead of asking coaching questions?","answer":"Clarify what kind of help the person needs. If relevant information or expertise would help, ask permission to share it and explain its limits. Make clear when a requirement or decision is fixed."},{"question":"What makes a coaching conversation useful?","answer":"A shared purpose, attention to the person's meaning and a next step they understand and own. Useful questions help examine a specific situation instead of steering someone toward a hidden preferred answer."}]
+  }
+]
