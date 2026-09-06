@@ -12,7 +12,7 @@ export function CustomerSignOut() {
       if (!response.ok) throw new Error("Sign-out could not be completed. Please try again.");
       window.location.replace("/sign-in");
     } catch (error) { setError(error instanceof Error ? error.message : "Please try again."); setBusy(false); }
-  }}>{busy ? "Signing out…" : "Sign out / switch account"}</button>{error && <p role="alert" className="tool-error">{error}</p>}</div>;
+  }}>{busy ? "Signing out…" : "Sign Out"}</button>{error && <p role="alert" className="tool-error">{error}</p>}</div>;
 }
 
 export function ConnectPurchase({ saved = false }: { saved?: boolean }) {
