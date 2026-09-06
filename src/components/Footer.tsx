@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { SITE } from "@/lib/config";
 import { EDITORIAL_TOPICS } from "@/lib/editorial";
+import { Logo } from "./Logo";
 import { SocialIcon } from "./SocialIcon";
 
 export function Footer() {
   return <footer className="mx-auto mt-16 w-full max-w-[1360px] px-5 pb-8 sm:px-10">
     <div className="grid gap-10 border-t border-line-2 pt-9 sm:grid-cols-[1.5fr_1fr_1fr]">
-      <div><Link href="/" className="display text-[32px]">CoachRank<span className="text-accent">.</span></Link>
+      <div><Link href="/" aria-label="CoachRank home"><Logo size={34} /></Link>
         <p className="mt-3 max-w-[35ch] text-[14px] leading-relaxed text-ink-2">An independent editorial for ambitious people. Celebrating greatness. Understanding what builds it.</p>
         <a href="https://x.com/coachranklol" target="_blank" rel="me noopener noreferrer" className="mt-5 inline-flex items-center gap-2 text-[14px] hover:text-accent"><SocialIcon name="x" />Find us on X ↗</a>
       </div>

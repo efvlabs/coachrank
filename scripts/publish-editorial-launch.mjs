@@ -39,11 +39,13 @@ function field(value) {
   if (Array.isArray(value)) return {arrayValue:{values:value.map(field)}};
   return {mapValue:{fields:Object.fromEntries(Object.entries(value).map(([key,item])=>[key,field(item)]))}};
 }
-const entries=JSON.parse(readFileSync(new URL("../content/editorial-launch/manifest.json",import.meta.url),"utf8"));
+const collection=option("collection") || "editorial-launch";
+if (!["editorial-launch","editorial-edition-02"].includes(collection)) throw new Error("Choose a reviewed editorial collection.");
+const entries=JSON.parse(readFileSync(new URL(`../content/${collection}/manifest.json`,import.meta.url),"utf8"));
 const publish=args.includes("--publish");
 
 for (const entry of entries) {
-  const body=readFileSync(new URL(`../content/editorial-launch/${entry.slug}.md`,import.meta.url),"utf8").trim();
+  const body=readFileSync(new URL(`../content/${collection}/${entry.slug}.md`,import.meta.url),"utf8").trim();
   if (body.split(/\s+/).length<600 || !/^## /m.test(body) || !entry.keyAnswer || !entry.coverAlt || !entry.sources.length || !entry.faqs.length) throw new Error(`Incomplete launch article: ${entry.slug}`);
   const exists=db
     ? !(await db.collection("blogPosts").where("slug","==",entry.slug).limit(1).get()).empty
@@ -51,11 +53,11 @@ for (const entry of entries) {
   if (exists) { console.log(`Preserved existing article: ${entry.slug}`); continue; }
   const now=Timestamp.now();
   const document={
-    ...entry, markdownBody:body, authorName:"CoachRank Editorial", authorBio:"An independent editorial for ambitious people. Celebrating greatness and understanding what builds it.", authorUrl:"/about", coverCredit:"Original illustration created for CoachRank with AI assistance.", featured:entry.featured || false, noindex:false, ctaCategory:null,
+    ...entry, markdownBody:body, authorName:"CoachRank Editorial", authorBio:"An independent editorial for ambitious people. Celebrating greatness and understanding what builds it.", authorUrl:"/about", coverCredit:entry.coverCredit || "Original illustration created for CoachRank with AI assistance.", featured:entry.featured || false, noindex:false, ctaCategory:null,
     status:publish ? "published" : "draft", publishedAt:publish ? now : null, createdAt:now, updatedAt:now,
   };
-  if (db) await db.collection("blogPosts").doc(`launch-${entry.slug}`).create(document);
-  else await firestoreRequest(`/blogPosts?documentId=${encodeURIComponent(`launch-${entry.slug}`)}`,{fields:field(document).mapValue.fields});
+  if (db) await db.collection("blogPosts").doc(`${collection}-${entry.slug}`).create(document);
+  else await firestoreRequest(`/blogPosts?documentId=${encodeURIComponent(`${collection}-${entry.slug}`)}`,{fields:field(document).mapValue.fields});
   console.log(`${publish?"Published":"Drafted"}: ${entry.slug}`);
 }
 console.log(`Finished ${emulator?"local":"production"} editorial import (${projectId}/${databaseId}). Existing articles were preserved.`);

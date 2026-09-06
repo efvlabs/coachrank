@@ -1,0 +1,881 @@
+[
+  {
+    "slug": "decision-journal-before-the-outcome",
+    "title": "Write it down before you know how it ends.",
+    "topic": "performance",
+    "seoTitle": "How to Keep a Decision Journal That Improves Your Thinking",
+    "metaDescription": "A decision journal makes your reasoning reviewable. Use a short decision note, a real alternative and a review date to learn from consequential choices.",
+    "keyAnswer": "Before a consequential choice, record the decision, evidence, uncertainty, alternative and review date. Later, compare the reasoning with what happened. Judge what you could reasonably know at the time as well as the outcome.",
+    "excerpt": "A decision journal makes your reasoning reviewable. Use a short decision note, a real alternative and a review date to learn from consequential choices.",
+    "coverUrl": "/editorial/edition-02/decision-journal-before-the-outcome.webp",
+    "coverAlt": "Two branching cobalt paths with a single orange decision point on warm paper.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Decision making",
+      "Decision journal",
+      "Judgment",
+      "Founder skills"
+    ],
+    "featured": true,
+    "sources": [
+      {
+        "title": "Farnam Street: decision journals",
+        "url": "https://fs.blog/decision-journal/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Which decisions belong in a decision journal?",
+        "answer": "Record decisions that consume meaningful time, money or attention, especially when you expect to face similar choices again. Routine reversible choices rarely need a full entry."
+      },
+      {
+        "question": "How often should I review a decision journal?",
+        "answer": "Choose the review date when writing the entry. Match it to when useful evidence should appear, and leave the original entry unchanged."
+      }
+    ]
+  },
+  {
+    "slug": "after-action-review-that-changes-the-next-attempt",
+    "title": "The work is over. The learning is not.",
+    "topic": "performance",
+    "seoTitle": "After-Action Review: Turn a Finished Project Into Better Work",
+    "metaDescription": "Run an after-action review that produces a useful change. Separate events from explanations, preserve what worked and assign a clear next experiment.",
+    "keyAnswer": "Review the intended result, what occurred, possible explanations and one change to try next. Use specific evidence, include the people who did the work and give the follow-up an owner and a review date.",
+    "excerpt": "Run an after-action review that produces a useful change. Separate events from explanations, preserve what worked and assign a clear next experiment.",
+    "coverUrl": "/editorial/edition-02/after-action-review-that-changes-the-next-attempt.webp",
+    "coverAlt": "A cobalt circular route with an orange segment returning to an improved starting point.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "After-action review",
+      "Team learning",
+      "Project delivery",
+      "Reflection"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "NASA: After Action Review and Pause and Learn",
+        "url": "https://www.nasa.gov/wp-content/uploads/2025/09/after-action-review-v3.pdf"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "When should an after-action review happen?",
+        "answer": "Hold it while the relevant details are still accessible. You can review a milestone or a single event without waiting for an entire project to end."
+      },
+      {
+        "question": "How do we stop a review becoming a blame session?",
+        "answer": "Agree that the meeting examines the work, gather observations before explanations and distinguish a learning discussion from formal performance management."
+      }
+    ]
+  },
+  {
+    "slug": "rehearse-the-transition-not-just-the-presentation",
+    "title": "Practice the moment when the script stops helping.",
+    "topic": "performance",
+    "seoTitle": "Presentation Rehearsal: Practice Transitions and Difficult Questions",
+    "metaDescription": "Make presentation rehearsal more useful. Practice opening, interruptions, hard questions and recovery, with a short rehearsal sheet you can use today.",
+    "keyAnswer": "Rehearse the transitions that can interrupt a presentation: the opening, a difficult question, a missing detail and the close. Set a clear audience task, practice one response at a time and review observable behavior rather than confidence alone.",
+    "excerpt": "Make presentation rehearsal more useful. Practice opening, interruptions, hard questions and recovery, with a short rehearsal sheet you can use today.",
+    "coverUrl": "/editorial/edition-02/rehearse-the-transition-not-just-the-presentation.webp",
+    "coverAlt": "A cobalt path interrupted by three gaps with an orange bridge connecting the middle transition.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Presentation skills",
+      "Preparation",
+      "Communication",
+      "Rehearsal"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: making and testing prototypes",
+        "url": "https://www.gov.uk/service-manual/design/making-prototypes"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What should I rehearse besides my slides?",
+        "answer": "Practice starting, moving between ideas, asking for clarification, acknowledging an unknown and stating the next step. These moments can be rehearsed separately."
+      },
+      {
+        "question": "How do I rehearse without memorizing every word?",
+        "answer": "Keep the message and sequence stable while changing the wording. Use a small prompt card and ask a colleague to introduce realistic questions."
+      }
+    ]
+  },
+  {
+    "slug": "performance-metrics-that-change-a-decision",
+    "title": "If a number changes nothing, why are you tracking it?",
+    "topic": "performance",
+    "seoTitle": "Choose Performance Metrics That Help You Make Decisions",
+    "metaDescription": "Build a smaller, more useful performance dashboard. Connect each metric to a decision, add a quality check and review the behavior the number encourages.",
+    "keyAnswer": "A useful metric connects an observation to a decision. Track an outcome, a relevant activity and a quality check, define each consistently, and write what action different results would justify. Review the context before attributing cause.",
+    "excerpt": "Build a smaller, more useful performance dashboard. Connect each metric to a decision, add a quality check and review the behavior the number encourages.",
+    "coverUrl": "/editorial/edition-02/performance-metrics-that-change-a-decision.webp",
+    "coverAlt": "Six precise cobalt measurement bars with one orange indicator aligned to a decision marker.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Performance metrics",
+      "Measurement",
+      "Decision making",
+      "Business systems"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: using performance data to improve a service",
+        "url": "https://www.gov.uk/service-manual/measuring-success/using-data-to-improve-your-service-an-introduction"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What is a useful leading indicator?",
+        "answer": "It is an earlier signal plausibly connected to an outcome you care about. Treat that connection as something to investigate, not proof that increasing the signal causes success."
+      },
+      {
+        "question": "How many metrics should a small team track?",
+        "answer": "Start with the few needed for a specific recurring decision. More metrics are useful only if the team can define, interpret and act on them."
+      }
+    ]
+  },
+  {
+    "slug": "checklist-for-the-moment-before-you-publish",
+    "title": "Your best work deserves a better final check.",
+    "topic": "performance",
+    "seoTitle": "A Pre-Publish Checklist for Important Work",
+    "metaDescription": "Create a short final checklist for articles, proposals and launches. Focus on consequential omissions, clear ownership and the version people will actually see.",
+    "keyAnswer": "Build a final checklist around consequential omissions: the right audience, accurate claims, functioning access, clear next steps and a named owner. Check the actual release version, record unresolved issues and improve the list after real use.",
+    "excerpt": "Create a short final checklist for articles, proposals and launches. Focus on consequential omissions, clear ownership and the version people will actually see.",
+    "coverUrl": "/editorial/edition-02/checklist-for-the-moment-before-you-publish.webp",
+    "coverAlt": "Five cobalt cards in a disciplined stack with an orange final verification seal.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Quality",
+      "Publishing",
+      "Checklists",
+      "Professional craft"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "W3C: easy accessibility checks",
+        "url": "https://www.w3.org/WAI/test-evaluate/easy-checks/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What belongs on a final checklist?",
+        "answer": "Include important omissions that are easy to miss and possible to verify at release time. Keep creative judgment and lengthy procedures in their own review stages."
+      },
+      {
+        "question": "Who should complete the final checklist?",
+        "answer": "Assign a release owner who can verify each item or name the person responsible for it. An item is not complete merely because somebody probably checked it."
+      }
+    ]
+  },
+  {
+    "slug": "customer-interviews-without-selling-the-answer",
+    "title": "Stop asking whether people like your idea.",
+    "topic": "business",
+    "seoTitle": "Customer Interviews: Find Evidence Beyond Polite Interest",
+    "metaDescription": "Ask about a real customer episode before pitching your idea. Use a practical interview guide to uncover triggers, workarounds and unresolved questions.",
+    "keyAnswer": "Ask intended customers about a recent real situation: what triggered it, what they tried, who was involved and what happened. Separate observations from your interpretation. Interest in an idea is not evidence of willingness to buy.",
+    "excerpt": "Ask about a real customer episode before pitching your idea. Use a practical interview guide to uncover triggers, workarounds and unresolved questions.",
+    "coverUrl": "/editorial/edition-02/customer-interviews-without-selling-the-answer.webp",
+    "coverAlt": "Two cobalt conversation shapes facing an orange evidence card.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Customer research",
+      "Customer interviews",
+      "Offer development",
+      "Founders"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: using in-depth interviews",
+        "url": "https://www.gov.uk/service-manual/user-research/using-in-depth-interviews"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should I explain my product during a customer interview?",
+        "answer": "First understand the person’s experience without framing it through your solution. If you later discuss an offer, label that as a separate part and avoid treating positive reactions as purchase evidence."
+      },
+      {
+        "question": "How many interviews prove demand?",
+        "answer": "No fixed small number proves demand. Interviews reveal situations and questions; commercial demand needs additional evidence, such as appropriate paid commitments and repeated use."
+      }
+    ]
+  },
+  {
+    "slug": "offer-page-that-answers-the-buyers-questions",
+    "title": "Make buying your work easier to understand.",
+    "topic": "business",
+    "seoTitle": "Write an Offer Page That Answers the Buyer’s Real Questions",
+    "metaDescription": "Clarify your service offer with a buyer-focused page: audience, deliverables, boundaries, evidence, price and the next step, with a practical review exercise.",
+    "keyAnswer": "An understandable offer page explains who it fits, what the buyer receives, how delivery works, the limits, the price or quotation process, relevant evidence and the next step. Test comprehension with intended buyers before optimizing persuasive language.",
+    "excerpt": "Clarify your service offer with a buyer-focused page: audience, deliverables, boundaries, evidence, price and the next step, with a practical review exercise.",
+    "coverUrl": "/editorial/edition-02/offer-page-that-answers-the-buyers-questions.webp",
+    "coverAlt": "An orange rectangular offer fitted precisely into a cobalt frame with clear margins.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Offer page",
+      "Positioning",
+      "Service business",
+      "Brand clarity"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: make the service simple to use",
+        "url": "https://www.gov.uk/service-manual/service-standard/point-4-make-the-service-simple-to-use"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Must every service show a fixed price?",
+        "answer": "No. If scope varies, explain how a quote is formed, what information is needed and what happens before someone commits. Avoid making the purchase process mysterious."
+      },
+      {
+        "question": "What should I put above the fold on an offer page?",
+        "answer": "Help the right visitor recognize the situation you address, understand the core offer and find a clear next step. The exact layout should follow the visitor’s needs and the complexity of the purchase."
+      }
+    ]
+  },
+  {
+    "slug": "scope-your-service-before-setting-the-price",
+    "title": "A clear price starts with a clear promise.",
+    "topic": "business",
+    "seoTitle": "Service Scope: Define the Promise Before Choosing a Price",
+    "metaDescription": "Define service scope before changing your price. Map deliverables, client responsibilities, revision limits and the assumptions that affect delivery.",
+    "keyAnswer": "Before setting a service price, define the deliverable, delivery effort, dependencies, support and boundaries. Compare real delivery experience with those assumptions. Use a clear process for changes so additional work becomes a decision rather than an accidental promise.",
+    "excerpt": "Define service scope before changing your price. Map deliverables, client responsibilities, revision limits and the assumptions that affect delivery.",
+    "coverUrl": "/editorial/edition-02/scope-your-service-before-setting-the-price.webp",
+    "coverAlt": "An orange promise block balanced inside a cobalt bracket with measured boundaries.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Service scope",
+      "Independent business",
+      "Pricing decisions",
+      "Client experience"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "U.S. Small Business Administration: market research and competitive analysis",
+        "url": "https://www.sba.gov/business-guide/plan-your-business/market-research-competitive-analysis"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should I lower my price when prospects hesitate?",
+        "answer": "First find out what is unclear: fit, scope, timing, proof, budget or the purchase process. A lower price does not resolve every reason someone declines."
+      },
+      {
+        "question": "How do I prevent scope creep?",
+        "answer": "Explain the agreed deliverables and responsibilities, keep a record of requested changes and discuss their effect before accepting additional work."
+      }
+    ]
+  },
+  {
+    "slug": "founder-bottleneck-decision-rights",
+    "title": "If every decision needs you, growth has a waiting room.",
+    "topic": "business",
+    "seoTitle": "Founder Bottlenecks: Give Decisions a Clear Owner",
+    "metaDescription": "Reduce founder bottlenecks by clarifying decision ownership, boundaries and escalation. Use one recurring decision as a practical delegation experiment.",
+    "keyAnswer": "Choose a recurring decision, name its owner and clarify what they can decide, what information they need and when to escalate. Review the outcome and the decision process. Responsibility without access or authority is incomplete delegation.",
+    "excerpt": "Reduce founder bottlenecks by clarifying decision ownership, boundaries and escalation. Use one recurring decision as a practical delegation experiment.",
+    "coverUrl": "/editorial/edition-02/founder-bottleneck-decision-rights.webp",
+    "coverAlt": "Multiple cobalt lanes narrowing at an orange gate before opening into independent paths.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Leadership",
+      "Delegation",
+      "Decision rights",
+      "Founder bottlenecks"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Google re:Work: understanding team effectiveness",
+        "url": "https://rework.withgoogle.com/en/guides/understanding-team-effectiveness"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What should a founder delegate first?",
+        "answer": "Start with a recurring, bounded decision someone else is equipped to handle. Consider the consequences of error and provide the information and authority needed."
+      },
+      {
+        "question": "How can I retain oversight without approving everything?",
+        "answer": "Agree on boundaries, an escalation rule and a review cadence. Inspect selected decisions and outcomes instead of making every routine choice yourself."
+      }
+    ]
+  },
+  {
+    "slug": "customer-onboarding-first-useful-result",
+    "title": "The sale is the beginning of the promise.",
+    "topic": "business",
+    "seoTitle": "Customer Onboarding: Design the First Useful Result",
+    "metaDescription": "Improve customer onboarding by defining the first useful result, removing avoidable setup and making recovery clear when a customer gets stuck.",
+    "keyAnswer": "Define the first result that makes the purchase useful, then map the steps needed to reach it. Explain what happens next, request only necessary information, preserve progress and provide a clear recovery path when access or setup fails.",
+    "excerpt": "Improve customer onboarding by defining the first useful result, removing avoidable setup and making recovery clear when a customer gets stuck.",
+    "coverUrl": "/editorial/edition-02/customer-onboarding-first-useful-result.webp",
+    "coverAlt": "An orange sphere moving through three cobalt doorways toward a bright open frame.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Customer onboarding",
+      "Product experience",
+      "Digital products",
+      "Conversion"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: make the service simple to use",
+        "url": "https://www.gov.uk/service-manual/service-standard/point-4-make-the-service-simple-to-use"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What is the first useful result in onboarding?",
+        "answer": "It is the earliest meaningful outcome the customer can recognize, such as completing an initial report or using a prepared template. Account creation alone may not be useful to them."
+      },
+      {
+        "question": "How do I identify onboarding friction?",
+        "answer": "Observe intended users attempting a realistic first task, review support questions and inspect where the journey becomes unclear. Ask what they expected at those points."
+      }
+    ]
+  },
+  {
+    "slug": "creative-brief-that-leaves-room-for-an-idea",
+    "title": "Give the idea a job before you give it a style.",
+    "topic": "creativity",
+    "seoTitle": "Write a Creative Brief That Leaves Room for Original Work",
+    "metaDescription": "Write a useful creative brief with a real audience, a clear task and meaningful constraints. Leave the solution open while making review criteria explicit.",
+    "keyAnswer": "A useful creative brief defines the audience, the change the work should support, the context, constraints and decision criteria. It explains the problem without prescribing every detail of the solution. Review the work against that shared purpose.",
+    "excerpt": "Write a useful creative brief with a real audience, a clear task and meaningful constraints. Leave the solution open while making review criteria explicit.",
+    "coverUrl": "/editorial/edition-02/creative-brief-that-leaves-room-for-an-idea.webp",
+    "coverAlt": "A cobalt open square framing an unexpected orange circle on a clean paper field.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Creative brief",
+      "Design direction",
+      "Branding",
+      "Creative strategy"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Design Council: Framework for Innovation",
+        "url": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long should a creative brief be?",
+        "answer": "Use the shortest document that makes the important decisions clear. Link supporting research and references rather than hiding the purpose inside a large presentation."
+      },
+      {
+        "question": "Should a creative brief include visual references?",
+        "answer": "Yes, when you explain what each reference demonstrates. A reference can clarify a quality or constraint without asking the creator to imitate the finished work."
+      }
+    ]
+  },
+  {
+    "slug": "prototype-the-risk-before-the-product",
+    "title": "Build the smallest thing that can change your mind.",
+    "topic": "creativity",
+    "seoTitle": "Prototype the Biggest Risk Before Building the Whole Product",
+    "metaDescription": "Choose a prototype that tests the uncertainty that matters. Use a simple risk-to-evidence map before investing in a complete product or polished concept.",
+    "keyAnswer": "Choose the uncertainty that could change your decision, then build a prototype capable of revealing useful evidence about it. Match fidelity to the question, define an observation in advance and keep the prototype distinct from the finished promise.",
+    "excerpt": "Choose a prototype that tests the uncertainty that matters. Use a simple risk-to-evidence map before investing in a complete product or polished concept.",
+    "coverUrl": "/editorial/edition-02/prototype-the-risk-before-the-product.webp",
+    "coverAlt": "An orange test piece suspended above an unfinished cobalt construction.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Prototyping",
+      "Product discovery",
+      "Creative experiments",
+      "Design"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: making prototypes",
+        "url": "https://www.gov.uk/service-manual/design/making-prototypes"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Does a prototype need to look finished?",
+        "answer": "Only when appearance or realistic interaction is part of the question. A sketch or manual demonstration may be enough for an earlier uncertainty."
+      },
+      {
+        "question": "What should I do after testing a prototype?",
+        "answer": "Record what you observed, what it does and does not establish, and whether to revise, continue or stop. Do not treat a positive reaction as proof of demand."
+      }
+    ]
+  },
+  {
+    "slug": "creative-constraints-that-open-better-options",
+    "title": "A constraint can give an idea somewhere to push.",
+    "topic": "creativity",
+    "seoTitle": "Use Creative Constraints Without Closing Better Options",
+    "metaDescription": "Choose creative constraints with a purpose. Distinguish fixed requirements from habits, explore several responses and test what the constraint makes possible.",
+    "keyAnswer": "Separate genuine requirements from preferences and assumptions. Choose a constraint that focuses a useful creative question, generate several responses within it and evaluate the work against its purpose. Remove or revise constraints that create avoidable harm or confusion.",
+    "excerpt": "Choose creative constraints with a purpose. Distinguish fixed requirements from habits, explore several responses and test what the constraint makes possible.",
+    "coverUrl": "/editorial/edition-02/creative-constraints-that-open-better-options.webp",
+    "coverAlt": "An orange curve bending elegantly through a tight arrangement of cobalt boundary lines.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Creative constraints",
+      "Originality",
+      "Design process",
+      "Creative work"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Design Council: Framework for Innovation",
+        "url": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Do constraints always improve creativity?",
+        "answer": "No. Some focus the work; others remove the resources or options needed for a useful result. Judge a constraint by the problem and the work it enables."
+      },
+      {
+        "question": "What is a good constraint for a creative exercise?",
+        "answer": "Choose one that directs attention toward a relevant problem, such as explaining an offer in ordinary language or producing a concept in one available medium."
+      }
+    ]
+  },
+  {
+    "slug": "reference-library-that-improves-your-taste",
+    "title": "Save the reason, not just the reference.",
+    "topic": "creativity",
+    "seoTitle": "Build a Creative Reference Library You Can Actually Use",
+    "metaDescription": "Turn saved inspiration into a useful reference library. Annotate the decision each example demonstrates and practice translating the principle into original work.",
+    "keyAnswer": "For each reference, record the problem it solves, the detail worth studying and the context in which it works. Retrieve references by creative question, then develop an original response instead of copying a distinctive finished expression.",
+    "excerpt": "Turn saved inspiration into a useful reference library. Annotate the decision each example demonstrates and practice translating the principle into original work.",
+    "coverUrl": "/editorial/edition-02/reference-library-that-improves-your-taste.webp",
+    "coverAlt": "A grid of cobalt reference cards with one orange detail enlarged in a circular lens.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Creative references",
+      "Visual research",
+      "Taste",
+      "Original work"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Design Council: history of the Double Diamond",
+        "url": "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How should I organize creative references?",
+        "answer": "Organize around questions you encounter in your work, such as explaining complexity, directing attention or showing material. Add a brief note about why each reference belongs."
+      },
+      {
+        "question": "How can I use references without imitating a brand?",
+        "answer": "Study the underlying decision, compare multiple examples and solve the problem in your own context. Do not reproduce distinctive assets, layouts or language without appropriate rights."
+      }
+    ]
+  },
+  {
+    "slug": "finish-creative-work-with-a-release-standard",
+    "title": "Decide what finished means before the final revision.",
+    "topic": "creativity",
+    "seoTitle": "Finish Creative Work With a Clear Release Standard",
+    "metaDescription": "Use a release standard to finish an article, design or creative project. Separate necessary fixes from new ideas and make the next revision a deliberate choice.",
+    "keyAnswer": "Define the audience task, necessary quality checks and release scope before the final review. Sort feedback into required fixes, useful later changes and different directions. Finish the agreed version, then use real response to inform the next one.",
+    "excerpt": "Use a release standard to finish an article, design or creative project. Separate necessary fixes from new ideas and make the next revision a deliberate choice.",
+    "coverUrl": "/editorial/edition-02/finish-creative-work-with-a-release-standard.webp",
+    "coverAlt": "A finished orange panel aligned with an open cobalt grid while unfinished outlines recede behind it.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Finishing work",
+      "Creative process",
+      "Publishing",
+      "Quality standards"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: how the alpha phase works",
+        "url": "https://www.gov.uk/service-manual/agile-delivery/how-the-alpha-phase-works"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How do I know when creative work is ready?",
+        "answer": "Compare it with the intended audience task, agreed scope and essential quality checks. Readiness is a reasoned release decision, not a feeling that no alternative could be better."
+      },
+      {
+        "question": "Should I ignore new ideas near a deadline?",
+        "answer": "Capture them and assess whether they fix a material problem in the current version. Ideas that change the assignment can become a later version rather than silently expanding this one."
+      }
+    ]
+  },
+  {
+    "slug": "weekly-review-that-changes-next-week",
+    "title": "Your weekly review should change next week.",
+    "topic": "growth",
+    "seoTitle": "A Weekly Review That Produces Clear Next Actions",
+    "metaDescription": "Build a weekly review around decisions, open commitments and realistic capacity. Leave with a short plan that changes what happens next week.",
+    "keyAnswer": "Review what happened, identify open commitments, inspect the coming week and choose the few next actions that fit your capacity. Renegotiate what cannot fit. A useful weekly review produces decisions and calendar changes, not only a tidy task list.",
+    "excerpt": "Build a weekly review around decisions, open commitments and realistic capacity. Leave with a short plan that changes what happens next week.",
+    "coverUrl": "/editorial/edition-02/weekly-review-that-changes-next-week.webp",
+    "coverAlt": "Seven cobalt calendar tiles with three orange decisions connected across the coming week.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Weekly review",
+      "Planning",
+      "Personal systems",
+      "Capacity"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Getting Things Done: guided weekly review",
+        "url": "https://gettingthingsdone.com/2015/07/podcast-07-guided-gtd-weekly-review/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How long should a weekly review take?",
+        "answer": "Choose a manageable period for the responsibilities you need to review. A shorter focused review is useful if it produces clear decisions; there is no universal duration."
+      },
+      {
+        "question": "What should I leave a weekly review with?",
+        "answer": "A current view of commitments, a few specific next actions, realistic space to do them and any messages needed to renegotiate work that will not fit."
+      }
+    ]
+  },
+  {
+    "slug": "learn-by-retrieving-not-collecting",
+    "title": "Close the notes. Find out what stayed.",
+    "topic": "growth",
+    "seoTitle": "Retrieval Practice for Adults: Turn Reading Into Usable Learning",
+    "metaDescription": "Use retrieval practice to make professional learning more active. Recall an idea, check the gap and apply it in a small realistic task.",
+    "keyAnswer": "After learning something, attempt to recall or explain it without looking, then check and correct the gaps. Return to the idea later and apply it to a relevant task. Remembering information and using a skill are connected but distinct learning goals.",
+    "excerpt": "Use retrieval practice to make professional learning more active. Recall an idea, check the gap and apply it in a small realistic task.",
+    "coverUrl": "/editorial/edition-02/learn-by-retrieving-not-collecting.webp",
+    "coverAlt": "An orange idea returning from a closed cobalt book into a clean open circle.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Learning",
+      "Retrieval practice",
+      "Professional development",
+      "Skill building"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Retrieval Practice: a research-based learning strategy",
+        "url": "https://www.retrievalpractice.org/retrievalpractice/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Is retrieval practice just taking a test?",
+        "answer": "It can be a low-stakes attempt to explain, sketch or answer from memory. The purpose is learning and feedback, not ranking yourself."
+      },
+      {
+        "question": "How do I use retrieval practice for work?",
+        "answer": "Choose a useful concept, explain it without notes, verify the explanation and attempt a small relevant application. For consequential work, continue using authoritative references and appropriate review."
+      }
+    ]
+  },
+  {
+    "slug": "unfinished-project-audit",
+    "title": "Your unfinished projects are making decisions for you.",
+    "topic": "growth",
+    "seoTitle": "An Unfinished-Project Audit for a More Realistic Workload",
+    "metaDescription": "Audit your unfinished projects with four decisions: continue, narrow, pause or close. Make dependencies and commitments visible before starting another initiative.",
+    "keyAnswer": "List active projects with their intended result, next action, dependency and cost of delay. Decide which to continue, narrow, pause or close, and communicate changes where others depend on them. Keep ideas separate from current commitments.",
+    "excerpt": "Audit your unfinished projects with four decisions: continue, narrow, pause or close. Make dependencies and commitments visible before starting another initiative.",
+    "coverUrl": "/editorial/edition-02/unfinished-project-audit.webp",
+    "coverAlt": "Cobalt open loops arranged around one orange loop that has been deliberately completed.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Project management",
+      "Focus",
+      "Capacity",
+      "Personal growth"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Getting Things Done: refresh and reset with the weekly review",
+        "url": "https://gettingthingsdone.com/2017/05/refresh-and-reset-with-the-weekly-review/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should I finish every project I start?",
+        "answer": "No. Reassess whether the result is still worth the remaining effort and whether others depend on it. Close or renegotiate responsibly instead of treating sunk effort as a reason to continue indefinitely."
+      },
+      {
+        "question": "How many projects should I keep active?",
+        "answer": "There is no universal number. Choose a workload that fits your responsibilities and lets each active project receive meaningful attention, including coordination and delivery work."
+      }
+    ]
+  },
+  {
+    "slug": "turn-a-goal-into-a-weekly-experiment",
+    "title": "Give your goal a first experiment.",
+    "topic": "growth",
+    "seoTitle": "Turn a Vague Goal Into a Useful Weekly Experiment",
+    "metaDescription": "Make a broad growth goal actionable with a small experiment. Define the behavior, context, evidence and review before asking for a dramatic transformation.",
+    "keyAnswer": "Translate a broad goal into one behavior in a specific context. Choose a manageable attempt, define what you will observe and review what happened. Adjust the next experiment using evidence rather than treating one week as a verdict on the whole goal.",
+    "excerpt": "Make a broad growth goal actionable with a small experiment. Define the behavior, context, evidence and review before asking for a dramatic transformation.",
+    "coverUrl": "/editorial/edition-02/turn-a-goal-into-a-weekly-experiment.webp",
+    "coverAlt": "An orange starting dot becoming three distinct cobalt steps inside a weekly frame.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Goal setting",
+      "Experiments",
+      "Personal development",
+      "Action planning"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "GOV.UK: plan a round of user research",
+        "url": "https://www.gov.uk/service-manual/user-research/plan-round-of-user-research"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What makes a good weekly experiment?",
+        "answer": "It addresses one useful question, fits your circumstances and produces an observation you can review. The attempt should be small enough to change without excessive cost."
+      },
+      {
+        "question": "What if the experiment does not work?",
+        "answer": "Separate whether you attempted it from whether the attempt produced the expected result. Inspect the context and adjust the question, action or support needed for the next trial."
+      }
+    ]
+  },
+  {
+    "slug": "build-a-portfolio-of-progress",
+    "title": "Keep the earlier version. It has something to teach you.",
+    "topic": "growth",
+    "seoTitle": "Build a Progress Portfolio With Before-and-After Evidence",
+    "metaDescription": "Track development with a small portfolio of earlier and later work. Compare like with like, preserve context and use the difference to choose your next practice.",
+    "keyAnswer": "Keep selected examples of earlier and later work, the context in which they were produced and the change you attempted. Compare them against a clear criterion. Use the difference to guide practice without treating a small sample as a complete measure of ability.",
+    "excerpt": "Track development with a small portfolio of earlier and later work. Compare like with like, preserve context and use the difference to choose your next practice.",
+    "coverUrl": "/editorial/edition-02/build-a-portfolio-of-progress.webp",
+    "coverAlt": "Two cobalt frames holding earlier and later orange forms connected by a measured line.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Progress tracking",
+      "Reflection",
+      "Skill development",
+      "Learning portfolio"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "Retrieval Practice: metacognition and feedback",
+        "url": "https://www.retrievalpractice.org/feedback/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What should I include in a progress portfolio?",
+        "answer": "Keep a few meaningful artifacts, the task and conditions, feedback you are permitted to retain and a note about the change you attempted."
+      },
+      {
+        "question": "How is a progress portfolio different from a public portfolio?",
+        "answer": "A progress portfolio supports private learning, so unfinished work and mistakes can be useful. A public portfolio is curated for an audience and requires permission for any client or collaborator material."
+      }
+    ]
+  },
+  {
+    "slug": "coaching-agreement-before-the-first-session",
+    "title": "The first act of coaching is clarity.",
+    "topic": "coaching",
+    "seoTitle": "Before Coaching Begins: Agree on Roles and Expectations",
+    "metaDescription": "Begin a coaching engagement with clearer expectations. Discuss purpose, roles, confidentiality, logistics and review before the first substantive session.",
+    "keyAnswer": "Before coaching begins, clarify the purpose, roles, practical arrangements, confidentiality and its limits, and how the relationship will be reviewed. If a sponsor is involved, agree what information can be shared. Revisit the understanding when circumstances change.",
+    "excerpt": "Begin a coaching engagement with clearer expectations. Discuss purpose, roles, confidentiality, logistics and review before the first substantive session.",
+    "coverUrl": "/editorial/edition-02/coaching-agreement-before-the-first-session.webp",
+    "coverAlt": "Two cobalt arcs meeting around an orange central agreement point.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Coaching agreement",
+      "Professional practice",
+      "Client experience",
+      "Coaching ethics"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "International Coaching Federation: Code of Ethics",
+        "url": "https://coachingfederation.org/ethics/code-of-ethics/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "What should I ask before a first coaching session?",
+        "answer": "Ask how the coach works, what the engagement includes, how confidentiality operates, what happens between sessions and how either party can raise a concern or end the engagement."
+      },
+      {
+        "question": "Does employer-funded coaching change confidentiality?",
+        "answer": "A sponsor creates additional expectations to clarify. Agree in advance what information may be shared, with whom and under what conditions, rather than assuming the arrangement is obvious."
+      }
+    ]
+  },
+  {
+    "slug": "listening-without-rushing-to-the-next-question",
+    "title": "Let the answer change your next question.",
+    "topic": "coaching",
+    "seoTitle": "Better Coaching Listening: Follow the Answer Before the Script",
+    "metaDescription": "Improve coaching listening with a simple discipline: reflect what you heard, check the meaning and let the answer shape the next question.",
+    "keyAnswer": "Listen for the person’s meaning before preparing a response. Reflect your understanding tentatively, ask whether it is accurate and allow them to correct it. Use the next question to explore what matters in their answer rather than advancing a hidden script.",
+    "excerpt": "Improve coaching listening with a simple discipline: reflect what you heard, check the meaning and let the answer shape the next question.",
+    "coverUrl": "/editorial/edition-02/listening-without-rushing-to-the-next-question.webp",
+    "coverAlt": "Two cobalt listening forms separated by a generous orange space.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Active listening",
+      "Coaching skills",
+      "Questions",
+      "Leadership conversations"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "International Coaching Federation: coaching competencies",
+        "url": "https://coachingfederation.org/credentialing/coaching-competencies/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Should a coach always remain silent after a question?",
+        "answer": "No fixed pause suits everyone. Give the person room to think and check their preference if the silence becomes unclear or uncomfortable."
+      },
+      {
+        "question": "How can I tell whether my question is leading?",
+        "answer": "Ask whether you would welcome an answer different from the one you expect. If you are trying to install your preferred solution, make that intention explicit rather than disguising it as exploration."
+      }
+    ]
+  },
+  {
+    "slug": "coaching-actions-the-client-actually-owns",
+    "title": "A nod is not an owned next step.",
+    "topic": "coaching",
+    "seoTitle": "Coaching Action Plans: Help Clients Own the Next Step",
+    "metaDescription": "Close a coaching conversation with an action the client understands and chooses. Explore the context, likely obstacles and a useful review without forcing a plan.",
+    "keyAnswer": "Invite the client to identify what they want to do with the conversation. Clarify a specific action, the situation in which it will happen, support needed and how they want to review it. A genuine choice may also be to reflect or gather information before acting.",
+    "excerpt": "Close a coaching conversation with an action the client understands and chooses. Explore the context, likely obstacles and a useful review without forcing a plan.",
+    "coverUrl": "/editorial/edition-02/coaching-actions-the-client-actually-owns.webp",
+    "coverAlt": "An orange small step chosen from three cobalt routes with space around the path.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Client ownership",
+      "Coaching action plans",
+      "Accountability",
+      "Behavior change"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "International Coaching Federation: coaching competencies",
+        "url": "https://coachingfederation.org/credentialing/coaching-competencies/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Does every coaching session need an action plan?",
+        "answer": "No. A useful session may clarify a question or perspective. Explore what the client wants next instead of forcing a task to make the session look productive."
+      },
+      {
+        "question": "How can a coach support accountability without pressure?",
+        "answer": "Agree with the client what they want to review, how they want to be supported and what a missed attempt would help them learn. Keep ownership of the choice with the client."
+      }
+    ]
+  },
+  {
+    "slug": "review-the-coaching-relationship-not-just-the-goal",
+    "title": "Make room to ask whether the coaching is helping.",
+    "topic": "coaching",
+    "seoTitle": "How to Review a Coaching Relationship With the Client",
+    "metaDescription": "Review a coaching engagement through usefulness, working conditions and fit. Invite honest feedback and agree whether to continue, adjust or conclude.",
+    "keyAnswer": "Review the coaching relationship at agreed points. Ask what is useful, what remains unclear and whether the format, focus and working agreement still fit. Separate the client’s experience from outcome claims and make room to adjust or end the engagement.",
+    "excerpt": "Review a coaching engagement through usefulness, working conditions and fit. Invite honest feedback and agree whether to continue, adjust or conclude.",
+    "coverUrl": "/editorial/edition-02/review-the-coaching-relationship-not-just-the-goal.webp",
+    "coverAlt": "Two cobalt conversation rings revisited by an orange checkpoint around their shared center.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Coaching review",
+      "Client feedback",
+      "Professional ethics",
+      "Coaching relationship"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "International Coaching Federation: Code of Ethics",
+        "url": "https://coachingfederation.org/ethics/code-of-ethics/"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "When should a coaching engagement be reviewed?",
+        "answer": "Agree on review points at the beginning and revisit sooner if the goal, sponsor, circumstances or fit changes. The client should also be able to raise concerns between formal reviews."
+      },
+      {
+        "question": "Can positive feedback prove coaching caused an outcome?",
+        "answer": "No. Client feedback describes an experience. Outcomes may reflect many influences, so causal claims need more evidence than a testimonial or before-and-after impression."
+      }
+    ]
+  },
+  {
+    "slug": "choose-a-coach-beyond-the-profile",
+    "title": "A compelling profile is the beginning of your search.",
+    "topic": "coaching",
+    "seoTitle": "How to Choose a Coach Beyond the Profile and Ranking",
+    "metaDescription": "Choose a coach with a clearer fit check. Verify relevant credentials, ask about the working process, understand terms and compare evidence beyond visibility.",
+    "keyAnswer": "Define the kind of help you need, verify relevant claims and discuss how the coach works. Compare scope, practical terms, boundaries and fit in an introductory conversation. A paid ranking or polished profile is visibility, not an independent quality assessment.",
+    "excerpt": "Choose a coach with a clearer fit check. Verify relevant credentials, ask about the working process, understand terms and compare evidence beyond visibility.",
+    "coverUrl": "/editorial/edition-02/choose-a-coach-beyond-the-profile.webp",
+    "coverAlt": "Three cobalt profile frames with an orange lens focusing on the details beneath the surface.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": [
+      "Choosing a coach",
+      "Coaching credentials",
+      "Coaching fit",
+      "Coach directory"
+    ],
+    "featured": false,
+    "sources": [
+      {
+        "title": "International Coaching Federation: finding the right coach",
+        "url": "https://coachingfederation.org/blog/how-to-find-a-coach-who-is-right-for-you/"
+      },
+      {
+        "title": "ICF: Verify a Coach",
+        "url": "https://apps.coachingfederation.org/eweb/dynamicpage.aspx?webcode=tpss"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Does a higher CoachRank position mean a better coach?",
+        "answer": "No. CoachRank rankings reflect paid self-bidding for visibility. They are advertising positions, not editorial endorsements or independent assessments of coaching quality."
+      },
+      {
+        "question": "What should I compare after introductory calls?",
+        "answer": "Compare the need you brought, the proposed approach, relevant experience, clear boundaries, practical terms and whether you could ask questions comfortably. Verify material claims independently."
+      }
+    ]
+  }
+]

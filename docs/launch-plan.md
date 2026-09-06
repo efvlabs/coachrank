@@ -6,7 +6,7 @@ The `.lol` domain adds personality without requiring a joke in every headline. T
 
 ## First product
 
-Brand Clarity Assessment: $9 USD once, plus applicable tax. 24 behavior-anchored questions across Audience, Offer, Difference, Proof, Message and Visibility. Buyers receive a visual report, three answer-based priorities, a seven-day plan, a downloadable PDF and one reassessment within 30 days of their first report. No subscription. The public sample demonstrates exactly what buyers receive.
+Brand Clarity Assessment: $9 USD once, plus applicable tax. 24 behavior-anchored questions across Audience, Offer, Difference, Proof, Message and Visibility. Buyers receive a visual report, three answer-based priorities, a seven-day plan, a downloadable PDF and lifetime access, unlimited personal retakes and side-by-side comparisons of saved reports. No subscription. The public sample demonstrates exactly what buyers receive.
 
 The assessment is an original structured reflection exercise. Scores are not scientific norms or promises of commercial performance. Do not describe the report as AI generated: it uses transparent, deterministic scoring and authored recommendations.
 
@@ -35,7 +35,7 @@ https://coachrank.lol/blog/brand-clarity-before-brand-identity
 
 Your brand may need clarity before it needs a new logo.
 
-We built a $9 Brand Clarity Assessment: 24 questions, six dimensions, three priorities and a seven-day plan. Includes a PDF report and one reassessment.
+We built a $9 Brand Clarity Assessment: 24 questions, six dimensions, three priorities and a seven-day plan. Includes a PDF report, lifetime access, unlimited retakes and side-by-side report comparisons.
 
 See the sample first:
 https://coachrank.lol/tools/brand-clarity
@@ -56,3 +56,23 @@ https://coachrank.lol
 Keep the product range focused until paid buyers demonstrate demand for a specific follow-on outcome. A $29 workbook or $49 positioning kit can deepen the work; a $99 guided implementation package needs substantially more value than a longer questionnaire. Decide from buyer feedback, completion and repeat use, rather than a calendar deadline.
 
 Defer a marketplace until the editorial reaches a recognizable audience and vendors ask to reach it. When built, separate paid vendor placements from editorial recommendations and keep its bid totals separate from coach rankings and tool sales.
+
+## Edition 02 release
+
+The wordmark and blue dot are the primary identity. Social exports are in public/brand. The homepage leads with stories and uses a compact header signature. Rankings remain paid visibility, with no implied editorial endorsement.
+
+The new collection adds 25 articles, five each in Performance, Business, Creativity, Growth and Coaching. Each has original practical guidance, a direct answer, two visible FAQs, source links, metadata and a distinct cover. The optional photographic prompts are in docs/editorial-cover-prompts.md. Structured data describes visible content; it does not guarantee a search ranking, AI citation or rich result.
+
+Publish the reviewed collection using scripts/publish-editorial-launch.mjs with --collection editorial-edition-02. Existing articles are preserved. The admin editorial library can edit every imported article.
+
+Product access now includes unlimited retakes and a paginated history. Existing buyers retain their token and reports. New completions migrate legacy inline reports into the order's private reports subcollection. No new Dodo product or recurring subscription is created.
+
+The next commercial step is to publish a focused demonstration of the report and invite relevant people to inspect the sample. Do not claim customer results before evidence exists. No social messages were sent by this release task.
+
+Suggested launch post:
+
+Your brand might not need another redesign. It might need three clearer decisions.
+
+CoachRank's $9 Brand Clarity Assessment gives you six visual scores, your next three moves and a seven-day plan. Pay once, retake anytime and compare your reports.
+
+See the full sample before you buy: https://coachrank.lol/tools/brand-clarity

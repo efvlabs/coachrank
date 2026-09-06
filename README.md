@@ -914,7 +914,7 @@ figure is genuinely unavailable the UI omits that segment instead of inventing o
 `/tools/brand-clarity` is the $9 product page; `/sample` shows fictional answers and a real PDF download.
 Buyers complete 24 questions across six dimensions in `/tools/brand-clarity/assessment`.
 The report contains six scores, answer-based priorities, a seven-day plan and a downloadable PDF.
-One reassessment may be completed within 30 days of the first report, preserving both reports.
+Purchases include lifetime access, unlimited personal retakes and comparisons of any two saved reports while CoachRank operates the service. Existing buyers receive the same upgrade. Completed reports are stored in the private order reports subcollection and paginated in groups of 20; old inline reports migrate on the next completion.
 This is an original business reflection tool, not a validated psychometric instrument or revenue prediction.
 
 The server creates a pending `assessmentOrders` record and a Dodo checkout for the fixed product.

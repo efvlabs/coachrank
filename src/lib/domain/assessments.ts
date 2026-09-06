@@ -22,7 +22,8 @@ export type AssessmentOrder = {
   version: number;
   revision: number;
   answers: BrandAnswers | null;
-  completed: { answers: BrandAnswers; completedAtMs: number }[];
+  completed: { answers: BrandAnswers; completedAtMs: number; index?: number }[];
+  completedCount?: number;
   feedback: { helpful: number; comment: string; createdAtMs: number } | null;
 };
 
@@ -37,7 +38,7 @@ async function createOrder(productId: string, preview: boolean) {
     id, accessHash: hash(token), productId, priceCents: BRAND_ASSESSMENT.priceCents,
     status: preview ? "paid" : "pending", preview, checkoutUrl: null, dodoSessionId: null,
     dodoPaymentId: null, createdAtMs: now, paidAtMs: preview ? now : null, acceptedTermsAtMs: now,
-    version: BRAND_ASSESSMENT.version, revision: 0, answers: {}, completed: [], feedback: null,
+    version: BRAND_ASSESSMENT.version, revision: 0, answers: {}, completed: [], completedCount: 0, feedback: null,
   };
   await orders().doc(id).set(order);
   return { order, access: `${id}.${token}` };
@@ -55,18 +56,40 @@ export async function authorizedAssessment(access: string | undefined): Promise<
   const order = snap.data() as AssessmentOrder;
   const stored = Buffer.from(order.accessHash, "hex");
   const incoming = Buffer.from(hash(token), "hex");
-  return stored.length === incoming.length && timingSafeEqual(stored, incoming) ? order : null;
+  if (stored.length !== incoming.length || !timingSafeEqual(stored, incoming)) return null;
+  return hydrateReports(order);
 }
 
+export type AssessmentRun = { answers: BrandAnswers; completedAtMs: number; index: number };
+export const reportCount = (order: AssessmentOrder) => order.completedCount ?? order.completed.length;
+const reportCollection = (id: string) => requireDb().collection(`${COLLECTIONS.assessmentOrders}/${id}/reports`);
+const reportId = (index: number) => String(index).padStart(12,"0");
+
+export async function assessmentHistory(order: AssessmentOrder, before?: number): Promise<AssessmentRun[]> {
+  if (order.status !== "paid") return [];
+  if (order.completedCount === undefined) return order.completed.map((run,index)=>({...run,index})).filter(run=>before===undefined || run.index<before).slice(-20);
+  let query = reportCollection(order.id).orderBy("index","desc").limit(20);
+  if (before !== undefined) query = query.where("index","<",before);
+  const snap = await query.get();
+  return snap.docs.map(doc=>doc.data() as AssessmentRun).reverse();
+}
+async function hydrateReports(order: AssessmentOrder): Promise<AssessmentOrder> {
+  return order.status === "paid" ? { ...order, completed: await assessmentHistory(order) } : order;
+}
+export async function assessmentRun(order: AssessmentOrder, index: number): Promise<AssessmentRun | null> {
+  if (order.status !== "paid" || !Number.isInteger(index) || index < 0 || index >= reportCount(order)) return null;
+  if (order.completedCount === undefined) return { ...order.completed[index], index };
+  const snap = await reportCollection(order.id).doc(reportId(index)).get();
+  return snap.exists ? snap.data() as AssessmentRun : null;
+}
 export function assessmentView(order: AssessmentOrder) {
   return {
     id: order.id, status: order.status, preview: order.preview, revision: order.revision,
     answers: order.status === "paid" ? order.answers : null,
-    completed: order.status === "paid" ? order.completed : [],
+    completed: order.status === "paid" ? order.completed.map((run,index)=>({...run,index:run.index ?? index})) : [],
+    completedCount: order.status === "paid" ? reportCount(order) : 0,
     feedbackSubmitted: Boolean(order.feedback),
-    retakeUntilMs: order.completed[0] ? order.completed[0].completedAtMs + BRAND_ASSESSMENT.retakeDays * 86_400_000 : null,
-    retakeExpired: Boolean(order.completed[0] && Date.now() > order.completed[0].completedAtMs + BRAND_ASSESSMENT.retakeDays * 86_400_000),
-    canRetake: order.status === "paid" && order.completed.length === 1 && order.answers === null && Date.now() <= order.completed[0].completedAtMs + BRAND_ASSESSMENT.retakeDays * 86_400_000,
+    canRetake: order.status === "paid" && reportCount(order) > 0 && order.answers === null,
   };
 }
 export type AssessmentView = ReturnType<typeof assessmentView>;
@@ -132,7 +155,7 @@ export class AssessmentError extends Error {
 export async function updateAssessment(id: string, revision: number, action: string, payload: unknown) {
   const db = requireDb();
   const ref = orders().doc(id);
-  return db.runTransaction(async tx => {
+  const updated = await db.runTransaction(async tx => {
     const snap = await tx.get(ref);
     if (!snap.exists) throw new AssessmentError("Assessment not found.", 404);
     const order = snap.data() as AssessmentOrder;
@@ -140,27 +163,30 @@ export async function updateAssessment(id: string, revision: number, action: str
     if (revision !== order.revision) throw new AssessmentError("Your assessment changed in another tab. Reload to continue with the saved version.", 409);
     const patch: Partial<AssessmentOrder> = { revision: order.revision + 1 };
     if (action === "save" || action === "complete") {
-      if (order.answers === null) throw new AssessmentError("This report is complete. Start your included reassessment to answer again.");
+      if (order.answers === null) throw new AssessmentError("This report is complete. Start a new assessment to answer again.");
       if (!validBrandAnswers(payload, action === "complete")) throw new AssessmentError("Choose a valid answer for each question.");
       patch.answers = payload;
       if (action === "complete") {
-        if (order.completed.length >= 2) throw new AssessmentError("Both included assessments are complete.");
-        if (order.completed[0] && Date.now() > order.completed[0].completedAtMs + BRAND_ASSESSMENT.retakeDays * 86_400_000) throw new AssessmentError("The reassessment window has ended. Your saved report remains available.");
-        patch.completed = [...order.completed, { answers: payload, completedAtMs: Date.now() }];
+        const count = reportCount(order);
+        // Upgrade old two-report orders without losing their answers or dates.
+        if (order.completedCount === undefined) order.completed.forEach((run,index)=>tx.set(reportCollection(id).doc(reportId(index)),{...run,index}));
+        tx.set(reportCollection(id).doc(reportId(count)),{answers:payload,completedAtMs:Date.now(),index:count});
+        patch.completed = [];
+        patch.completedCount = count + 1;
         patch.answers = null;
       }
     } else if (action === "retake") {
-      const first = order.completed[0];
-      if (!first || order.completed.length !== 1 || order.answers !== null || Date.now() > first.completedAtMs + BRAND_ASSESSMENT.retakeDays * 86_400_000) throw new AssessmentError("Your included reassessment is unavailable. Saved reports remain available.");
+      if (!reportCount(order) || order.answers !== null) throw new AssessmentError("Finish your current assessment before starting another. Saved reports remain available.");
       patch.answers = {};
     } else if (action === "feedback") {
       const feedback = payload as { helpful?: unknown; comment?: unknown } | null;
-      if (!order.completed.length || !feedback || !Number.isInteger(feedback.helpful) || Number(feedback.helpful) < 1 || Number(feedback.helpful) > 5 || typeof feedback.comment !== "string" || feedback.comment.length > 1000) throw new AssessmentError("Choose a rating and keep feedback under 1,000 characters.");
+      if (!reportCount(order) || !feedback || !Number.isInteger(feedback.helpful) || Number(feedback.helpful) < 1 || Number(feedback.helpful) > 5 || typeof feedback.comment !== "string" || feedback.comment.length > 1000) throw new AssessmentError("Choose a rating and keep feedback under 1,000 characters.");
       patch.feedback = { helpful: Number(feedback.helpful), comment: feedback.comment.trim(), createdAtMs: Date.now() };
     } else throw new AssessmentError("Unknown action.");
     tx.update(ref, patch);
-    return assessmentView({ ...order, ...patch });
+    return { ...order, ...patch };
   });
+  return assessmentView(await hydrateReports(updated));
 }
 
 export async function recentAssessmentOrders(): Promise<AssessmentOrder[]> {

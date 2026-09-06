@@ -1,10 +1,12 @@
 import "server-only";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { brandReport, brandActionPlan, type BrandAnswers } from "./brand-assessment";
 
 const clean = (value: string) => value.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[\u2013\u2014]/g, "-").replace(/…/g, "...").replace(/[^\x20-\x7e\n]/g, " ");
 
-export async function createBrandPdf(answers: BrandAnswers, completedAtMs: number, previous?: BrandAnswers, sample = false) {
+export async function createBrandPdf(answers: BrandAnswers, completedAtMs: number, previous?: BrandAnswers, sample = false, previousAtMs?: number) {
   const report = brandReport(answers);
   const baseline = previous ? brandReport(previous) : null;
   const pdf = await PDFDocument.create();
@@ -54,7 +56,9 @@ export async function createBrandPdf(answers: BrandAnswers, completedAtMs: numbe
   function rule() { ensure(20); page.drawLine({start:{x:margin,y},end:{x:width-margin,y},color:line,thickness:.7}); y-=22; }
 
   page.drawRectangle({ x:0,y:height-14,width,height:14,color:accent });
-  paragraph("CoachRank.",26,true,ink,24);
+  const wordmark = await pdf.embedPng(await readFile(join(process.cwd(),"public/brand/wordmark.png")));
+  page.drawImage(wordmark,{x:margin,y:y-22,width:180,height:180*wordmark.height/wordmark.width});
+  y -= 62;
   label(sample ? "Illustrative sample / Fictional answers" : "Your private report / Edition 01");
   heading("Brand Clarity",43);
   paragraph("A clearer view. A better next step.",19,true,ink,14);
@@ -74,7 +78,35 @@ export async function createBrandPdf(answers: BrandAnswers, completedAtMs: numbe
     page.drawText(dimension.band,{x:margin,y,size:9,font:regular,color:muted});
     y-=24;
   });
-  paragraph(baseline ? "Point changes compare this report with your first assessment. They describe changes in your reported practices, not measured commercial performance." : "The dimensions are independent. Scores are not percentiles, a measure of personal worth or a prediction of revenue.",9);
+  paragraph(baseline ? `Point changes compare with your selected report${previousAtMs ? " dated " + new Date(previousAtMs).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"}) : ""}. They describe changes in your reported practices, not measured commercial performance.` : "The dimensions are independent. Scores are not percentiles, a measure of personal worth or a prediction of revenue.",9);
+
+  newPage(); label("Your brand at a glance"); heading("Six dimensions. One clear view.");
+  paragraph(baseline ? "The solid blue shape is this report. The gray outline is your selected comparison. Look at individual dimensions before drawing conclusions from the overall shape." : "Read each dimension independently. The shape helps you see where your reported practices are more established and where there is room to build evidence.");
+  const centerX=width/2,centerY=y-165,radius=118;
+  const point=(index:number,score:number)=>{const angle=Math.PI/2-index*Math.PI/3;return {x:centerX+Math.cos(angle)*radius*score/100,y:centerY+Math.sin(angle)*radius*score/100};};
+  for(const ring of [25,50,75,100]) for(let i=0;i<6;i++) page.drawLine({start:point(i,ring),end:point((i+1)%6,ring),color:line,thickness:.7});
+  report.dimensions.forEach((dimension,index)=>{
+    page.drawLine({start:{x:centerX,y:centerY},end:point(index,100),color:line,thickness:.7});
+    const pos=point(index,135);page.drawText(dimension.label,{x:pos.x-regular.widthOfTextAtSize(dimension.label,10)/2,y:pos.y-4,size:10,font:regular,color:muted});
+  });
+  const polygon=report.dimensions.map((dimension,index)=>point(index,dimension.score));
+  page.drawSvgPath(polygon.map((p,index)=>`${index?"L":"M"}${p.x} ${-p.y}`).join(" ")+" Z",{x:0,y:0,color:accent,opacity:.12});
+  for(let i=0;i<6;i++){
+    if(baseline) page.drawLine({start:point(i,baseline.dimensions[i].score),end:point((i+1)%6,baseline.dimensions[(i+1)%6].score),color:muted,thickness:1,dashArray:[4,3]});
+    page.drawLine({start:polygon[i],end:polygon[(i+1)%6],color:accent,thickness:2});
+    page.drawCircle({...polygon[i],size:3,color:accent});
+  }
+  y=centerY-195;
+  if(baseline){
+    label("Side-by-side comparison");
+    paragraph(`Compared with ${previousAtMs ? new Date(previousAtMs).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}) : "your selected report"}. Change is shown in score points.`,9);
+    for(const [index,dimension] of report.dimensions.entries()){
+      ensure(24);const earlier=baseline.dimensions[index].score,delta=dimension.score-earlier;
+      page.drawText(dimension.label,{x:margin,y,size:10,font:bold,color:ink});
+      page.drawText(`${earlier} / 100  to  ${dimension.score} / 100`,{x:260,y,size:10,font:regular,color:muted});
+      page.drawText(`${delta>=0?"+":""}${delta} pts`,{x:465,y,size:10,font:bold,color:accent});y-=24;
+    }
+  }else paragraph("Use this snapshot alongside actual examples from your business. A later retake can show how your reported evidence has changed, with every earlier report preserved.",10);
 
   newPage(); label("Your next moves"); heading(report.established ? "Keep testing your foundations." : "Start with these three.");
   paragraph("Priorities follow your lowest dimension scores. Ties start with audience, then offer, difference, proof, message and visibility.");
@@ -102,7 +134,7 @@ export async function createBrandPdf(answers: BrandAnswers, completedAtMs: numbe
   paragraph("The bands - below 40, 40-69 and 70-100 - are CoachRank's editorial guide to prioritization. They are not validated clinical or psychometric thresholds. This original business self-assessment reflects your answers, not an independent audit or a comparison with other businesses.");
   paragraph("A higher score means you reported more established practices. It does not guarantee customer demand, more revenue or stronger performance. Keep the underlying examples and look for evidence that challenges your assumptions.");
   rule(); heading("Revisit with new evidence.",23);
-  paragraph("Your purchase includes one reassessment completed within 30 days of your first report. Use your private access link to return to CoachRank. The second report compares your scores with the first, while preserving both reports.");
+  paragraph("Your purchase includes lifetime access and unlimited personal retakes while CoachRank operates the service. Use your private access link to return, keep every report and compare any two saved reports side by side. Download your PDFs to keep your own copies.");
   paragraph("Keep your private access link and this report safe. Anyone with the link can view your assessment. If you need help restoring access, contact contact@coachrank.lol with your Dodo payment receipt. Never send card details.");
   rule(); paragraph("Celebrating greatness. Understanding what builds it.",17,true,accent);
   paragraph("CoachRank is an independent editorial for ambitious people. Explore performance, business, creativity, growth and coaching at coachrank.lol.");
@@ -111,8 +143,5 @@ export async function createBrandPdf(answers: BrandAnswers, completedAtMs: numbe
     current.drawText(sample ? "COACHRANK  /  ILLUSTRATIVE SAMPLE" : "COACHRANK  /  PRIVATE BRAND CLARITY REPORT", {x:margin,y:28,font:regular,size:7,color:muted});
     current.drawText(`${index+1} / ${pdf.getPageCount()}`,{x:width-margin-26,y:28,font:bold,size:8,color:muted});
   }
-  const cover = pdf.getPage(0);
-  const markX = width-margin-35, markY = height-74;
-  for (const [x,h] of [[0,15],[12,29],[24,21]]) cover.drawRectangle({x:markX+x,y:markY,width:9,height:h,color:accent});
   return pdf.save();
 }

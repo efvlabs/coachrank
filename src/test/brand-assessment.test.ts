@@ -11,7 +11,7 @@ vi.mock("@/lib/firebase/admin", async () => {
 });
 
 import { BRAND_DIMENSIONS, BRAND_QUESTIONS, SAMPLE_ANSWERS, brandReport, validBrandAnswers } from "@/lib/brand-assessment";
-import { assessmentView, authorizedAssessment, createAssessmentOrder, createAssessmentPreview, markAssessmentFailed, processVerifiedAssessmentPayment, reverseAssessmentPayment, updateAssessment } from "@/lib/domain/assessments";
+import { assessmentHistory, assessmentRun, assessmentView, authorizedAssessment, createAssessmentOrder, createAssessmentPreview, markAssessmentFailed, processVerifiedAssessmentPayment, reverseAssessmentPayment, updateAssessment } from "@/lib/domain/assessments";
 import { createBrandPdf } from "@/lib/brand-pdf";
 import { fakeDb } from "./fake-firestore";
 
@@ -109,7 +109,7 @@ describe("saved progress and reassessment",()=>{
     await expect(updateAssessment(order.id,0,"save",{"audience-1":0})).rejects.toThrow("another tab");
     expect((await authorizedAssessment(access))!.answers).toEqual({"audience-1":2});
   });
-  it("preserves the original report and includes exactly one reassessment",async()=>{
+  it("preserves every report and permits a third assessment",async()=>{
     const {order}=await paidOrder();
     const initial=await updateAssessment(order.id,0,"complete",SAMPLE_ANSWERS);
     expect(initial.completed).toHaveLength(1);
@@ -122,15 +122,18 @@ describe("saved progress and reassessment",()=>{
     const final=await updateAssessment(order.id,2,"complete",changed);
     expect(final.completed[0].answers).toEqual(SAMPLE_ANSWERS);
     expect(final.completed[1].answers).toEqual(changed);
-    expect(final.canRetake).toBe(false);
-    await expect(updateAssessment(order.id,3,"retake",null)).rejects.toThrow("unavailable");
+    expect(final.canRetake).toBe(true);
+    await updateAssessment(order.id,3,"retake",null);
+    const third=await updateAssessment(order.id,4,"complete",SAMPLE_ANSWERS);
+    expect(third.completedCount).toBe(3);
+    expect(third.completed.map(run=>run.index)).toEqual([0,1,2]);
   });
-  it("expires the reassessment window without removing the original report",async()=>{
+  it("allows a retake years after purchase without losing earlier reports",async()=>{
     vi.useFakeTimers();
     const {order,access}=await paidOrder();
     await updateAssessment(order.id,0,"complete",SAMPLE_ANSWERS);
-    vi.setSystemTime(Date.now()+31*86_400_000);
-    await expect(updateAssessment(order.id,1,"retake",null)).rejects.toThrow("unavailable");
+    vi.setSystemTime(Date.now()+730*86_400_000);
+    await updateAssessment(order.id,1,"retake",null);
     const saved=assessmentView((await authorizedAssessment(access))!);
     expect(saved.completed).toHaveLength(1);
     expect(saved.canRetake).toBe(false);
@@ -142,17 +145,54 @@ describe("saved progress and reassessment",()=>{
     await expect(updateAssessment(order.id,1,"feedback",{helpful:6,comment:""})).rejects.toThrow();
     expect((await updateAssessment(order.id,1,"feedback",{helpful:4,comment:" A concrete next step. "})).feedbackSubmitted).toBe(true);
   });
-  it("keeps the report reachable when an unfinished reassessment expires",async()=>{
+  it("lets an unfinished reassessment resume years later",async()=>{
     vi.useFakeTimers();
     const {order,access}=await paidOrder();
     await updateAssessment(order.id,0,"complete",SAMPLE_ANSWERS);
     await updateAssessment(order.id,1,"retake",null);
-    vi.setSystemTime(Date.now()+31*86_400_000);
+    vi.setSystemTime(Date.now()+730*86_400_000);
     const saved=assessmentView((await authorizedAssessment(access))!);
-    expect(saved.retakeExpired).toBe(true);
+    expect(saved.answers).toEqual({});
     expect(saved.completed).toHaveLength(1);
-    await expect(updateAssessment(order.id,2,"complete",SAMPLE_ANSWERS)).rejects.toThrow("window has ended");
+    expect((await updateAssessment(order.id,2,"complete",SAMPLE_ANSWERS)).completedCount).toBe(2);
   });
+  it("pages long histories without growing the order document or exposing another purchase",async()=>{
+    const {order,access}=await paidOrder();
+    let revision=0;
+    for(let index=0;index<23;index++){
+      if(index) await updateAssessment(order.id,revision++,"retake",null);
+      await updateAssessment(order.id,revision++,"complete",{...SAMPLE_ANSWERS,"audience-1":index%4});
+    }
+    const saved=(await authorizedAssessment(access))!;
+    expect(saved.completed).toHaveLength(20);
+    expect(saved.completed[0].index).toBe(3);
+    expect(assessmentView(saved).completedCount).toBe(23);
+    const older=await assessmentHistory(saved,3);
+    expect(older.map(run=>run.index)).toEqual([0,1,2]);
+    expect((await assessmentRun(saved,0))?.answers["audience-1"]).toBe(0);
+    expect((await assessmentRun(saved,22))?.answers["audience-1"]).toBe(2);
+    expect(fakeDb.peek("assessmentOrders",order.id)?.completed).toEqual([]);
+    const other=await createAssessmentPreview();
+    expect(await assessmentRun(other.order,0)).toBeNull();
+    expect(await assessmentRun(saved,23)).toBeNull();
+    await reverseAssessmentPayment("pay_brand","refund_many");
+    const reversed=(await authorizedAssessment(access))!;
+    expect(await assessmentHistory(reversed)).toEqual([]);
+    expect(await assessmentRun(reversed,0)).toBeNull();
+  });
+  it("upgrades legacy buyers and preserves both original reports and dates",async()=>{
+    const {order,access}=await paidOrder();
+    const legacy={...order,status:"paid",answers:null,completed:[{answers:SAMPLE_ANSWERS,completedAtMs:100},{answers:SAMPLE_ANSWERS,completedAtMs:200}]};
+    delete legacy.completedCount;
+    await fakeDb.collection("assessmentOrders").doc(order.id).set(legacy);
+    expect(assessmentView((await authorizedAssessment(access))!).canRetake).toBe(true);
+    await updateAssessment(order.id,0,"retake",null);
+    const saved=await updateAssessment(order.id,1,"complete",SAMPLE_ANSWERS);
+    expect(saved.completedCount).toBe(3);
+    expect(saved.completed.map(run=>run.completedAtMs).slice(0,2)).toEqual([100,200]);
+    expect(fakeDb.peek("assessmentOrders",order.id)?.completed).toEqual([]);
+  });
+
 });
 
 it("exports a real PDF with complete report sections",async()=>{

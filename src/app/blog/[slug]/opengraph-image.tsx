@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { OgWordmark } from "@/lib/og-card";
+import { topicLabel } from "@/lib/editorial";
 
 import { BLOG_ENABLED } from "@/lib/config";
 import { getPublishedPostBySlug } from "@/lib/domain/blog";
@@ -8,12 +10,7 @@ export const alt = "CoachRank article";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/**
- * A generated card for every article, so a post has a preview the moment it publishes and
- * nobody has to make artwork for it. The same image backs the cards on /blog, which is why
- * the title is capped rather than shrunk to fit - a long headline reads better truncated
- * at a legible size than complete at an illegible one.
- */
+/** A branded social preview is generated for every published article. */
 export default async function BlogOpenGraphImage({
   params,
 }: {
@@ -40,7 +37,7 @@ export default async function BlogOpenGraphImage({
         }}
       >
         <div style={{ display: "flex", fontSize: 22, color: "#9aa0b0", letterSpacing: 3 }}>
-          COACHRANK.LOL
+          <OgWordmark width={260}/>
         </div>
 
         <div
@@ -58,7 +55,7 @@ export default async function BlogOpenGraphImage({
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ display: "flex", width: 46, height: 8, background: "#a8baff" }} />
           <div style={{ display: "flex", fontSize: 26, color: "#9aa0b0" }}>
-            Find coaches who back themselves
+            {post ? `${topicLabel(post.topic)} · The CoachRank editorial` : "Celebrating greatness. Understanding what builds it."}
           </div>
         </div>
       </div>

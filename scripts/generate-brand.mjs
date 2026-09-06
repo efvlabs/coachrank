@@ -1,109 +1,26 @@
-/**
- * Regenerates every exported brand asset from the single geometry in src/lib/brand.ts.
- *
- * Run it after changing the mark so the favicon, the touch icon and the social avatars
- * cannot drift apart from what the site renders:
- *
- *   node scripts/generate-brand.mjs
- */
-import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
-import sharp from "sharp";
-
-const LOGO_BG = "#2C4BF0";
-const LOGO_FG = "#FFFFFF";
-const LOGO_BG_DARK = "#12141A";
-const LOGO_FG_DARK = "#A8BAFF";
-
-// Kept in step with src/lib/brand.ts. [x, y, width, height, opacity] on a 32-unit grid.
-const PODIUM = [
-  [4, 16, 7, 11, 1],
-  [12.5, 6, 7, 21, 1],
-  [21, 12, 7, 15, 1],
-];
-const RADIUS = 1.25;
-
-const round = (v) => Number(v.toFixed(3));
-
-function rects(scale, fill) {
-  return PODIUM.map(
-    ([x, y, w, h, o]) =>
-      `<rect x="${round(x * scale)}" y="${round(y * scale)}" width="${round(w * scale)}" height="${round(h * scale)}" rx="${round(RADIUS * scale)}" fill="${fill}"${o < 1 ? ` opacity="${o}"` : ""}/>`,
-  ).join("\n  ");
-}
-
-function tile({ size, bg, fg, label = "CoachRank" }) {
-  const scale = size / 32;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" fill="none" role="img" aria-label="${label}">
-  <rect width="${size}" height="${size}" rx="${round(size * 0.25)}" fill="${bg}"/>
-  ${rects(scale, fg)}
-</svg>`;
-}
-
-const root = process.cwd();
-const brand = join(root, "public", "brand");
-mkdirSync(brand, { recursive: true });
-
-// --- The favicon the app serves -------------------------------------------------------
-writeFileSync(join(root, "src", "app", "icon.svg"), tile({ size: 32, bg: LOGO_BG, fg: LOGO_FG }) + "\n");
-
-// --- Exported brand files -------------------------------------------------------------
-writeFileSync(join(brand, "avatar.svg"), tile({ size: 1024, bg: LOGO_BG, fg: LOGO_FG }) + "\n");
-writeFileSync(
-  join(brand, "avatar-dark.svg"),
-  tile({ size: 1024, bg: LOGO_BG_DARK, fg: LOGO_FG_DARK }) + "\n",
-);
-
-// The bare mark, for anywhere that supplies its own colour and background.
-writeFileSync(
-  join(brand, "mark.svg"),
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="CoachRank">
-  ${rects(1, "currentColor")}
-</svg>\n`,
-);
-
-// The wordmark: tile at 56px on a 320x64 canvas, with the name set beside it.
-// Two files rather than one currentColor file, because a wordmark is mostly used as an
-// image - and inside an <img> currentColor resolves to black on any background.
-const wm = 56 / 32;
-const wordmark = (ink) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" role="img" aria-label="CoachRank">
-  <rect y="4" width="56" height="56" rx="14" fill="${LOGO_BG}"/>
-  <g transform="translate(0 4)">
-    ${rects(wm, LOGO_FG)}
-  </g>
-  <text x="74" y="41" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="30" font-weight="700" fill="${ink}">CoachRank</text>
-</svg>\n`;
-
-writeFileSync(join(brand, "wordmark.svg"), wordmark("#101218"));
-writeFileSync(join(brand, "wordmark-dark.svg"), wordmark("#F2F3F6"));
-
-// --- Rasters --------------------------------------------------------------------------
-const png = (svg, size) => sharp(Buffer.from(svg)).resize(size, size).png({ quality: 92 }).toBuffer();
-
-const light1024 = tile({ size: 1024, bg: LOGO_BG, fg: LOGO_FG });
-const dark1024 = tile({ size: 1024, bg: LOGO_BG_DARK, fg: LOGO_FG_DARK });
-
-writeFileSync(join(brand, "avatar-1024.png"), await png(light1024, 1024));
-writeFileSync(join(brand, "avatar-512.png"), await png(light1024, 512));
-writeFileSync(join(brand, "avatar-dark-1024.png"), await png(dark1024, 1024));
-
-// Apple wants no transparency and its own rounding, so this one is a full-bleed square.
-const appleSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
-  <rect width="180" height="180" fill="${LOGO_BG}"/>
-  ${rects(180 / 32, LOGO_FG)}
-</svg>`;
-writeFileSync(join(root, "src", "app", "apple-icon.png"), await png(appleSvg, 180));
-
-console.log("Regenerated from one geometry:");
-for (const f of [
-  "src/app/icon.svg",
-  "src/app/apple-icon.png",
-  "public/brand/avatar.svg",
-  "public/brand/avatar-dark.svg",
-  "public/brand/mark.svg",
-  "public/brand/wordmark.svg",
-  "public/brand/wordmark-dark.svg",
-  "public/brand/avatar-1024.png",
-  "public/brand/avatar-512.png",
-  "public/brand/avatar-dark-1024.png",
-]) console.log("  " + f);
+/** Outlined CoachRank wordmark. No installed fonts are required to use the exports. */
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {join} from 'node:path';
+import * as fontkit from 'fontkit';
+import sharp from 'sharp';
+const root=process.cwd(),dir=join(root,'public/brand');mkdirSync(dir,{recursive:true});
+const font=fontkit.openSync(join(root,'assets/fonts/bricolage-grotesque-800.woff2'));
+const run=font.layout('CoachRank.');let x=20;
+const paths=run.glyphs.map((glyph,i)=>{const result={d:glyph.path.toSVG(),x:x+run.positions[i].xOffset,dot:i===run.glyphs.length-1};x+=run.positions[i].xAdvance-34;return result;});
+const geometry={width:Math.ceil(x+30),height:810,baseline:755,paths};
+writeFileSync(join(root,'src/lib/brand-wordmark.ts'),'// Generated by scripts/generate-brand.mjs from the licensed Bricolage font.\nexport const WORDMARK = '+JSON.stringify(geometry)+' as const;\n');
+function inner(ink,accent){return paths.map(p=>`<path d="${p.d}" transform="translate(${p.x} 755) scale(1 -1)" fill="${p.dot?accent:ink}"/>`).join('');}
+function wordmark(ink='#101218',accent='#2C4BF0',bg){return `<svg xmlns="http://www.w3.org/2000/svg" width="${geometry.width}" height="810" viewBox="0 0 ${geometry.width} 810" role="img" aria-label="CoachRank.">${bg?`<rect width="100%" height="100%" fill="${bg}"/>`:''}${inner(ink,accent)}</svg>`;}
+const variants=[['wordmark','#101218','#2C4BF0'],['wordmark-dark','#F2F3F6','#9BA8FF'],['wordmark-white','#FFFFFF','#FFFFFF'],['wordmark-black','#101218','#101218']];
+for(const[name,ink,accent]of variants){const svg=wordmark(ink,accent);writeFileSync(join(dir,name+'.svg'),svg);writeFileSync(join(dir,name+'.png'),await sharp(Buffer.from(svg)).resize({width:2400}).png().toBuffer());}
+// Square avatars keep the complete name in the safe center of a circular crop.
+function avatar(bg,ink,accent){const w=800,h=w*810/geometry.width;return `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="${bg}"/><g transform="translate(112 ${(1024-h)/2}) scale(${w/geometry.width})">${inner(ink,accent)}</g></svg>`;}
+for(const[name,bg,ink,accent]of [['avatar','#FBFAF7','#101218','#2C4BF0'],['avatar-dark','#0C0D10','#F2F3F6','#9BA8FF'],['avatar-blue','#2C4BF0','#FFFFFF','#FFFFFF']]){const svg=avatar(bg,ink,accent);writeFileSync(join(dir,name+'.svg'),svg);for(const size of [1024,512])writeFileSync(join(dir,`${name}-${size}.png`),await sharp(Buffer.from(svg)).resize(size).png().toBuffer());}
+// C. is a typographic micro version for favicon sizes where a whole name is illegible.
+const c=font.layout('C.');let cx=90;const micro=c.glyphs.map((g,i)=>{const p=`<path d="${g.path.toSVG()}" transform="translate(${cx} 850) scale(1 -1)" fill="${i?'#2C4BF0':'#101218'}"/>`;cx+=c.positions[i].xAdvance-30;return p;}).join('');
+const icon=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1100"><rect width="1100" height="1100" rx="220" fill="#FBFAF7"/>${micro}</svg>`;
+writeFileSync(join(root,'src/app/icon.svg'),icon);writeFileSync(join(root,'src/app/apple-icon.png'),await sharp(Buffer.from(icon)).resize(180).png().toBuffer());writeFileSync(join(dir,'favicon.svg'),icon);writeFileSync(join(dir,'mark.svg'),wordmark());
+const banner=`<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500"><rect width="1500" height="500" fill="#FBFAF7"/><g transform="translate(410 120) scale(${760/geometry.width})">${inner('#101218','#2C4BF0')}</g><text x="420" y="335" font-family="sans-serif" font-size="27" fill="#545861">Celebrating greatness. Understanding what builds it.</text><circle cx="1380" cy="400" r="200" fill="#2C4BF0" opacity=".055"/></svg>`;
+writeFileSync(join(dir,'x-header-1500x500.png'),await sharp(Buffer.from(banner)).png().toBuffer());
+writeFileSync(join(dir,'README.md'),`# CoachRank brand kit\n\nThe complete CoachRank wordmark with its blue dot is the primary identity.\n\n- wordmark.svg / wordmark.png: transparent, dark lettering for light backgrounds.\n- wordmark-dark.svg / wordmark-dark.png: transparent, light lettering for dark backgrounds.\n- wordmark-white and wordmark-black: single-color artwork.\n- avatar-1024.png: complete name, centered for X and other circular profile crops.\n- avatar-dark-1024.png and avatar-blue-1024.png: alternate profile backgrounds.\n- x-header-1500x500.png: social cover with space on the left for the profile overlap.\n- favicon.svg: C. micro wordmark, used only when the full name would be too small.\n\nSVG lettering is outlined. It will not change font on another computer. Do not stretch, add a separate icon, change letter spacing, or remove the dot. Keep space around the wordmark.\n\nTypeface: Bricolage Grotesque, SIL Open Font License. Source and license in assets/fonts. Regenerate using node scripts/generate-brand.mjs.\n`);
+console.log('Generated outlined wordmarks, social avatars, X header and typographic favicon.');

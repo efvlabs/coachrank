@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgWordmark } from "@/lib/og-card";
 
 import { categoryLabel } from "@/lib/categories";
 import { SITE } from "@/lib/config";
@@ -47,7 +48,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ slu
             THE PAID LEADERBOARD FOR COACHES
           </div>
           <div style={{ ...row({ fontSize: 120, fontWeight: 800, letterSpacing: -6, marginTop: 20 }) }}>
-            CoachRank
+            <OgWordmark width={650}/>
           </div>
         </div>
       ),
@@ -108,7 +109,7 @@ export default async function OpenGraphImage({ params }: { params: Promise<{ slu
             </div>
           </div>
           <div style={{ ...col({ marginLeft: "auto", alignItems: "flex-end", justifyContent: "flex-end" }) }}>
-            <div style={{ ...row({ fontSize: 36, fontWeight: 800, letterSpacing: -1 }) }}>CoachRank</div>
+            <div style={{ ...row({ fontSize: 36, fontWeight: 800, letterSpacing: -1 }) }}><OgWordmark width={220}/></div>
             <div style={{ ...row({ fontSize: 18, color: MUTED, marginTop: 6 }) }}>
               {SITE.tagline}
             </div>

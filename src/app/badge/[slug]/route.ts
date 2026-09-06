@@ -1,4 +1,4 @@
-import { podiumRects } from "@/lib/brand";
+import { wordmarkPaths, WORDMARK } from "@/lib/brand";
 import { categoryLabel } from "@/lib/categories";
 import { computeRanks, getListingBySlug } from "@/lib/domain/listings";
 
@@ -33,12 +33,11 @@ function escapeXml(value: string): string {
 function svg(rank: string | null, category: string | null, theme: keyof typeof THEMES): string {
   const t = THEMES[theme];
   const H = 40;
-  const wordmark = "CoachRank";
 
   const padL = 12;
-  const bars = 15;
-  const gapAfterBars = 8;
-  const wordmarkW = textWidth(wordmark, 13.5, true);
+  const bars = 0;
+  const gapAfterBars = 0;
+  const wordmarkW = 100;
   const rankW = rank ? textWidth(rank, 15, true) : 0;
   const catW = category ? textWidth(category, 11.5) : 0;
   const dividerGap = rank ? 11 : 0;
@@ -61,10 +60,7 @@ function svg(rank: string | null, category: string | null, theme: keyof typeof T
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${H}" viewBox="0 0 ${width} ${H}" role="img" aria-label="${escapeXml(label)}">
   <title>${escapeXml(label)}</title>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${H - 1}" rx="${H / 2}" fill="${t.bg}" stroke="${t.border}"/>
-  <g fill="${t.accent}" transform="translate(${barsX - 2.1} 9.5) scale(0.594)">
-    ${podiumRects({ fill: t.accent })}
-  </g>
-  <text x="${wordX}" y="${H / 2 + 4.5}" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="13.5" font-weight="700" fill="${t.ink}">${escapeXml(wordmark)}</text>
+  <g transform="translate(${wordX} 10) scale(${wordmarkW / WORDMARK.width})">${wordmarkPaths(t.ink,t.accent)}</g>
   ${rank ? `<line x1="${divX}" y1="11" x2="${divX}" y2="${H - 11}" stroke="${t.border}" stroke-width="1"/>
   <text x="${rankX}" y="${H / 2 + 5}" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="15" font-weight="800" fill="${t.accent}">${escapeXml(rank)}</text>` : ""}
   ${category ? `<text x="${catX}" y="${H / 2 + 4}" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" font-weight="500" fill="${t.muted}">${escapeXml(category)}</text>` : ""}

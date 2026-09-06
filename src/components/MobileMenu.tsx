@@ -8,9 +8,9 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const LINKS = [
   { href: "/", label: "Editorial" },
-  { href: "/tools", label: "Tools" },
   { href: "/rankings", label: "Rankings" },
   { href: "/categories", label: "Categories" },
+  { href: "/tools", label: "Tools" },
 ] as const;
 
 export function MobileMenu() {

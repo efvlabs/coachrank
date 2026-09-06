@@ -8,15 +8,15 @@ function radarPoint(index: number, value: number) {
   return `${220 + Math.cos(angle) * 123 * value},${183 + Math.sin(angle) * 123 * value}`;
 }
 
-export function BrandReport({ answers, previous, sample = false, completedAtMs, run = 0 }: { answers: BrandAnswers; previous?: BrandAnswers; sample?: boolean; completedAtMs?: number; run?: number }) {
+export function BrandReport({ answers, previous, sample = false, completedAtMs, previousAtMs, run = 0, compareRun = -1 }: { answers: BrandAnswers; previous?: BrandAnswers; sample?: boolean; completedAtMs?: number; previousAtMs?: number; run?: number; compareRun?: number }) {
   const report = brandReport(answers);
   const baseline = previous ? brandReport(previous) : null;
   const days = brandActionPlan(report);
 
   return <article className="brand-report" id="brand-report">
     <header className="report-heading">
-      <div><p className="journal-label">CoachRank Tools · {sample ? "Illustrative sample" : "Your Brand Clarity Report"}</p><h1>{report.established ? "Keep your clarity sharp." : "A clearer view.<br />A better next step."}</h1><p>{sample ? "These fictional answers show what a report looks like. Your priorities and plan follow your own answers." : "Your answers show where you have evidence today, and where a small, specific change could help."}</p></div>
-      <div className="report-edition"><span>BRAND<br />CLARITY</span><p>Edition 01{completedAtMs ? <><br />{new Date(completedAtMs).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" })}</> : null}</p><a className="tool-text-link no-print" href={sample ? "/api/assessment/report?sample=true" : `/api/assessment/report?run=${run}`}>Download PDF ↓</a></div>
+      <div><p className="journal-label">CoachRank Tools · {sample ? "Illustrative sample" : "Your Brand Clarity Report"}</p><h1>{report.established ? "Keep your clarity sharp." : <>A clearer view.<br />A better next step.</>}</h1><p>{sample ? "These fictional answers show what a report looks like. Your priorities and plan follow your own answers." : "Your answers show where you have evidence today, and where a small, specific change could help."}</p></div>
+      <div className="report-edition"><span>BRAND<br />CLARITY</span><p>Edition 01{completedAtMs ? <><br />{new Date(completedAtMs).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" })}</> : null}</p><a className="tool-text-link no-print" href={sample ? "/api/assessment/report?sample=true" : `/api/assessment/report?run=${run}&compare=${compareRun}`}>Download PDF ↓</a></div>
     </header>
 
     <section className="report-overview" aria-label="Your six brand dimensions">
@@ -30,7 +30,7 @@ export function BrandReport({ answers, previous, sample = false, completedAtMs, 
           {report.dimensions.map((dimension, index) => <circle key={dimension.id} cx={radarPoint(index, dimension.score / 100).split(",")[0]} cy={radarPoint(index, dimension.score / 100).split(",")[1]} r="4" fill="var(--accent)" />)}
           {[{x:220,y:32},{x:371,y:102},{x:375,y:271},{x:220,y:346},{x:64,y:271},{x:64,y:102}].map((position, index) => <text key={index} x={position.x} y={position.y} textAnchor="middle" fill="var(--ink-2)" fontSize="13" fontFamily="inherit">{report.dimensions[index].label}</text>)}
         </svg>
-        <p className="report-chart-note">{baseline ? "Solid: this assessment · Dashed: your first assessment" : "Six independent dimensions. No single score defines your brand."}</p>
+        <p className="report-chart-note">{baseline ? "Solid: this assessment · Dashed: comparison report" : "Six independent dimensions. No single score defines your brand."}</p>
       </div>
       <div className="report-bars">{report.dimensions.map((dimension, index) => <div className="report-bar" key={dimension.id}>
         <div><span>{dimension.label}</span><strong>{dimension.score}<small>/100</small>{baseline ? <em>{dimension.score - baseline.dimensions[index].score >= 0 ? "+" : ""}{dimension.score - baseline.dimensions[index].score} pts</em> : null}</strong></div>
@@ -38,6 +38,8 @@ export function BrandReport({ answers, previous, sample = false, completedAtMs, 
         <p>{dimension.band}</p>
       </div>)}</div>
     </section>
+
+    {baseline ? <section className="report-comparison" aria-label="Side-by-side report comparison"><div className="tool-section-heading"><p className="journal-label">Two snapshots. A clearer picture.</p><h2>Compare the evidence.</h2><p>Scores describe what you reported at each point. A change is a prompt to investigate, not proof of business performance.</p></div><div className="report-comparison-scroll"><table><thead><tr><th scope="col">Dimension</th><th scope="col">Comparison report{previousAtMs ? <small>{new Date(previousAtMs).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"})}</small> : null}</th><th scope="col">This report{completedAtMs ? <small>{new Date(completedAtMs).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric",timeZone:"UTC"})}</small> : null}</th><th scope="col">Change</th></tr></thead><tbody>{report.dimensions.map((dimension,index)=>{const change=dimension.score-baseline.dimensions[index].score;return <tr key={dimension.id}><th scope="row">{dimension.label}</th><td>{baseline.dimensions[index].score}<small>/100</small></td><td>{dimension.score}<small>/100</small></td><td className={change>0?"is-improved":""}>{change>0?"+":""}{change} pts</td></tr>;})}</tbody></table></div></section> : null}
 
     <section className="report-priorities"><div className="tool-section-heading"><p className="journal-label">Your next moves</p><h2>{report.established ? "Three areas to keep testing." : "Start with these three."}</h2><p>{report.established ? "Your answers indicate established practices. These areas are useful starting points for testing whether the evidence still holds." : "Your lowest-scoring dimensions come first. When scores tie, we start with the foundations: audience, offer, difference, proof, message, then visibility."}</p></div>
       <div className="report-priority-grid">{report.priorities.map((dimension, index) => <section className="report-priority" key={dimension.id}><span className="report-priority-number">0{index + 1}</span><p className="journal-label">{dimension.score}/100 · {dimension.band}</p><h3>{dimension.label}</h3><p>{dimension.insight}</p><div className="report-evidence"><p><strong>One answer behind this priority</strong></p><p>{dimension.question}</p><blockquote>{dimension.answer}</blockquote></div><p><strong>Your next action</strong><br />{dimension.action}</p><Link href={`/blog/${dimension.article}`} className="tool-text-link no-print">A useful perspective ↗</Link></section>)}</div>
