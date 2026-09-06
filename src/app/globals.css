@@ -556,7 +556,7 @@
 @media(max-width:1000px) { .article-layout { grid-template-columns:170px minmax(0,1fr); gap:35px; } .editor-columns { grid-template-columns:minmax(0,1fr) 275px; gap:16px; } .editor-panel { padding:18px; } }
 @media(max-width:760px) { .article-layout { display:block; padding-top:25px; } .article-sidebar { position:static; margin-bottom:30px; } .article-sidebar ol { columns:2; column-gap:25px; } .article-cover img { aspect-ratio:1.5; } .article-answer { padding:20px; } .article-prose { font-size:17px; } .article-prose h2 { font-size:28px; } .article-header { padding-top:8px; } .editor-columns { display:flex; flex-direction:column; } .editor-main,.editor-sidebar { width:100%; } .editor-pair { grid-template-columns:1fr; gap:0; } }
 
-/* CoachRank Tools — a practical companion to the editorial. */
+/* CoachRank Tools: a practical companion to the editorial. */
 .journal-topic-intro { padding: 40px 0 6px; }
 .journal-topic-intro h2 { font-size: clamp(40px,6vw,76px); margin: 12px 0; }
 .journal-topic-intro h2 span { color: var(--accent); }
@@ -804,7 +804,7 @@
  .report-print-footer { font-size:9px; }
 }
 
-/* CoachRank Studio — editorial workspace. */
+/* CoachRank Studio: editorial workspace. */
 .admin-console { max-width:1600px; margin:0 auto; display:grid; grid-template-columns:224px minmax(0,1fr); min-height:calc(100dvh - 65px); border-inline:1px solid var(--line); }
 .admin-sidebar { padding:34px 20px; border-right:1px solid var(--line); background:var(--card); display:flex; flex-direction:column; }
 .admin-studio-brand { display:flex; align-items:center; gap:12px; padding:0 10px; font-family:var(--font-display); font-size:19px; }

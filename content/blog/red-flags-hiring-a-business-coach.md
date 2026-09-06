@@ -7,7 +7,7 @@ excerpt: Coaching has no protected title, which means the market rewards confide
 ctaCategory: business
 ---
 
-Anyone can call themselves a business coach. There is no licence to lose, no register to be struck from, and no exam that has to be passed. Most people working in the field are serious about it — but the absence of a gate means the market rewards confidence at least as much as competence.
+Anyone can call themselves a business coach. There is no licence to lose, no register to be struck from, and no exam that has to be passed. Most people working in the field are serious about it, but the absence of a gate means the market rewards confidence at least as much as competence.
 
 These are the signals worth acting on.
 
@@ -29,7 +29,7 @@ Certifications in coaching vary from serious multi-year supervision to a weekend
 
 ## 5. Scope that keeps expanding
 
-Coaching that drifts into financial advice, medical or mental-health territory, or legal opinion is a real risk — not because the person is malicious, but because those fields are regulated for reasons. A good coach names the boundary before you have to.
+Coaching that drifts into financial advice, medical or mental-health territory, or legal opinion is a real risk, not because the person is malicious, but because those fields are regulated for reasons. A good coach names the boundary before you have to.
 
 ## 6. Testimonials without specifics
 
@@ -37,7 +37,7 @@ Coaching that drifts into financial advice, medical or mental-health territory, 
 
 ## 7. Vagueness about money
 
-Not the price — the terms. What is included, what notice applies, what happens if it stops working. Discomfort with commercial specifics tends to be a general trait rather than a local one.
+Not the price. The terms. What is included, what notice applies, what happens if it stops working. Discomfort with commercial specifics tends to be a general trait rather than a local one.
 
 ## The one that is not a red flag
 
@@ -47,6 +47,6 @@ This reads as weakness and is the opposite. Careful language about outcomes usua
 
 ## Where directories fit in
 
-A ranking will not catch any of this for you. Ours certainly will not — CoachRank ranks by what a coach paid to appear, and we say so on every page precisely so nobody mistakes position for endorsement.
+A ranking will not catch any of this for you. Ours certainly will not. CoachRank ranks by what a coach paid to appear, and we say so on every page precisely so nobody mistakes position for endorsement.
 
 The seven signals above are things you can only see in a conversation. No list can do that part, and any list that implies it can has just given you an eighth red flag.

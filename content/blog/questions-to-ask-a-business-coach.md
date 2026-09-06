@@ -7,7 +7,7 @@ excerpt: The intro call is a two-way interview, and most people only play one si
 ctaCategory: business
 ---
 
-Most first calls with a coach are structured as a sales conversation with a discovery layer on top. That is reasonable — they are running a business. But it means the questions flow one way unless you bring your own.
+Most first calls with a coach are structured as a sales conversation with a discovery layer on top. That is reasonable. They are running a business. But it means the questions flow one way unless you bring your own.
 
 These nine are ordered roughly by how much they reveal per minute spent.
 
@@ -42,7 +42,7 @@ This is the actual job. Accountability is where coaching either works or quietly
 Covered in more depth in our piece on coaching costs, but worth repeating: a clear, unembarrassed answer here predicts a clear answer to everything else.
 
 **9. "What do you not do?"**
-Coaching sits next to therapy, consulting and advice that requires a licence. A coach who knows their boundary — and will say so — is a professional. A coach who claims a broad remit across financial, medical or legal territory is a risk, whatever their intentions.
+Coaching sits next to therapy, consulting and advice that requires a licence. A coach who knows their boundary, and will say so, is a professional. A coach who claims a broad remit across financial, medical or legal territory is a risk, whatever their intentions.
 
 ## What you are really testing
 
@@ -52,6 +52,6 @@ Coaching is a field with no protected title and enormous variance in practice. P
 
 ## And one about the directory
 
-If you found the coach through a list — including this one — ask how the list worked.
+If you found the coach through a list, including this one, ask how the list worked.
 
 On CoachRank the answer is public: position is bought, the amount is displayed, and nobody is vetted. Other directories may answer differently, or not at all. Either way it is worth knowing before you treat a ranking as a shortlist.

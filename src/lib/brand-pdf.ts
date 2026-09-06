@@ -2,7 +2,7 @@ import "server-only";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { brandReport, brandActionPlan, type BrandAnswers } from "./brand-assessment";
 
-const clean = (value: string) => value.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, "-").replace(/…/g, "...").replace(/[^\x20-\x7e\n]/g, " ");
+const clean = (value: string) => value.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[\u2013\u2014]/g, "-").replace(/…/g, "...").replace(/[^\x20-\x7e\n]/g, " ");
 
 export async function createBrandPdf(answers: BrandAnswers, completedAtMs: number, previous?: BrandAnswers, sample = false) {
   const report = brandReport(answers);

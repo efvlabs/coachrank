@@ -99,7 +99,7 @@ export function PostEditor({ post, saveAction, deleteAction }: Props) {
           </section>
           <section className="editor-panel"><p className="journal-label">Publishing checks</p>
             <ul className="editor-checklist"><li>{title.trim() ? "✓" : "○"} Clear headline</li><li>{excerpt.trim() ? "✓" : "○"} Standfirst</li><li>{/^##\s/m.test(body) ? "✓" : "○"} Descriptive section headings</li><li>{sources.length ? "✓" : "○"} Supporting sources where relevant</li><li>{!coverUrl || coverAlt ? "✓" : "○"} Cover image description</li></ul>
-            <p className="editor-hint">These checks support editing. They are not a ranking score or an assessment of factual quality.</p>
+            <p className="editor-hint">House style: no em dashes. Use periods, commas, colons or parentheses. These checks support editing; they are not a ranking score or an assessment of factual quality.</p>
           </section>
           <details className="editor-panel"><summary className="text-[14px] font-semibold">Optional rankings link</summary><label htmlFor="post-cta">Relevant coach category</label><select id="post-cta" name="ctaCategory" className="field" defaultValue={post?.ctaCategory || ""}><option value="">No rankings link</option>{CATEGORIES.map(category => <option key={category.slug} value={category.slug}>{category.label}</option>)}</select><p className="editor-hint">For articles about hiring a coach. Shown as a clearly labeled paid directory link.</p></details>
         </aside>

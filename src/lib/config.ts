@@ -26,7 +26,7 @@ export const SITE = {
   shortName: "CoachRank",
   tagline: "Celebrating greatness. Understanding what builds it.",
   /** Editorial identity; paid-board descriptions live on their own routes. */
-  title: "CoachRank — Celebrating Greatness",
+  title: "CoachRank | Celebrating Greatness",
   /** Link previews stay on the tagline; it is a hook, not an explanation. */
   description: "An independent editorial for ambitious people. Performance, business, creativity, growth and coaching.",
   searchDescription:

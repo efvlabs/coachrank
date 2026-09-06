@@ -20,7 +20,7 @@ The assessment is an original structured reflection exercise. Scores are not sci
 
 No sale, conversion rate or audience growth is guaranteed. The initial launch is a way to learn whether this particular promise earns a purchase.
 
-## X drafts — prepared, not posted
+## X drafts: prepared, not posted
 
 ### Editorial introduction
 
