@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   let answers = SAMPLE_ANSWERS, previous, previousAtMs;
   let date = Date.UTC(2026,8,6);
   if (!sample) {
-    const order = await currentAssessment();
+    const order = await currentAssessment(request);
     if (!order || order.status !== "paid") return jsonError("Open your private assessment before downloading.",403);
     const run = url.searchParams.has("run") ? Number(url.searchParams.get("run")) : reportCount(order)-1;
     const selected = await assessmentRun(order,run);

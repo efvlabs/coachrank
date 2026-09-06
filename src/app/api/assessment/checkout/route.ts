@@ -1,5 +1,5 @@
 import { jsonError, jsonOk, rateLimited, readJson } from "@/lib/api";
-import { currentAssessment, sameOriginRequest, setAssessmentAccess } from "@/lib/assessment-request";
+import { currentAssessment, preserveLegacyAssessmentPreview, sameOriginRequest, setAssessmentAccess } from "@/lib/assessment-request";
 import { assessmentProductId, createAssessmentCheckout, isAssessmentCheckoutConfigured } from "@/lib/dodo";
 import { attachAssessmentCheckout, createAssessmentOrder, markAssessmentFailed } from "@/lib/domain/assessments";
 
@@ -14,8 +14,9 @@ export async function POST(request: Request) {
   if (!isAssessmentCheckoutConfigured()) return jsonError("Checkout is temporarily unavailable. Your card has not been charged.", 503);
   let orderId: string | null = null;
   try {
+    await preserveLegacyAssessmentPreview();
     const existing = await currentAssessment();
-    if (existing?.status === "paid") return jsonOk({ checkoutUrl: "/tools/brand-clarity/assessment" });
+    if (existing?.status === "paid" && !existing.preview) return jsonOk({ checkoutUrl: "/tools/brand-clarity/assessment" });
     if (existing?.status === "pending" && existing.checkoutUrl && Date.now() - existing.createdAtMs < 15 * 60_000) return jsonOk({ checkoutUrl: existing.checkoutUrl });
     const { order, access } = await createAssessmentOrder(assessmentProductId()!);
     orderId = order.id;

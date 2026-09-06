@@ -1177,3 +1177,7 @@
 .social-indexing button { color:var(--accent); }
 @media(max-width:1000px) { .social-record-grid { grid-template-columns:1fr; } .social-playbook-grid { gap:14px; } .social-playbook-grid article { padding:22px; } }
 @media(max-width:600px) { .social-filters { flex-wrap:wrap; } .social-filters label:first-child { flex-basis:100%; } .social-filters label { flex:1; } .social-editor { padding:22px 16px; } .social-editor-heading { align-items:flex-start; } .social-editor-heading h2 { font-size:25px; } .social-editor-heading .tool-text-link { font-size:11px; } .social-form-grid,.social-playbook-grid,.social-indexing { grid-template-columns:1fr; gap:10px; } .social-form-actions { flex-wrap:wrap; gap:20px; } .social-record { padding:22px 18px; } .social-playbook-lead { padding:24px; } .social-distribution > article { flex-direction:column; align-items:flex-start; gap:14px; } .social-tracked-link { flex-direction:column; align-items:flex-start; gap:12px; } }
+
+.assessment-preview-actions { display:flex; flex-wrap:wrap; align-items:center; gap:14px 24px; }
+.assessment-preview-actions .tool-text-link { font-size:12px; }
+@media(max-width:700px) { .assessment-preview-actions { align-items:flex-start; gap:14px; flex-direction:column; } }

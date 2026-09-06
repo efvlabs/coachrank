@@ -12,7 +12,7 @@ export function AssessmentAccess() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Access could not be restored.");
       window.history.replaceState(null, "", window.location.pathname);
-      window.location.replace("/tools/brand-clarity/assessment");
+      window.location.replace(data.url || "/tools/brand-clarity/assessment");
     }).catch(error => { if (!controller.signal.aborted) setError(error.message); });
     return () => controller.abort();
   }, []);
