@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   if (!sameOriginRequest(request) || !await getAdminUser()) return jsonError("Admin sign-in required.", 403);
   await preserveLegacyAssessmentPreview();
   const existing = await assessmentSession("preview");
-  const { access } = existing ?? await createAssessmentPreview();
+  const access = existing?.access ?? (await createAssessmentPreview()).access;
   await setAssessmentAccess(access, "preview");
   return jsonOk({ url: "/tools/brand-clarity/assessment?preview=true" }, { headers: { "Cache-Control": "no-store" } });
 }

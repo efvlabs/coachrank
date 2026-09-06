@@ -1,0 +1,57 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+const jar = vi.hoisted(() => ({ values: new Map<string,string>(), set: vi.fn(), delete: vi.fn() }));
+const paymentRead = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/assessment-payment", () => ({reconcileAssessmentPayment:vi.fn(async()=>{})}));
+vi.mock("next/headers", () => ({ cookies: async () => ({ get: (key:string) => jar.values.has(key) ? {value:jar.values.get(key)} : undefined, set:jar.set, delete:jar.delete }) }));
+vi.mock("@/lib/customer-auth", () => ({ getCustomerUser:vi.fn() }));
+vi.mock("@/lib/admin-auth", () => ({ getAdminUser:vi.fn(async()=>null) }));
+vi.mock("@/lib/firebase/admin", async () => { const {fakeDb}=await import("./fake-firestore");return {requireDb:()=>fakeDb}; });
+vi.mock("@/lib/brand-pdf", () => ({createBrandPdf:vi.fn(async()=>new Uint8Array([37,80,68,70]))}));
+vi.mock("@/lib/dodo", async importOriginal => ({...await importOriginal<typeof import("@/lib/dodo")>(),assessmentProductId:()=>"brand-product",isAssessmentCheckoutConfigured:()=>true,createAssessmentCheckout:vi.fn(async()=>({checkoutUrl:"https://checkout.dodopayments.com/test",sessionId:"checkout-fixture"})),requireDodoClient:()=>({payments:{retrieve:paymentRead}})}));
+import {getCustomerUser} from "@/lib/customer-auth";
+import {createAssessmentCheckout} from "@/lib/dodo";
+import {ASSESSMENT_COOKIE,createAssessmentOrder,createAssessmentPreview,processVerifiedAssessmentPayment,updateAssessment,customerAssessmentOrders} from "@/lib/domain/assessments";
+import {POST as checkout} from "@/app/api/assessment/checkout/route";
+import {GET as read,POST as save} from "@/app/api/assessment/route";
+import {GET as history} from "@/app/api/assessment/history/route";
+import {GET as pdf} from "@/app/api/assessment/report/route";
+import {POST as restore} from "@/app/api/assessment/access/route";
+import {POST as claim} from "@/app/api/account/claim/route";
+import {SAMPLE_ANSWERS} from "@/lib/brand-assessment";
+import {fakeDb} from "./fake-firestore";
+import {lockCustomerCheckout} from "@/lib/domain/customer-checkout";
+import {customerReturnPath} from "@/lib/customer-links";
+const alice={uid:"alice",email:"alice@example.com",name:"Alice"},bob={uid:"bob",email:"bob@example.com",name:"Bob"};
+let sequence=0;
+const request=(path:string,body?:object,origin="https://coachrank.lol")=>new Request(`https://coachrank.lol${path}`,{method:body?"POST":"GET",headers:{origin,"content-type":"application/json","x-forwarded-for":`customer-test-${++sequence}`},...(body?{body:JSON.stringify(body)}:{})});
+async function purchase(owner?:typeof alice){const p=await createAssessmentOrder("brand-product",owner);await processVerifiedAssessmentPayment({orderId:p.order.id,dodoPaymentId:`pay_${p.order.id}`,paidNetCents:900,productCart:[{product_id:"brand-product",quantity:1}]});return p;}
+function receipt(p:Awaited<ReturnType<typeof purchase>>,email=alice.email){return {payment_id:`pay_${p.order.id}`,status:"succeeded",customer:{email},metadata:{cr_kind:"assessment",cr_payment_id:p.order.id},currency:"USD",total_amount:900,tax:0,product_cart:[{product_id:"brand-product",quantity:1}]};}
+beforeEach(()=>{fakeDb.reset();jar.values.clear();vi.clearAllMocks();jar.set.mockImplementation((key:string,value:string)=>jar.values.set(key,value));jar.delete.mockImplementation((key:string)=>jar.values.delete(key));vi.mocked(getCustomerUser).mockResolvedValue(alice);});
+
+describe("customer purchase ownership",()=>{
+ it("requires sign-in before creating an order or opening Dodo",async()=>{vi.mocked(getCustomerUser).mockResolvedValue(null);const r=await checkout(request("/api/assessment/checkout",{acceptedTerms:true}));expect(r.status).toBe(401);expect((await r.json()).signInUrl).toContain("/sign-in");expect(fakeDb.all("assessmentOrders")).toHaveLength(0);expect(createAssessmentCheckout).not.toHaveBeenCalled();});
+ it("uses the verified customer, ignoring submitted owner fields",async()=>{const r=await checkout(request("/api/assessment/checkout",{acceptedTerms:true,ownerUid:bob.uid,email:bob.email}));expect(r.status).toBe(200);expect(fakeDb.all("assessmentOrders")[0].doc).toMatchObject({ownerUid:alice.uid,ownerEmail:alice.email,preview:false,status:"pending"});expect(createAssessmentCheckout).toHaveBeenCalledWith(expect.any(String),"brand-product",alice);});
+ it("restores purchases and completed reports with only an account session",async()=>{const p=await purchase(alice);await updateAssessment(p.order.id,0,"complete",SAMPLE_ANSWERS);const r=await read(request("/api/assessment"));const d=await r.json();expect(d.order).toMatchObject({id:p.order.id,accountLinked:true,completedCount:1});expect(d.accessLink).toBeUndefined();expect((await history(request(`/api/assessment/history?order=${p.order.id}`))).status).toBe(200);expect((await pdf(request(`/api/assessment/report?order=${p.order.id}`))).status).toBe(200);});
+ it("rejects another customer even with a copied legacy token",async()=>{const p=await purchase(alice);jar.values.set(ASSESSMENT_COOKIE,p.access);vi.mocked(getCustomerUser).mockResolvedValue(bob);expect((await read(request(`/api/assessment?order=${p.order.id}`))).status).toBe(401);expect((await save(request(`/api/assessment?order=${p.order.id}`,{action:"complete",revision:0,payload:SAMPLE_ANSWERS}))).status).toBe(401);expect((await history(request(`/api/assessment/history?order=${p.order.id}`))).status).toBe(403);expect((await pdf(request(`/api/assessment/report?order=${p.order.id}`))).status).toBe(403);expect((await restore(request("/api/assessment/access",{access:p.access}))).status).toBe(403);});
+ it("requires account sign-in for an owned private link",async()=>{const p=await purchase(alice);jar.values.set(ASSESSMENT_COOKIE,p.access);vi.mocked(getCustomerUser).mockResolvedValue(null);expect((await read(request("/api/assessment"))).status).toBe(401);const r=await restore(request("/api/assessment/access",{access:p.access}));expect((await r.json()).url).toContain("/sign-in?next=");});
+ it("never falls back to another report when a requested order does not belong to the user",async()=>{await purchase(alice);const other=await purchase(bob);expect((await read(request(`/api/assessment?order=${other.order.id}`))).status).toBe(401);expect((await read(request("/api/assessment?order=invalid"))).status).toBe(401);});
+ it("keeps account libraries private and excludes previews",async()=>{const p=await purchase(alice);await purchase(bob);await createAssessmentPreview();expect((await customerAssessmentOrders(alice.uid)).map(o=>o.id)).toEqual([p.order.id]);});
+ it("does not send an owner back to checkout, even if a newer unpaid order cookie exists",async()=>{const p=await purchase(alice);const pending=await createAssessmentOrder("brand-product",alice);jar.values.set(ASSESSMENT_COOKIE,pending.access);const r=await checkout(request("/api/assessment/checkout",{acceptedTerms:true}));expect((await r.json()).checkoutUrl).toBe(`/tools/brand-clarity/assessment?order=${p.order.id}`);expect(createAssessmentCheckout).not.toHaveBeenCalled();});
+ it("resumes the same pending checkout on a second device",async()=>{await checkout(request("/api/assessment/checkout",{acceptedTerms:true}));jar.values.clear();const r=await checkout(request("/api/assessment/checkout",{acceptedTerms:true}));expect(r.status).toBe(200);expect(fakeDb.all("assessmentOrders")).toHaveLength(1);expect(createAssessmentCheckout).toHaveBeenCalledOnce();});
+ it("serializes checkout starts and releases only its own lease",async()=>{const release=await lockCustomerCheckout(alice.uid);expect(release).not.toBeNull();expect(await lockCustomerCheckout(alice.uid)).toBeNull();expect((await checkout(request("/api/assessment/checkout",{acceptedTerms:true}))).status).toBe(409);await release!();expect(await lockCustomerCheckout(alice.uid)).not.toBeNull();});
+});
+
+describe("legacy purchase recovery",()=>{
+ it("connects an existing private link without losing answers or reports",async()=>{const p=await purchase();await updateAssessment(p.order.id,0,"complete",SAMPLE_ANSWERS);const r=await claim(request("/api/account/claim",{access:`https://coachrank.lol/tools/brand-clarity/access#${p.access}`}));expect(r.status).toBe(200);expect(fakeDb.peek("assessmentOrders",p.order.id)).toMatchObject({ownerUid:alice.uid,completedCount:1,revision:1});jar.values.clear();expect((await (await read(request("/api/assessment"))).json()).order.completedCount).toBe(1);jar.values.set(ASSESSMENT_COOKIE,p.access);vi.mocked(getCustomerUser).mockResolvedValue(null);expect((await read(request("/api/assessment"))).status).toBe(401);});
+ it("requires sign-in and same-origin requests to claim",async()=>{expect((await claim(request("/api/account/claim",{},"https://evil.example"))).status).toBe(403);vi.mocked(getCustomerUser).mockResolvedValue(null);expect((await claim(request("/api/account/claim",{}))).status).toBe(401);});
+ it("never converts an admin preview or unpaid order into customer ownership",async()=>{for(const p of [await createAssessmentPreview(),await createAssessmentOrder("brand-product")])expect((await claim(request("/api/account/claim",{access:p.access}))).status).toBe(403);});
+ it("does not transfer an already owned purchase",async()=>{const p=await purchase(bob);const r=await claim(request("/api/account/claim",{access:p.access}));expect(r.status).toBe(403);expect(fakeDb.peek("assessmentOrders",p.order.id)?.ownerUid).toBe(bob.uid);});
+ it("recovers a paid receipt only when Dodo email matches the verified account",async()=>{const p=await purchase();paymentRead.mockResolvedValue(receipt(p,bob.email));expect((await claim(request("/api/account/claim",{receipt:`pay_${p.order.id}`,email:bob.email}))).status).toBe(403);paymentRead.mockResolvedValue(receipt(p,"ALICE@example.com"));expect((await claim(request("/api/account/claim",{receipt:`pay_${p.order.id}`}))).status).toBe(200);expect(fakeDb.peek("assessmentOrders",p.order.id)?.ownerUid).toBe(alice.uid);});
+ it("rejects refunded, wrong-product and mismatched-payment receipts",async()=>{const p=await purchase();for(const change of [{status:"refunded"},{product_cart:[{product_id:"another-product",quantity:1}]},{payment_id:"pay_another"},{total_amount:100},{metadata:{cr_kind:"bid",cr_payment_id:p.order.id}}]){paymentRead.mockResolvedValue({...receipt(p),...change});expect((await claim(request("/api/account/claim",{receipt:`pay_${p.order.id}`}))).status).toBe(403);}});
+ it("blocks a stale unowned write if another request connected the purchase",async()=>{const p=await purchase();await claim(request("/api/account/claim",{access:p.access}));await expect(updateAssessment(p.order.id,0,"save",SAMPLE_ANSWERS,null)).rejects.toThrow("connected to an account");});
+ it("rejects private links on unrelated domains",async()=>{const p=await purchase();expect((await claim(request("/api/account/claim",{access:`https://evil.example/tools/brand-clarity/access#${p.access}`}))).status).toBe(400);});
+});
+
+describe("sign-in destinations",()=>{
+ it("allows only intentional local destinations",()=>{for(const value of ["https://evil.example","//evil.example","/\\evil.example","/admin","/sign-in","/%2f%2fevil.example","/my-tools\r\nLocation:evil"]){expect(customerReturnPath(value)).toBe("/my-tools");}expect(customerReturnPath("/tools/brand-clarity#get-assessment")).toBe("/tools/brand-clarity#get-assessment");expect(customerReturnPath("/tools/brand-clarity/assessment?preview=true&order="+"a".repeat(32))).toBe("/tools/brand-clarity/assessment?order="+"a".repeat(32));});
+});

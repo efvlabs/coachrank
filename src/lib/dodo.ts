@@ -71,16 +71,17 @@ export function isAssessmentCheckoutConfigured(): boolean {
   return !paymentsDisabled() && Boolean(process.env.DODO_PAYMENTS_API_KEY && process.env.DODO_PAYMENTS_WEBHOOK_KEY && assessmentProductId());
 }
 
-export async function createAssessmentCheckout(orderId: string, productId: string): Promise<CheckoutResult> {
+export async function createAssessmentCheckout(orderId: string, productId: string, customer?: { email: string; name?: string | null }): Promise<CheckoutResult> {
   const session = await requireDodoClient().checkoutSessions.create({
     product_cart: [{ product_id: productId, quantity: 1 }],
     billing_currency: "USD",
     metadata: { cr_payment_id: orderId, cr_kind: "assessment", cr_amount_cents: BRAND_ASSESSMENT.priceCents },
-    return_url: absoluteUrl("/tools/brand-clarity/assessment?checkout=returned"),
+    return_url: absoluteUrl(`/tools/brand-clarity/assessment?checkout=returned&order=${orderId}`),
     cancel_url: absoluteUrl("/tools/brand-clarity?checkout=cancelled"),
     feature_flags: { allow_discount_code: false, allow_currency_selection: false },
     customization: { show_order_details: true, theme: "system" },
-  });
+    customer: customer ? { email: customer.email, name: customer.name ?? undefined } : undefined,
+  }, { timeout: 20_000, maxRetries: 0 });
   if (!session.checkout_url) throw new Error("Dodo returned no checkout URL.");
   return { checkoutUrl: session.checkout_url, sessionId: session.session_id };
 }

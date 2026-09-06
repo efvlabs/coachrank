@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/rankings", label: "Rankings" },
   { href: "/categories", label: "Categories" },
   { href: "/tools", label: "Tools" },
+  { href: "/my-tools", label: "My tools / Sign in" },
 ] as const;
 
 export function MobileMenu() {

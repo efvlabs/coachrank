@@ -1,0 +1,24 @@
+import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { getCustomerUser } from "@/lib/customer-auth";
+import { ASSESSMENT_COOKIE, authorizedAssessment, customerAssessmentOrders, reportCount } from "@/lib/domain/assessments";
+import { ConnectPurchase, CustomerSignOut } from "@/components/CustomerAccountActions";
+import { customerSignInUrl } from "@/lib/customer-links";
+
+export const dynamic = "force-dynamic";
+export const metadata = { title: "My tools", robots: { index: false, follow: false }, referrer: "no-referrer" as const, alternates: { canonical: "/my-tools" } };
+
+export default async function MyToolsPage() {
+  const user = await getCustomerUser();
+  if (!user) redirect(customerSignInUrl());
+  const orders = await customerAssessmentOrders(user.uid);
+  const legacy = await authorizedAssessment((await cookies()).get(ASSESSMENT_COOKIE)?.value);
+  const hasLegacy = Boolean(legacy && !legacy.ownerUid && !legacy.preview && legacy.status === "paid");
+  const paid = orders.filter(order => order.status === "paid");
+  const pending = paid.length ? [] : orders.filter(order => order.status === "pending").slice(0,1);
+  const visible = [...paid, ...pending];
+  return <div className="account-shell account-library"><header className="account-library-header"><div><p className="journal-label">Your CoachRank workspace</p><h1>Good to have<br/><em>you back.</em></h1><p>Your tools. Your reports. Your next step.</p></div><div className="account-identity"><span className="account-avatar" aria-hidden="true">{(user.name || user.email).slice(0,1).toUpperCase()}</span><p><span>Signed in as</span><strong>{user.email}</strong></p><CustomerSignOut/></div></header><div className="account-library-heading"><h2>My tools<span className="accent-dot">.</span></h2><span>{paid.length ? `${paid.length} ${paid.length === 1 ? "purchase" : "purchases"} · ${paid.reduce((sum, order) => sum + reportCount(order), 0)} saved reports` : "A place for your next chapter"}</span></div>
+    {visible.length ? <div className="account-tool-grid">{visible.map(order => <article key={order.id} className="account-tool-card"><div className="account-tool-art" aria-hidden="true"><span>BRAND<br/>CLARITY<span className="accent-dot">.</span></span><span>01</span><svg viewBox="0 0 220 180"><path d="M110 12 183 54v84l-73 42-73-42V54Z M110 12v168 M37 54l146 84 M183 54 37 138" fill="none" stroke="currentColor" strokeOpacity=".22"/><path d="m110 46 61 16-14 61-47 32-48-40 13-52Z" fill="currentColor" fillOpacity=".18" stroke="currentColor" strokeWidth="3"/></svg></div><div className="account-tool-body"><p className="journal-label">{order.status === "paid" ? "Purchased · Lifetime access" : "Awaiting payment confirmation"}</p><h3>Brand Clarity Assessment</h3><p>{order.status === "paid" ? "Your six dimensions, three next moves and a seven-day plan. Return whenever you have new evidence." : "If you have already paid, check your access below. You do not need to pay again."}</p><div className="account-tool-meta"><span>{reportCount(order)} saved {reportCount(order) === 1 ? "report" : "reports"}</span><span>{order.status === "paid" ? "Unlimited retakes" : "$9 · One-time purchase"}</span></div><Link className="tool-button" href={`/tools/brand-clarity/assessment?order=${order.id}`}>{order.status !== "paid" ? "Check payment and access →" : reportCount(order) && order.answers === null ? "Open reports and retake →" : Object.keys(order.answers ?? {}).length ? "Continue assessment →" : "Start your assessment →"}</Link>{order.status === "pending" && <Link className="tool-text-link" href="/tools/brand-clarity#get-assessment">Payment not completed? Return to checkout</Link>}<p className="tool-tax-note">Order reference: {order.id}</p></div></article>)}</div> : <section className="account-empty"><span className="account-empty-symbol" aria-hidden="true">↗</span><div><p className="journal-label">Your first tool starts here</p><h3>A clearer view.<br/>A useful next move.</h3><p>{orders.some(order => order.status === "reversed") ? "Your earlier payment was refunded or reversed, so that purchase is no longer active. Contact us if you need help." : "Your account is ready. Purchase Brand Clarity once and keep your reports, retakes and comparisons together here."}</p><Link className="tool-button" href="/tools/brand-clarity">Explore Brand Clarity · $9 ↗</Link><Link className="tool-text-link" href="/tools/brand-clarity/sample">See a sample report first</Link></div></section>}
+    <ConnectPurchase saved={hasLegacy}/><section className="account-return-note"><span aria-hidden="true">∞</span><div><h3>A new device. The same workspace.</h3><p>Sign in with {user.email} using Google or a fresh email link to find your purchases and reports. Signing out does not delete anything you have saved.</p></div></section></div>;
+}

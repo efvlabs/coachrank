@@ -8,10 +8,10 @@ const headers = { "Cache-Control": "private, no-store" };
 
 export async function GET(request: Request) {
   if (rateLimited(request, "assessment-read", 90, 60_000)) return jsonError("Please wait before checking again.", 429);
-  const session = await assessmentSession(assessmentMode(request));
-  if (!session) return jsonError(assessmentMode(request) === "preview" ? "Sign in to CoachRank Studio and open the admin preview to continue." : "Open your private access link or purchase the assessment to continue.", 401);
+  const session = await assessmentSession(assessmentMode(request), new URL(request.url).searchParams.get("order") ?? undefined);
+  if (!session) return jsonError(assessmentMode(request) === "preview" ? "Sign in to CoachRank Studio and open the admin preview to continue." : "Sign in to the account connected to your purchase, or open your earlier private access link.", 401);
   const { order, access } = session;
-  return jsonOk({ order: assessmentView(order), ...(order.status === "paid" ? { accessLink: `/tools/brand-clarity/access#${access}` } : {}) }, { headers });
+  return jsonOk({ order: assessmentView(order), ...(order.status === "paid" && access && !order.ownerUid ? { accessLink: `/tools/brand-clarity/access#${access}` } : {}) }, { headers });
 }
 
 export async function POST(request: Request) {
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const body = await readJson<{ revision?: number; action?: string; payload?: unknown }>(request);
   if (!body || !Number.isInteger(body.revision) || typeof body.action !== "string") return jsonError("Invalid assessment request.");
   try {
-    const result = await updateAssessment(order.id, body.revision!, body.action, body.payload);
+    const result = await updateAssessment(order.id, body.revision!, body.action, body.payload, order.ownerUid ?? null);
     return jsonOk({ order: result }, { headers });
   } catch (error) {
     if (error instanceof AssessmentError) return jsonError(error.message, error.status);

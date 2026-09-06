@@ -1,0 +1,22 @@
+import {beforeEach,describe,expect,it,vi} from "vitest";
+const jar=vi.hoisted(()=>({values:new Map<string,string>(),set:vi.fn(),delete:vi.fn()}));
+const auth=vi.hoisted(()=>({verifyIdToken:vi.fn(),createSessionCookie:vi.fn(),verifySessionCookie:vi.fn()}));
+vi.mock("next/headers",()=>({cookies:async()=>({get:(key:string)=>jar.values.has(key)?{value:jar.values.get(key)}:undefined,set:jar.set,delete:jar.delete})}));
+vi.mock("@/lib/firebase/admin",()=>({getAdminAuth:()=>auth}));
+vi.mock("@/lib/assessment-request",()=>({sameOriginRequest:(r:Request)=>r.headers.get("origin")==="https://coachrank.lol"}));
+import {GET,POST,DELETE} from "@/app/api/account/session/route";
+import {CUSTOMER_COOKIE,getCustomerUser} from "@/lib/customer-auth";
+let count=0;
+const request=(method="POST",origin="https://coachrank.lol",body:object={idToken:"test-id-token"})=>new Request("https://coachrank.lol/api/account/session",{method,headers:{origin,"content-type":"application/json","x-forwarded-for":`auth-test-${++count}`},...(method==="POST"?{body:JSON.stringify(body)}:{})});
+const decoded=()=>({uid:"alice",email:"alice@example.com",email_verified:true,name:"Alice",auth_time:Date.now()/1000});
+beforeEach(()=>{vi.clearAllMocks();jar.values.clear();jar.set.mockImplementation((k:string,v:string)=>jar.values.set(k,v));jar.delete.mockImplementation((k:string)=>jar.values.delete(k));auth.verifyIdToken.mockResolvedValue(decoded());auth.createSessionCookie.mockResolvedValue("opaque-customer-session");auth.verifySessionCookie.mockResolvedValue(decoded());});
+describe("customer authentication boundary",()=>{
+ it("exchanges a recently verified ID token for a separate http-only session",async()=>{const r=await POST(request());expect(r.status).toBe(200);expect(jar.set).toHaveBeenCalledWith(CUSTOMER_COOKIE,"opaque-customer-session",expect.objectContaining({httpOnly:true,sameSite:"lax",maxAge:14*86400,path:"/"}));expect(auth.verifyIdToken).toHaveBeenCalledWith("test-id-token",true);expect(jar.values.has("cr_admin")).toBe(false);});
+ it("rejects unverified email, stale auth and future timestamps",async()=>{for(const change of [{email_verified:false},{email:undefined},{auth_time:Date.now()/1000-600},{auth_time:Date.now()/1000+600},{auth_time:undefined}]){auth.verifyIdToken.mockResolvedValue({...decoded(),...change});expect((await POST(request())).status).toBeGreaterThanOrEqual(400);}expect(auth.createSessionCookie).not.toHaveBeenCalled();});
+ it("rejects forged and revoked tokens without logging credentials",async()=>{auth.verifyIdToken.mockRejectedValue(new Error("credential-secret"));const r=await POST(request());expect(r.status).toBe(401);expect(JSON.stringify(await r.json())).not.toContain("credential-secret");expect(jar.set).not.toHaveBeenCalled();});
+ it("rejects cross-origin login and logout",async()=>{expect((await POST(request("POST","https://evil.example"))).status).toBe(403);expect((await DELETE(request("DELETE","https://evil.example"))).status).toBe(403);expect(auth.verifyIdToken).not.toHaveBeenCalled();expect(jar.delete).not.toHaveBeenCalled();});
+ it("does not accept browser-supplied identity",async()=>{const r=await POST(request("POST","https://coachrank.lol",{uid:"alice",email:"alice@example.com"}));expect(r.status).toBe(400);expect(auth.createSessionCookie).not.toHaveBeenCalled();});
+ it("rechecks session revocation and email verification",async()=>{jar.values.set(CUSTOMER_COOKIE,"session");expect(await getCustomerUser()).toMatchObject({uid:"alice"});expect(auth.verifySessionCookie).toHaveBeenCalledWith("session",true);auth.verifySessionCookie.mockRejectedValue(new Error("revoked"));expect(await getCustomerUser()).toBeNull();auth.verifySessionCookie.mockResolvedValue({...decoded(),email_verified:false});expect(await getCustomerUser()).toBeNull();});
+ it("clears customer access on sign-out without touching Studio or its preview",async()=>{jar.values.set(CUSTOMER_COOKIE,"session");jar.values.set("cr_brand_access","access");jar.values.set("cr_admin","admin");jar.values.set("cr_brand_preview","preview");expect((await DELETE(request("DELETE"))).status).toBe(200);expect(jar.values.has(CUSTOMER_COOKIE)).toBe(false);expect(jar.values.has("cr_brand_access")).toBe(false);expect(jar.values.get("cr_admin")).toBe("admin");expect(jar.values.get("cr_brand_preview")).toBe("preview");});
+ it("keeps identity responses out of caches",async()=>{const r=await GET();expect(r.headers.get("cache-control")).toBe("private, no-store");expect((await r.json()).user).toBeNull();});
+});

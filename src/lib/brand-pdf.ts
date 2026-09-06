@@ -134,8 +134,8 @@ export async function createBrandPdf(answers: BrandAnswers, completedAtMs: numbe
   paragraph("The bands - below 40, 40-69 and 70-100 - are CoachRank's editorial guide to prioritization. They are not validated clinical or psychometric thresholds. This original business self-assessment reflects your answers, not an independent audit or a comparison with other businesses.");
   paragraph("A higher score means you reported more established practices. It does not guarantee customer demand, more revenue or stronger performance. Keep the underlying examples and look for evidence that challenges your assumptions.");
   rule(); heading("Revisit with new evidence.",23);
-  paragraph("Your purchase includes lifetime access and unlimited personal retakes while CoachRank operates the service. Use your private access link to return, keep every report and compare any two saved reports side by side. Download your PDFs to keep your own copies.");
-  paragraph("Keep your private access link and this report safe. Anyone with the link can view your assessment. If you need help restoring access, contact contact@coachrank.lol with your Dodo payment receipt. Never send card details.");
+  paragraph("Your purchase includes lifetime access and unlimited personal retakes while CoachRank operates the service. Sign in at coachrank.lol/my-tools with the email connected to your purchase to return, keep every report and compare any two saved reports side by side. Download your PDFs to keep your own copies.");
+  paragraph("Use Google or a fresh email sign-in link to open your account on any device. Earlier purchases can be connected in My tools using a private access link or a Dodo payment ID. Keep unconnected private links and this report safe. For help, contact contact@coachrank.lol with your receipt. Never send card details.");
   rule(); paragraph("Celebrating greatness. Understanding what builds it.",17,true,accent);
   paragraph("CoachRank is an independent editorial for ambitious people. Explore performance, business, creativity, growth and coaching at coachrank.lol.");
   for (const [index,current] of pdf.getPages().entries()) {

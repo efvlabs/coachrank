@@ -30,6 +30,7 @@ export function isClientFirebaseConfigured(): boolean {
 let appPromise: Promise<FirebaseApp | null> | null = null;
 let dbPromise: Promise<Firestore | null> | null = null;
 let authPromise: Promise<Auth | null> | null = null;
+let customerAuthPromise: Promise<Auth | null> | null = null;
 
 /**
  * The Firebase web SDK is ~180 KiB and only two surfaces need it - the live activity feed
@@ -88,4 +89,18 @@ export function getClientAuth(): Promise<Auth | null> {
     }
   })();
   return authPromise;
+}
+
+/** Separate in-memory identity exchange: customer sign-in never changes Studio auth. */
+export function getCustomerAuth(): Promise<Auth | null> {
+  if (!isClientFirebaseConfigured()) return Promise.resolve(null);
+  customerAuthPromise ??= (async () => {
+    const [{ getApps, initializeApp }, { getAuth, setPersistence, inMemoryPersistence, connectAuthEmulator }] = await Promise.all([import("firebase/app"), import("firebase/auth")]);
+    const app = getApps().find(app => app.name === "coachrank-customer") ?? initializeApp(config as Required<typeof config>, "coachrank-customer");
+    const auth = getAuth(app);
+    if (AUTH_EMULATOR) connectAuthEmulator(auth, AUTH_EMULATOR.startsWith("http") ? AUTH_EMULATOR : `http://${AUTH_EMULATOR}`, { disableWarnings: true });
+    await setPersistence(auth, inMemoryPersistence);
+    return auth;
+  })();
+  return customerAuthPromise;
 }

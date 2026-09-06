@@ -1,13 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const cookieState = vi.hoisted(() => ({ values: new Map<string, string>(), set: vi.fn(), delete: vi.fn() }));
+vi.mock("@/lib/assessment-payment", () => ({reconcileAssessmentPayment:vi.fn(async()=>{})}));
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: (name: string) => cookieState.values.has(name) ? { value: cookieState.values.get(name) } : undefined, set: cookieState.set, delete: cookieState.delete }) }));
 vi.mock("@/lib/brand-pdf", () => ({ createBrandPdf: vi.fn(async () => new Uint8Array([37, 80, 68, 70])) }));
+vi.mock("@/lib/customer-auth", () => ({ getCustomerUser: vi.fn() }));
 vi.mock("@/lib/admin-auth", () => ({ getAdminUser: vi.fn() }));
 vi.mock("@/lib/firebase/admin", async () => { const { fakeDb } = await import("./fake-firestore"); return { requireDb: () => fakeDb }; });
 vi.mock("@/lib/dodo", () => ({ assessmentProductId: () => "brand-product", isAssessmentCheckoutConfigured: () => true, createAssessmentCheckout: vi.fn() }));
 
 import { createBrandPdf } from "@/lib/brand-pdf";
+import { getCustomerUser } from "@/lib/customer-auth";
 import { getAdminUser } from "@/lib/admin-auth";
 import { createAssessmentCheckout } from "@/lib/dodo";
 import { ASSESSMENT_PREVIEW_COOKIE, assessmentSession, preserveLegacyAssessmentPreview, setAssessmentAccess } from "@/lib/assessment-request";
@@ -30,6 +33,7 @@ async function purchase() {
 }
 beforeEach(() => {
   fakeDb.reset(); cookieState.values.clear(); vi.clearAllMocks();
+  vi.mocked(getCustomerUser).mockResolvedValue({ uid: "buyer", email: "buyer@example.com", name: null });
   cookieState.set.mockImplementation((name: string, value: string) => cookieState.values.set(name, value));
   cookieState.delete.mockImplementation((name: string) => cookieState.values.delete(name));
   vi.mocked(getAdminUser).mockResolvedValue({ uid: "admin", email: "admin@example.com" });
@@ -77,7 +81,7 @@ describe("separate customer and admin preview sessions", () => {
     const paid = await purchase(), preview = await createAssessmentPreview();
     await setAssessmentAccess(paid.access); await setAssessmentAccess(preview.access, "preview");
     const response = await checkout(request("/api/assessment/checkout", { acceptedTerms: true }));
-    expect((await response.json()).checkoutUrl).toBe("/tools/brand-clarity/assessment");
+    expect((await response.json()).checkoutUrl).toBe(`/tools/brand-clarity/assessment?order=${paid.order.id}`);
     expect(createAssessmentCheckout).not.toHaveBeenCalled();
     expect(cookieState.values.get(ASSESSMENT_COOKIE)).toBe(paid.access);
   });

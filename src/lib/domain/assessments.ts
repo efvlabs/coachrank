@@ -8,6 +8,8 @@ import { COLLECTIONS } from "./collections";
 export const ASSESSMENT_COOKIE = "cr_brand_access";
 export type AssessmentOrder = {
   id: string;
+  ownerUid?: string;
+  ownerEmail?: string;
   accessHash: string;
   productId: string;
   priceCents: number;
@@ -30,7 +32,7 @@ export type AssessmentOrder = {
 const hash = (token: string) => createHash("sha256").update(token).digest("hex");
 const orders = () => requireDb().collection(COLLECTIONS.assessmentOrders);
 
-async function createOrder(productId: string, preview: boolean) {
+async function createOrder(productId: string, preview: boolean, owner?: { uid: string; email: string }) {
   const id = randomBytes(16).toString("hex");
   const token = randomBytes(32).toString("hex");
   const now = Date.now();
@@ -39,12 +41,13 @@ async function createOrder(productId: string, preview: boolean) {
     status: preview ? "paid" : "pending", preview, checkoutUrl: null, dodoSessionId: null,
     dodoPaymentId: null, createdAtMs: now, paidAtMs: preview ? now : null, acceptedTermsAtMs: now,
     version: BRAND_ASSESSMENT.version, revision: 0, answers: {}, completed: [], completedCount: 0, feedback: null,
+    ...(owner && !preview ? { ownerUid: owner.uid, ownerEmail: owner.email } : {}),
   };
   await orders().doc(id).set(order);
   return { order, access: `${id}.${token}` };
 }
 
-export const createAssessmentOrder = (productId: string) => createOrder(productId, false);
+export const createAssessmentOrder = (productId: string, owner?: { uid: string; email: string }) => createOrder(productId, false, owner);
 /** This entry point is called only by the authenticated admin preview route. */
 export const createAssessmentPreview = () => createOrder("admin-preview", true);
 
@@ -58,6 +61,36 @@ export async function authorizedAssessment(access: string | undefined): Promise<
   const incoming = Buffer.from(hash(token), "hex");
   if (stored.length !== incoming.length || !timingSafeEqual(stored, incoming)) return null;
   return hydrateReports(order);
+}
+
+export async function customerAssessmentOrders(uid: string): Promise<AssessmentOrder[]> {
+  const snap = await orders().where("ownerUid", "==", uid).get();
+  return snap.docs.map(doc => doc.data() as AssessmentOrder).filter(order => !order.preview).sort((a,b) => b.createdAtMs - a.createdAtMs);
+}
+
+export async function customerAssessment(uid: string, id?: string): Promise<AssessmentOrder | null> {
+  if (id !== undefined) {
+    if (!/^[a-f0-9]{32}$/.test(id)) return null;
+    const doc = await orders().doc(id).get();
+    const order = doc.data() as AssessmentOrder | undefined;
+    return order && !order.preview && order.ownerUid === uid ? hydrateReports(order) : null;
+  }
+  const all = await customerAssessmentOrders(uid);
+  const order = all.find(order => order.status === "paid") ?? all.find(order => order.status === "pending") ?? all[0];
+  return order ? hydrateReports(order) : null;
+}
+
+/** Only call after verifying a legacy private link or the payer's receipt and email. */
+export async function claimAssessment(id: string, owner: { uid: string; email: string }) {
+  return requireDb().runTransaction(async tx => {
+    const ref = orders().doc(id);
+    const snap = await tx.get(ref);
+    const order = snap.data() as AssessmentOrder | undefined;
+    if (!order || order.preview || order.status !== "paid") throw new AssessmentError("We could not connect this purchase. Contact support with your receipt.", 403);
+    if (order.ownerUid && order.ownerUid !== owner.uid) throw new AssessmentError("This purchase is already connected to another account. Sign in with the account used for your purchase.", 403);
+    tx.update(ref, { ownerUid: owner.uid, ownerEmail: owner.email });
+    return order.id;
+  });
 }
 
 export type AssessmentRun = { answers: BrandAnswers; completedAtMs: number; index: number };
@@ -85,6 +118,7 @@ export async function assessmentRun(order: AssessmentOrder, index: number): Prom
 export function assessmentView(order: AssessmentOrder) {
   return {
     id: order.id, status: order.status, preview: order.preview, revision: order.revision,
+    accountLinked: Boolean(order.ownerUid),
     answers: order.status === "paid" ? order.answers : null,
     completed: order.status === "paid" ? order.completed.map((run,index)=>({...run,index:run.index ?? index})) : [],
     completedCount: order.status === "paid" ? reportCount(order) : 0,
@@ -152,13 +186,14 @@ export class AssessmentError extends Error {
   constructor(message: string, readonly status = 400) { super(message); }
 }
 
-export async function updateAssessment(id: string, revision: number, action: string, payload: unknown) {
+export async function updateAssessment(id: string, revision: number, action: string, payload: unknown, expectedOwner?: string | null) {
   const db = requireDb();
   const ref = orders().doc(id);
   const updated = await db.runTransaction(async tx => {
     const snap = await tx.get(ref);
     if (!snap.exists) throw new AssessmentError("Assessment not found.", 404);
     const order = snap.data() as AssessmentOrder;
+    if (expectedOwner !== undefined && (order.ownerUid ?? null) !== expectedOwner) throw new AssessmentError("This purchase was connected to an account. Sign in and reopen it from My tools.", 403);
     if (order.status !== "paid") throw new AssessmentError("Verified payment is required.", 403);
     if (revision !== order.revision) throw new AssessmentError("Your assessment changed in another tab. Reload to continue with the saved version.", 409);
     const patch: Partial<AssessmentOrder> = { revision: order.revision + 1 };

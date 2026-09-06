@@ -8,7 +8,7 @@ function radarPoint(index: number, value: number) {
   return `${220 + Math.cos(angle) * 123 * value},${183 + Math.sin(angle) * 123 * value}`;
 }
 
-export function BrandReport({ answers, previous, sample = false, preview = false, completedAtMs, previousAtMs, run = 0, compareRun = -1 }: { answers: BrandAnswers; previous?: BrandAnswers; sample?: boolean; preview?: boolean; completedAtMs?: number; previousAtMs?: number; run?: number; compareRun?: number }) {
+export function BrandReport({ answers, previous, sample = false, preview = false, orderId, completedAtMs, previousAtMs, run = 0, compareRun = -1 }: { answers: BrandAnswers; previous?: BrandAnswers; sample?: boolean; preview?: boolean; orderId?: string; completedAtMs?: number; previousAtMs?: number; run?: number; compareRun?: number }) {
   const report = brandReport(answers);
   const baseline = previous ? brandReport(previous) : null;
   const days = brandActionPlan(report);
@@ -16,7 +16,7 @@ export function BrandReport({ answers, previous, sample = false, preview = false
   return <article className="brand-report" id="brand-report">
     <header className="report-heading">
       <div><p className="journal-label">CoachRank Tools · {sample ? "Illustrative sample" : "Your Brand Clarity Report"}</p><h1>{report.established ? "Keep your clarity sharp." : <>A clearer view.<br />A better next step.</>}</h1><p>{sample ? "These fictional answers show what a report looks like. Your priorities and plan follow your own answers." : "Your answers show where you have evidence today, and where a small, specific change could help."}</p></div>
-      <div className="report-edition"><span>BRAND<br />CLARITY</span><p>Edition 01{completedAtMs ? <><br />{new Date(completedAtMs).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" })}</> : null}</p><a className="tool-text-link no-print" href={sample ? "/api/assessment/report?sample=true" : `/api/assessment/report?run=${run}&compare=${compareRun}${preview ? "&preview=true" : ""}`}>Download PDF ↓</a></div>
+      <div className="report-edition"><span>BRAND<br />CLARITY</span><p>Edition 01{completedAtMs ? <><br />{new Date(completedAtMs).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" })}</> : null}</p><a className="tool-text-link no-print" href={sample ? "/api/assessment/report?sample=true" : `/api/assessment/report?run=${run}&compare=${compareRun}${preview ? "&preview=true" : orderId ? `&order=${encodeURIComponent(orderId)}` : ""}`}>Download PDF ↓</a></div>
     </header>
 
     <section className="report-overview" aria-label="Your six brand dimensions">
