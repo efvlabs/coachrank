@@ -15,4 +15,4 @@ SVG lettering is outlined. It will not change font on another computer. Do not s
 
 Typeface: Bricolage Grotesque, SIL Open Font License. Source and license in assets/fonts. Regenerate using node scripts/generate-brand.mjs.
 
-Create quote artwork at `/admin/social?tab=qotd`. The QOTD editor adds Bricolage Grotesque quote text, optional attribution and an optional date. Preview and PNG export share the same canvas renderer and wait for the site's fonts. Saved quotes live in the admin-only `socialQuotes` collection. Downloading or creating an X draft does not publish a post.
+Create quote artwork at `/admin/social?tab=qotd`. The QOTD editor adds Bricolage Grotesque quote text and optional attribution. The artwork has no heading or date. An optional planned date organises the library, filenames and X drafts only. Preview and PNG export share the same canvas renderer and wait for the site's fonts. Saved quotes live in the admin-only `socialQuotes` collection. Downloading or creating an X draft does not publish a post.

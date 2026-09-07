@@ -20,7 +20,7 @@ export async function renderQotd(item: QotdArtwork, scale = 1): Promise<HTMLCanv
   const [background, displayFaces, sansFaces] = await Promise.all([
     template(),
     document.fonts.load(`700 108px ${display}`, `“${item.quote} ${item.author}`),
-    document.fonts.load(`400 28px ${sans}`, `QUOTE OF THE DAY ${item.role}`),
+    document.fonts.load(`400 28px ${sans}`, item.role || "CoachRank"),
   ]);
   if (!displayFaces.length || !sansFaces.length) throw new Error("The brand fonts could not load. Please try again before downloading.");
   const canvas = document.createElement("canvas");
@@ -34,17 +34,6 @@ export async function renderQotd(item: QotdArtwork, scale = 1): Promise<HTMLCanv
   context.textBaseline = "alphabetic";
   context.font = `700 240px ${display}`;
   context.fillText("“", 64, 236);
-  context.font = `400 22px ${sans}`;
-  context.textAlign = "right";
-  context.fillText("QUOTE OF THE DAY", 1008, 100);
-  if (item.date) {
-    context.globalAlpha = 0.72;
-    context.font = `400 19px ${sans}`;
-    const date = new Date(`${item.date}T12:00:00Z`).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric", timeZone: "UTC" });
-    context.fillText(date.toUpperCase(), 1008, 138);
-    context.globalAlpha = 1;
-  }
-  context.textAlign = "left";
   const measure = (text: string, size: number) => { context.font = `700 ${size}px ${display}`; return context.measureText(text).width; };
   const quote = fitQuote(item.quote, measure);
   if (!quote.fits) throw new Error("This quote needs more space. Shorten it or remove a few line breaks so every word stays readable.");

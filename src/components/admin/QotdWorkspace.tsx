@@ -121,8 +121,9 @@ export function QotdWorkspace({ initialQuotes, onCreatePost }: { initialQuotes: 
           <input id="qotd-author" maxLength={90} placeholder="Name or CoachRank" value={editor.author} onChange={event => update({ author: event.target.value })} />
           <label htmlFor="qotd-role">Role or description <span>Optional</span></label>
           <input id="qotd-role" maxLength={100} placeholder="Author, founder, or an original perspective" value={editor.role} onChange={event => update({ role: event.target.value })} />
-          <label htmlFor="qotd-date">Date on the card <span>Optional</span></label>
-          <div className="qotd-date-field"><input id="qotd-date" type="date" value={editor.date} onChange={event => update({ date: event.target.value })} /><button type="button" disabled={!editor.date} onClick={() => update({ date: "" })}>Hide date</button></div>
+          <label htmlFor="qotd-date">Planned posting date <span>Optional</span></label>
+          <div className="qotd-date-field"><input id="qotd-date" type="date" value={editor.date} aria-describedby="qotd-date-help" onChange={event => update({ date: event.target.value })} /><button type="button" disabled={!editor.date} onClick={() => update({ date: "" })}>Clear</button></div>
+          <p id="qotd-date-help" className="social-field-note">For your library and X drafts only. The date is not printed on the image.</p>
           <details className="qotd-reference"><summary>Keep a source reference</summary><label htmlFor="qotd-source">Source URL</label><input id="qotd-source" type="url" maxLength={2000} placeholder="https://" value={editor.sourceUrl} onChange={event => update({ sourceUrl: event.target.value })} /><p>Saved in Studio for your reference. It will not appear on the artwork.</p></details>
           <div className="qotd-actions"><button className="tool-button" disabled={!editor.quote.trim()} type="submit">{busy ? "Preparing your card…" : "Save & download PNG ↓"}</button><button className="tool-text-link" disabled={!editor.quote.trim()} type="button" onClick={() => void save(false)}>Save to library</button></div>
           <p className="qotd-export-note">1080 × 1350 px · PNG · CoachRank typography<br/>Your blue template. Every word, crisp and ready to share.</p>
