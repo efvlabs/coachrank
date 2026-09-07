@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { emptySocial, SOCIAL_STATUSES, trackedSocialUrl, type SocialInput, type SocialRecord, type SocialStatus } from "@/lib/social";
+import { qotdCaption, type QotdRecord } from "@/lib/qotd";
+import { QotdWorkspace } from "./QotdWorkspace";
 
 type Article = { id: string; title: string; slug: string; topic: string; coverUrl: string };
-type View = "posts" | "accounts" | "distribution" | "playbook";
+type View = "posts" | "qotd" | "accounts" | "distribution" | "playbook";
 const label = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 function matchingSource(source: string, slug: string) { try { return new URL(source).hostname === "coachrank.lol" && new URL(source).pathname === `/blog/${slug}`; } catch { return false; } }
 function postCopy(item: SocialInput) {
@@ -13,9 +15,10 @@ function postCopy(item: SocialInput) {
   return !url || item.body.includes(url) ? item.body : item.body.includes(item.sourceUrl) ? item.body.replaceAll(item.sourceUrl, url) : `${item.body}\n\n${url}`;
 }
 
-export function SocialWorkspace({ initialRecords, articles }: { initialRecords: SocialRecord[]; articles: Article[] }) {
+export function SocialWorkspace({ initialRecords, articles, initialQuotes, initialQotd = false }: { initialRecords: SocialRecord[]; articles: Article[]; initialQuotes: QotdRecord[]; initialQotd?: boolean }) {
   const [records, setRecords] = useState(initialRecords);
-  const [view, setView] = useState<View>("posts");
+  const [view, setView] = useState<View>(initialQotd ? "qotd" : "posts");
+  const [qotdVisited, setQotdVisited] = useState(initialQotd);
   const [status, setStatus] = useState("all");
   const [search, setSearch] = useState("");
   const [editor, setEditor] = useState<SocialInput | null>(null);
@@ -50,16 +53,18 @@ export function SocialWorkspace({ initialRecords, articles }: { initialRecords: 
   }
 
   return <div className="social-workspace">
-    <div className="admin-page-heading"><div><p className="journal-label">CoachRank Social · X</p><h1>Good ideas deserve company.</h1><p>Your publication, out in the world. Plan the story, join the conversation and keep track of what you share on X.</p></div><button className="tool-button" onClick={() => edit(emptySocial(view === "accounts" ? "account" : "post"))} disabled={busy}>+ {view === "accounts" ? "Add account" : "New draft"}</button></div>
+    <div className="admin-page-heading"><div><p className="journal-label">CoachRank Social · X</p><h1>Good ideas deserve company.</h1><p>Your publication, out in the world. Plan the story, join the conversation and keep track of what you share on X.</p></div>{view !== "qotd" && <button className="tool-button" onClick={() => edit(emptySocial(view === "accounts" ? "account" : "post"))} disabled={busy}>+ {view === "accounts" ? "Add account" : "New draft"}</button>}</div>
     <div className="admin-metrics admin-metrics-three">
       {[{ label: "In the making", value: posts.filter(item => ["draft", "ready"].includes(item.status)).length, detail: "Drafts and ready-to-post ideas" }, { label: "Published", value: posts.filter(item => item.status === "published").length, detail: "Posts you have logged with a live link" }, { label: "Following", value: accounts.filter(item => item.status === "following").length, detail: "Accounts you have marked as followed" }].map(item => <div className="admin-metric" key={item.label}><p>{item.label}</p><strong>{item.value}</strong><span>{item.detail}</span></div>)}
     </div>
-    <div className="social-tabs" aria-label="Social workspace sections">{(["posts", "accounts", "distribution", "playbook"] as const).map(tab => <button key={tab} aria-pressed={view === tab} onClick={() => { setView(tab); setStatus("all"); }}>{({ posts: "Publishing queue", accounts: "People & ideas", distribution: "Article distribution", playbook: "Launch playbook" })[tab]}</button>)}</div>
+    <div className="social-tabs" aria-label="Social workspace sections">{(["posts", "qotd", "accounts", "distribution", "playbook"] as const).map(tab => <button key={tab} aria-pressed={view === tab} onClick={() => { setView(tab); setStatus("all"); if (tab === "qotd") setQotdVisited(true); window.history.replaceState(null, "", tab === "qotd" ? "/admin/social?tab=qotd" : "/admin/social"); }}>{({ posts: "Publishing queue", qotd: "QOTD", accounts: "People & ideas", distribution: "Article distribution", playbook: "Launch playbook" })[tab]}</button>)}</div>
     <p className="social-notice">Plan and record your activity here. Publish on X, then add its live link. Dates organise your queue.</p>
     <p role="status" className="social-feedback">{message}</p>
     {initialRecords.length >= 1000 && <p className="social-notice">Showing the most recently updated 1,000 records.</p>}
 
-    {editor && <form ref={editorRef} className="social-editor" onSubmit={save}>
+    {qotdVisited && <div hidden={view !== "qotd"}><QotdWorkspace initialQuotes={initialQuotes} onCreatePost={quote => { setView("posts"); window.history.replaceState(null, "", "/admin/social"); edit({ ...emptySocial("post"), title: `QOTD: ${quote.quote.slice(0, 100)}`, body: qotdCaption(quote), notes: `Attach the PNG from QOTD card ${quote.id}.${quote.sourceUrl ? `\nQuote source: ${quote.sourceUrl}` : ""}`, plannedDate: quote.date }); }}/></div>}
+
+    {editor && view !== "qotd" && <form ref={editorRef} className="social-editor" onSubmit={save}>
       <div className="social-editor-heading"><div><p className="journal-label">{editor.kind === "post" ? "Make it worth sharing" : "Find your kind of people"}</p><h2>{editor.revision ? "Edit record" : editor.kind === "post" ? "A new perspective." : "Start a connection."}</h2></div><button type="button" className="tool-text-link" disabled={busy} onClick={() => setEditor(null)}>Close editor</button></div>
       <fieldset disabled={busy}>
         <label>{editor.kind === "post" ? "Working title" : "Name / account"}<input required maxLength={180} value={editor.title} onChange={event => update({ title: event.target.value })} /></label>
