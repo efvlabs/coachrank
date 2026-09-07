@@ -1,7 +1,7 @@
 import { validSocialUrl } from "./social";
 
 export const QOTD_SIZE = { width: 1080, height: 1350 };
-export const QOTD_TEMPLATE = "/brand/cr_qotd_template.png";
+export const QOTD_LAYOUT = { background: "#2c4bf0", ink: "#ffffff", margin: 72, logoWidth: 220, footerColumnGap: 48, attributionGap: 14, quoteTop: 255, quoteHeight: 790 } as const;
 export const QOTD_QUOTE_LIMIT = 700;
 export type QotdInput = {
   id: string;

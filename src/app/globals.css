@@ -1135,7 +1135,7 @@
 .qotd-introduction .tool-text-link { font-size:12px; line-height:1.8; text-align:left; }
 .qotd-introduction-art { padding:34px; display:flex; align-items:center; background:var(--paper); }
 .qotd-introduction-art .qotd-artwork { box-shadow:0 20px 45px -25px #131b6f90; transform:rotate(2deg); }
-.qotd-artwork { width:100%; aspect-ratio:4/5; position:relative; background:#304bea; overflow:hidden; }
+.qotd-artwork { width:100%; aspect-ratio:4/5; position:relative; background:#2c4bf0; overflow:hidden; }
 .qotd-artwork canvas { width:100%; height:auto; display:block; }
 .qotd-artwork-state { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:12%; font:400 13px/1.8 var(--font-sans); color:white; }
 .qotd-editor-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,.95fr); gap:clamp(24px,3vw,44px); align-items:start; margin:26px 0 46px; }
