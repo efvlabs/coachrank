@@ -1,9 +1,9 @@
 ---
-title: Red flags when hiring a business coach
+title: 7 Red Flags to Check Before Hiring a Business Coach
 slug: red-flags-hiring-a-business-coach
-seoTitle: 7 Red Flags to Watch For When Hiring a Business Coach
-metaDescription: Coaching has no protected title, so the market rewards confidence over competence. Seven warning signs worth walking away from, and one that is commonly mistaken for a problem.
-excerpt: Coaching has no protected title, which means the market rewards confidence. Seven signs worth walking away from - and one that only looks like a problem.
+seoTitle: 7 Red Flags to Check Before Hiring a Business Coach
+metaDescription: Check seven warning signs before hiring a business coach, from unsupported outcome claims and sales pressure to unclear scope, credentials and payment terms.
+excerpt: Pressure, vague terms and unsupported promises can make a coaching engagement hard to evaluate. Seven signals to examine before committing your time and money.
 ctaCategory: business
 ---
 

@@ -66,6 +66,12 @@ describe("editorial publishing", () => {
 });
 
 describe("article output", () => {
+  it("keeps editorial citations followable and preserves explicit paid-link qualifiers", () => {
+    const article = renderArticle('[Research](https://example.com/research)\n\n<a href="https://example.com/sponsor" rel="sponsored nofollow">Sponsor</a>');
+    expect(article.html).toContain('href="https://example.com/research" rel="noopener noreferrer"');
+    expect(article.html).toContain('rel="sponsored nofollow noopener noreferrer"');
+  });
+
   it("creates unique navigable section IDs while removing scripts and unsafe attributes", () => {
     const article = renderArticle('## A question\n<script>alert(1)</script>\n\n## A question\n<img src="https://example.com/a.jpg" alt="Example" onerror="alert(1)">');
     expect(article.headings.map(heading => heading.id)).toEqual(["section-a-question", "section-a-question-2"]);

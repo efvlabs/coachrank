@@ -5,6 +5,7 @@ import { topicLabel } from "@/lib/editorial";
 import { BLOG_ENABLED } from "@/lib/config";
 import { getPublishedPostBySlug } from "@/lib/domain/blog";
 
+export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 export const alt = "CoachRank article";
 export const size = { width: 1200, height: 630 };
@@ -19,7 +20,6 @@ export default async function BlogOpenGraphImage({
   const { slug } = await params;
   const post = BLOG_ENABLED ? await getPublishedPostBySlug(slug) : null;
   const title = post?.title ?? "CoachRank";
-  const trimmed = title.length > 96 ? `${title.slice(0, 95).trimEnd()}…` : title;
 
   return new ImageResponse(
     (
@@ -43,13 +43,13 @@ export default async function BlogOpenGraphImage({
         <div
           style={{
             display: "flex",
-            fontSize: trimmed.length > 58 ? 62 : 78,
+            fontSize: title.length > 100 ? 48 : title.length > 70 ? 58 : 72,
             fontWeight: 800,
             letterSpacing: -2,
             lineHeight: 1.08,
           }}
         >
-          {trimmed}
+          {title}
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

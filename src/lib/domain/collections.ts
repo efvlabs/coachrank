@@ -114,7 +114,7 @@ export function toBlogPost(id: string, doc: BlogPostDoc): BlogPost {
     slug: doc.slug,
     excerpt: doc.excerpt,
     markdownBody: doc.markdownBody,
-    seoTitle: doc.seoTitle || doc.title,
+    seoTitle: doc.title,
     metaDescription: doc.metaDescription || doc.excerpt,
     ctaCategory: doc.ctaCategory ?? null,
     status: doc.status,

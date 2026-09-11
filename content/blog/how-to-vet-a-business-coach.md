@@ -1,9 +1,9 @@
 ---
-title: How to vet a business coach when every directory is paid
+title: How to Vet a Business Coach: Look Beyond Paid Rankings
 slug: how-to-vet-a-business-coach
-seoTitle: How to Vet a Business Coach When Every Directory Is Paid For
-metaDescription: Almost every coach directory, badge and award list is paid for somewhere. Here is how to read one anyway, and the four checks that tell you more than any ranking.
-excerpt: Almost every list of "top coaches" is paid for somewhere in the chain. That is fine, once you know it. Here is how to read one, and what to check instead.
+seoTitle: How to Vet a Business Coach: Look Beyond Paid Rankings
+metaDescription: Vet a business coach with four practical checks. Look beyond paid placement to relevant experience, careful outcome claims, references and clear terms.
+excerpt: A directory can help you discover coaches, but paid visibility does not establish fit. Check the working process, relevant experience, evidence and commercial terms.
 ctaCategory: business
 ---
 

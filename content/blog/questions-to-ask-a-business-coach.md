@@ -1,8 +1,8 @@
 ---
-title: Questions to ask a business coach before you pay
+title: 9 Questions to Ask a Business Coach Before You Pay
 slug: questions-to-ask-a-business-coach
-seoTitle: 9 Questions to Ask a Business Coach Before You Pay Anything
-metaDescription: The intro call is a two-way interview and most people only play one side. Nine questions that surface fit, terms and competence before any money moves.
+seoTitle: 9 Questions to Ask a Business Coach Before You Pay
+metaDescription: Use nine questions to assess a business coach's fit, working process, boundaries and commercial terms. Make your first conversation a useful two-way interview.
 excerpt: The intro call is a two-way interview, and most people only play one side. Nine questions that tell you more than any testimonial.
 ctaCategory: business
 ---

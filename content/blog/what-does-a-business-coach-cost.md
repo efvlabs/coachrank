@@ -1,8 +1,8 @@
 ---
-title: What does a business coach actually cost?
+title: Business Coach Cost: Compare Fees, Packages and Value
 slug: what-does-a-business-coach-cost
-seoTitle: What Does a Business Coach Cost? Real Pricing, Plainly Explained
-metaDescription: Business coaching is priced by the hour, by the month, or by the programme, and the number you are quoted depends more on who the coach sells to than on how good they are. Here is how the pricing actually works.
+seoTitle: Business Coach Cost: Compare Fees, Packages and Value
+metaDescription: Compare business coaching fees by session, retainer and package. Learn what to ask about scope, access, review points and exit terms before choosing a coach.
 excerpt: Coaching prices look arbitrary until you understand what is being priced. Here is how the three common models work, and what actually moves the number.
 ctaCategory: business
 ---

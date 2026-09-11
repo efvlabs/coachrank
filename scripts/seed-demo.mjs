@@ -452,6 +452,7 @@ async function seed() {
   for (const [index, post] of POSTS.entries()) {
     await db.collection("blogPosts").doc(`demo_post_${index}`).set({
       ...post,
+      seoTitle: post.title,
       status: "published",
       publishedAt: Timestamp.fromMillis(now - (index + 1) * 3 * 24 * HOUR),
       updatedAt: Timestamp.fromMillis(now - (index + 1) * 3 * 24 * HOUR),

@@ -202,7 +202,6 @@ function blogInputFrom(formData: FormData) {
     slug: String(formData.get("slug") ?? ""),
     excerpt: String(formData.get("excerpt") ?? ""),
     markdownBody: String(formData.get("markdownBody") ?? ""),
-    seoTitle: String(formData.get("seoTitle") ?? ""),
     metaDescription: String(formData.get("metaDescription") ?? ""),
     ctaCategory: String(formData.get("ctaCategory") ?? "") || null,
     status: (String(formData.get("status") ?? "draft") === "published" ? "published" : "draft") as
@@ -236,6 +235,9 @@ export async function savePostAction(formData: FormData): Promise<ActionResult> 
   revalidatePath("/blog");
   revalidatePath("/");
   revalidatePath(`/blog/${parsed.value.slug}`);
+  revalidatePath(`/blog/${parsed.value.slug}/opengraph-image`);
+  revalidatePath(`/topics/${parsed.value.topic}`);
+  revalidatePath("/sitemap.xml");
   if (createdId) redirect(`/admin/blog/${createdId}`);
   return ok(parsed.value.status === "published" ? "Published." : "Draft saved.");
 }

@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { articleDescription } from "@/lib/article-seo";
 import { SITE, absoluteUrl } from "@/lib/config";
 import { getCategory } from "@/lib/categories";
 import { coverFor, jsonLd, topicLabel } from "@/lib/editorial";
@@ -16,19 +17,22 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const post = await getPublishedPostBySlug(slug);
   if (!post) return { title: "Article not found", robots: { index: false, follow: false } };
   return {
-    title: post.seoTitle || post.title,
-    description: post.metaDescription || post.excerpt,
+    title: { absolute: post.title },
+    description: articleDescription(post),
+    authors: [{ name: post.authorName, ...(post.authorUrl ? { url: post.authorUrl } : {}) }],
+    publisher: SITE.name,
+    keywords: post.tags,
     alternates: { canonical: `/blog/${post.slug}` },
     robots: { index: !post.noindex, follow: true, "max-image-preview": "large" },
     openGraph: {
-      type: "article", title: post.seoTitle || post.title,
-      description: post.metaDescription || post.excerpt,
+      type: "article", title: post.title,
+      description: articleDescription(post),
       url: absoluteUrl(`/blog/${post.slug}`),
       publishedTime: post.publishedAtMs ? new Date(post.publishedAtMs).toISOString() : undefined,
       modifiedTime: new Date(post.updatedAtMs).toISOString(),
       authors: [post.authorName], section: topicLabel(post.topic), tags: post.tags, siteName: SITE.name,
     },
-    twitter: { card: "summary_large_image", title: post.seoTitle || post.title, description: post.metaDescription || post.excerpt },
+    twitter: { card: "summary_large_image", site: SITE.twitter, title: post.title, description: articleDescription(post) },
   };
 }
 
@@ -49,7 +53,7 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
     "@context": "https://schema.org",
     "@graph": [
       { "@type":"BlogPosting", "@id":absoluteUrl(`/blog/${post.slug}#article`), headline:post.title,
-        description:post.metaDescription || post.excerpt, image:cover.startsWith("/") ? absoluteUrl(cover) : cover,
+        description:articleDescription(post), image:cover.startsWith("/") ? absoluteUrl(cover) : cover,
         datePublished:post.publishedAtMs ? new Date(post.publishedAtMs).toISOString() : undefined,
         dateModified:new Date(post.updatedAtMs).toISOString(), author,
         publisher:{"@type":"Organization",name:SITE.name,url:SITE.url,logo:{"@type":"ImageObject",url:absoluteUrl("/brand/avatar-512.png")}},
@@ -60,7 +64,8 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
       ...(post.faqs.length ? [{ "@type":"FAQPage", "@id":absoluteUrl(`/blog/${post.slug}#questions`), mainEntity:post.faqs.map(faq=>({"@type":"Question",name:faq.question,acceptedAnswer:{"@type":"Answer",text:faq.answer}})) }] : []),
       { "@type":"BreadcrumbList", itemListElement:[
         {"@type":"ListItem",position:1,name:"CoachRank",item:SITE.url},
-        {"@type":"ListItem",position:2,name:post.title,item:absoluteUrl(`/blog/${post.slug}`)},
+        {"@type":"ListItem",position:2,name:topicLabel(post.topic),item:absoluteUrl(`/topics/${post.topic}`)},
+        {"@type":"ListItem",position:3,name:post.title,item:absoluteUrl(`/blog/${post.slug}`)},
       ]},
     ],
   };
@@ -82,11 +87,11 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
           {post.sources.length ? <section className="article-sources"><h2>Sources & further reading</h2><ul>{post.sources.map((source,index) => <li key={index}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title} ↗</a></li>)}</ul></section> : null}
           <footer className="article-author"><p className="journal-label">Written by</p><h2>{post.authorName}</h2><p>{post.authorBio}</p>{post.authorUrl ? <a href={post.authorUrl} className="buy">More about the author ↗</a> : null}</footer>
           {post.tags.length ? <div className="article-tags">{post.tags.map(tag => <span key={tag}>{tag}</span>)}</div> : null}
-          {cta ? <aside className="article-directory"><p className="journal-label">Paid coach directory</p><p>Exploring {cta.label.toLowerCase()} coaching? Our listings link to coaches’ own websites. Positions are bought through bidding and do not indicate quality or editorial endorsement.</p><Link href={`/coaches/${cta.slug}`} className="buy mt-3">Browse {cta.label.toLowerCase()} coaches ↗</Link></aside> : null}
+          {cta ? <div className="article-directory" role="complementary" data-nosnippet><p className="journal-label">Paid coach directory</p><p>Exploring {cta.label.toLowerCase()} coaching? Our listings link to coaches’ own websites. Positions are bought through bidding and do not indicate quality or editorial endorsement.</p><Link href={`/coaches/${cta.slug}`} className="buy mt-3">Browse {cta.label.toLowerCase()} coaches ↗</Link></div> : null}
         </div>
       </div>
     </article>
-    {related.length ? <section className="journal-latest article-related"><div className="journal-section-title"><h2>Keep the ideas coming<span>.</span></h2><Link href="/" className="buy">All stories ↗</Link></div><div className="journal-grid">{related.map(item => <article className="journal-card" key={item.id}><Link href={`/blog/${item.slug}`}><div className="journal-card-image"><img src={coverFor(item)} alt={item.coverAlt || ""} width={1536} height={1024} loading="lazy" /><span className="journal-card-arrow">↗</span></div><p className="journal-label">{topicLabel(item.topic)} <span>{readingMinutes(item.markdownBody)} min</span></p><h3>{item.title}</h3></Link></article>)}</div></section> : null}
+    {related.length ? <section className="journal-latest article-related" data-nosnippet><div className="journal-section-title"><h2>Keep the ideas coming<span>.</span></h2><Link href="/" className="buy">All stories ↗</Link></div><div className="journal-grid">{related.map(item => <article className="journal-card" key={item.id}><Link href={`/blog/${item.slug}`}><div className="journal-card-image"><img src={coverFor(item)} alt={item.coverAlt || ""} width={1536} height={1024} loading="lazy" /><span className="journal-card-arrow">↗</span></div><p className="journal-label">{topicLabel(item.topic)} <span>{readingMinutes(item.markdownBody)} min</span></p><h3>{item.title}</h3></Link></article>)}</div></section> : null}
     <script type="application/ld+json" dangerouslySetInnerHTML={{__html:jsonLd(structured)}} />
   </div>;
 }

@@ -1,7 +1,7 @@
 [
   {
     "slug": "decision-journal-before-the-outcome",
-    "title": "Write it down before you know how it ends.",
+    "title": "How to Keep a Decision Journal That Improves Your Thinking",
     "topic": "performance",
     "seoTitle": "How to Keep a Decision Journal That Improves Your Thinking",
     "metaDescription": "A decision journal makes your reasoning reviewable. Use a short decision note, a real alternative and a review date to learn from consequential choices.",
@@ -36,7 +36,7 @@
   },
   {
     "slug": "after-action-review-that-changes-the-next-attempt",
-    "title": "The work is over. The learning is not.",
+    "title": "After-Action Review: Turn a Finished Project Into Better Work",
     "topic": "performance",
     "seoTitle": "After-Action Review: Turn a Finished Project Into Better Work",
     "metaDescription": "Run an after-action review that produces a useful change. Separate events from explanations, preserve what worked and assign a clear next experiment.",
@@ -71,9 +71,9 @@
   },
   {
     "slug": "rehearse-the-transition-not-just-the-presentation",
-    "title": "Practice the moment when the script stops helping.",
+    "title": "Presentation Rehearsal: Handle Transitions and Hard Questions",
     "topic": "performance",
-    "seoTitle": "Presentation Rehearsal: Practice Transitions and Difficult Questions",
+    "seoTitle": "Presentation Rehearsal: Handle Transitions and Hard Questions",
     "metaDescription": "Make presentation rehearsal more useful. Practice opening, interruptions, hard questions and recovery, with a short rehearsal sheet you can use today.",
     "keyAnswer": "Rehearse the transitions that can interrupt a presentation: the opening, a difficult question, a missing detail and the close. Set a clear audience task, practice one response at a time and review observable behavior rather than confidence alone.",
     "excerpt": "Make presentation rehearsal more useful. Practice opening, interruptions, hard questions and recovery, with a short rehearsal sheet you can use today.",
@@ -106,7 +106,7 @@
   },
   {
     "slug": "performance-metrics-that-change-a-decision",
-    "title": "If a number changes nothing, why are you tracking it?",
+    "title": "Choose Performance Metrics That Help You Make Decisions",
     "topic": "performance",
     "seoTitle": "Choose Performance Metrics That Help You Make Decisions",
     "metaDescription": "Build a smaller, more useful performance dashboard. Connect each metric to a decision, add a quality check and review the behavior the number encourages.",
@@ -141,7 +141,7 @@
   },
   {
     "slug": "checklist-for-the-moment-before-you-publish",
-    "title": "Your best work deserves a better final check.",
+    "title": "A Pre-Publish Checklist for Important Work",
     "topic": "performance",
     "seoTitle": "A Pre-Publish Checklist for Important Work",
     "metaDescription": "Create a short final checklist for articles, proposals and launches. Focus on consequential omissions, clear ownership and the version people will actually see.",
@@ -176,7 +176,7 @@
   },
   {
     "slug": "customer-interviews-without-selling-the-answer",
-    "title": "Stop asking whether people like your idea.",
+    "title": "Customer Interviews: Find Evidence Beyond Polite Interest",
     "topic": "business",
     "seoTitle": "Customer Interviews: Find Evidence Beyond Polite Interest",
     "metaDescription": "Ask about a real customer episode before pitching your idea. Use a practical interview guide to uncover triggers, workarounds and unresolved questions.",
@@ -211,7 +211,7 @@
   },
   {
     "slug": "offer-page-that-answers-the-buyers-questions",
-    "title": "Make buying your work easier to understand.",
+    "title": "Write an Offer Page That Answers the Buyer’s Real Questions",
     "topic": "business",
     "seoTitle": "Write an Offer Page That Answers the Buyer’s Real Questions",
     "metaDescription": "Clarify your service offer with a buyer-focused page: audience, deliverables, boundaries, evidence, price and the next step, with a practical review exercise.",
@@ -246,7 +246,7 @@
   },
   {
     "slug": "scope-your-service-before-setting-the-price",
-    "title": "A clear price starts with a clear promise.",
+    "title": "Service Scope: Define the Promise Before Choosing a Price",
     "topic": "business",
     "seoTitle": "Service Scope: Define the Promise Before Choosing a Price",
     "metaDescription": "Define service scope before changing your price. Map deliverables, client responsibilities, revision limits and the assumptions that affect delivery.",
@@ -281,7 +281,7 @@
   },
   {
     "slug": "founder-bottleneck-decision-rights",
-    "title": "If every decision needs you, growth has a waiting room.",
+    "title": "Founder Bottlenecks: Give Decisions a Clear Owner",
     "topic": "business",
     "seoTitle": "Founder Bottlenecks: Give Decisions a Clear Owner",
     "metaDescription": "Reduce founder bottlenecks by clarifying decision ownership, boundaries and escalation. Use one recurring decision as a practical delegation experiment.",
@@ -316,7 +316,7 @@
   },
   {
     "slug": "customer-onboarding-first-useful-result",
-    "title": "The sale is the beginning of the promise.",
+    "title": "Customer Onboarding: Design the First Useful Result",
     "topic": "business",
     "seoTitle": "Customer Onboarding: Design the First Useful Result",
     "metaDescription": "Improve customer onboarding by defining the first useful result, removing avoidable setup and making recovery clear when a customer gets stuck.",
@@ -351,7 +351,7 @@
   },
   {
     "slug": "creative-brief-that-leaves-room-for-an-idea",
-    "title": "Give the idea a job before you give it a style.",
+    "title": "Write a Creative Brief That Leaves Room for Original Work",
     "topic": "creativity",
     "seoTitle": "Write a Creative Brief That Leaves Room for Original Work",
     "metaDescription": "Write a useful creative brief with a real audience, a clear task and meaningful constraints. Leave the solution open while making review criteria explicit.",
@@ -386,7 +386,7 @@
   },
   {
     "slug": "prototype-the-risk-before-the-product",
-    "title": "Build the smallest thing that can change your mind.",
+    "title": "Prototype the Biggest Risk Before Building the Whole Product",
     "topic": "creativity",
     "seoTitle": "Prototype the Biggest Risk Before Building the Whole Product",
     "metaDescription": "Choose a prototype that tests the uncertainty that matters. Use a simple risk-to-evidence map before investing in a complete product or polished concept.",
@@ -421,7 +421,7 @@
   },
   {
     "slug": "creative-constraints-that-open-better-options",
-    "title": "A constraint can give an idea somewhere to push.",
+    "title": "Use Creative Constraints Without Closing Better Options",
     "topic": "creativity",
     "seoTitle": "Use Creative Constraints Without Closing Better Options",
     "metaDescription": "Choose creative constraints with a purpose. Distinguish fixed requirements from habits, explore several responses and test what the constraint makes possible.",
@@ -456,7 +456,7 @@
   },
   {
     "slug": "reference-library-that-improves-your-taste",
-    "title": "Save the reason, not just the reference.",
+    "title": "Build a Creative Reference Library You Can Actually Use",
     "topic": "creativity",
     "seoTitle": "Build a Creative Reference Library You Can Actually Use",
     "metaDescription": "Turn saved inspiration into a useful reference library. Annotate the decision each example demonstrates and practice translating the principle into original work.",
@@ -491,7 +491,7 @@
   },
   {
     "slug": "finish-creative-work-with-a-release-standard",
-    "title": "Decide what finished means before the final revision.",
+    "title": "Finish Creative Work With a Clear Release Standard",
     "topic": "creativity",
     "seoTitle": "Finish Creative Work With a Clear Release Standard",
     "metaDescription": "Use a release standard to finish an article, design or creative project. Separate necessary fixes from new ideas and make the next revision a deliberate choice.",
@@ -526,7 +526,7 @@
   },
   {
     "slug": "weekly-review-that-changes-next-week",
-    "title": "Your weekly review should change next week.",
+    "title": "A Weekly Review That Produces Clear Next Actions",
     "topic": "growth",
     "seoTitle": "A Weekly Review That Produces Clear Next Actions",
     "metaDescription": "Build a weekly review around decisions, open commitments and realistic capacity. Leave with a short plan that changes what happens next week.",
@@ -561,7 +561,7 @@
   },
   {
     "slug": "learn-by-retrieving-not-collecting",
-    "title": "Close the notes. Find out what stayed.",
+    "title": "Retrieval Practice for Adults: Turn Reading Into Usable Learning",
     "topic": "growth",
     "seoTitle": "Retrieval Practice for Adults: Turn Reading Into Usable Learning",
     "metaDescription": "Use retrieval practice to make professional learning more active. Recall an idea, check the gap and apply it in a small realistic task.",
@@ -596,7 +596,7 @@
   },
   {
     "slug": "unfinished-project-audit",
-    "title": "Your unfinished projects are making decisions for you.",
+    "title": "An Unfinished-Project Audit for a More Realistic Workload",
     "topic": "growth",
     "seoTitle": "An Unfinished-Project Audit for a More Realistic Workload",
     "metaDescription": "Audit your unfinished projects with four decisions: continue, narrow, pause or close. Make dependencies and commitments visible before starting another initiative.",
@@ -631,7 +631,7 @@
   },
   {
     "slug": "turn-a-goal-into-a-weekly-experiment",
-    "title": "Give your goal a first experiment.",
+    "title": "Turn a Vague Goal Into a Useful Weekly Experiment",
     "topic": "growth",
     "seoTitle": "Turn a Vague Goal Into a Useful Weekly Experiment",
     "metaDescription": "Make a broad growth goal actionable with a small experiment. Define the behavior, context, evidence and review before asking for a dramatic transformation.",
@@ -666,7 +666,7 @@
   },
   {
     "slug": "build-a-portfolio-of-progress",
-    "title": "Keep the earlier version. It has something to teach you.",
+    "title": "Build a Progress Portfolio With Before-and-After Evidence",
     "topic": "growth",
     "seoTitle": "Build a Progress Portfolio With Before-and-After Evidence",
     "metaDescription": "Track development with a small portfolio of earlier and later work. Compare like with like, preserve context and use the difference to choose your next practice.",
@@ -701,7 +701,7 @@
   },
   {
     "slug": "coaching-agreement-before-the-first-session",
-    "title": "The first act of coaching is clarity.",
+    "title": "Before Coaching Begins: Agree on Roles and Expectations",
     "topic": "coaching",
     "seoTitle": "Before Coaching Begins: Agree on Roles and Expectations",
     "metaDescription": "Begin a coaching engagement with clearer expectations. Discuss purpose, roles, confidentiality, logistics and review before the first substantive session.",
@@ -736,7 +736,7 @@
   },
   {
     "slug": "listening-without-rushing-to-the-next-question",
-    "title": "Let the answer change your next question.",
+    "title": "Better Coaching Listening: Follow the Answer Before the Script",
     "topic": "coaching",
     "seoTitle": "Better Coaching Listening: Follow the Answer Before the Script",
     "metaDescription": "Improve coaching listening with a simple discipline: reflect what you heard, check the meaning and let the answer shape the next question.",
@@ -771,7 +771,7 @@
   },
   {
     "slug": "coaching-actions-the-client-actually-owns",
-    "title": "A nod is not an owned next step.",
+    "title": "Coaching Action Plans: Help Clients Own the Next Step",
     "topic": "coaching",
     "seoTitle": "Coaching Action Plans: Help Clients Own the Next Step",
     "metaDescription": "Close a coaching conversation with an action the client understands and chooses. Explore the context, likely obstacles and a useful review without forcing a plan.",
@@ -806,7 +806,7 @@
   },
   {
     "slug": "review-the-coaching-relationship-not-just-the-goal",
-    "title": "Make room to ask whether the coaching is helping.",
+    "title": "How to Review a Coaching Relationship With the Client",
     "topic": "coaching",
     "seoTitle": "How to Review a Coaching Relationship With the Client",
     "metaDescription": "Review a coaching engagement through usefulness, working conditions and fit. Invite honest feedback and agree whether to continue, adjust or conclude.",
@@ -841,7 +841,7 @@
   },
   {
     "slug": "choose-a-coach-beyond-the-profile",
-    "title": "A compelling profile is the beginning of your search.",
+    "title": "How to Choose a Coach Beyond the Profile and Ranking",
     "topic": "coaching",
     "seoTitle": "How to Choose a Coach Beyond the Profile and Ranking",
     "metaDescription": "Choose a coach with a clearer fit check. Verify relevant credentials, ask about the working process, understand terms and compare evidence beyond visibility.",

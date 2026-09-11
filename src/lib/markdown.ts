@@ -22,10 +22,11 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     a: (tagName, attribs) => {
       const href = attribs.href ?? "";
       const external = /^https?:\/\//i.test(href) && !href.includes("coachrank.lol");
+      const qualifiers = (attribs.rel || "").split(/\s+/).filter(value => ["nofollow", "sponsored", "ugc"].includes(value));
       return {
         tagName,
         attribs: external
-          ? { ...attribs, rel: "nofollow noopener noreferrer", target: "_blank" }
+          ? { ...attribs, rel: [...new Set([...qualifiers, "noopener", "noreferrer"])].join(" "), target: "_blank" }
           : attribs,
       };
     },

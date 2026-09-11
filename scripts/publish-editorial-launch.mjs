@@ -53,7 +53,7 @@ for (const entry of entries) {
   if (exists) { console.log(`Preserved existing article: ${entry.slug}`); continue; }
   const now=Timestamp.now();
   const document={
-    ...entry, markdownBody:body, authorName:"CoachRank Editorial", authorBio:"An independent editorial for ambitious people. Celebrating greatness and understanding what builds it.", authorUrl:"/about", coverCredit:entry.coverCredit || "Original illustration created for CoachRank with AI assistance.", featured:entry.featured || false, noindex:false, ctaCategory:null,
+    ...entry, seoTitle:entry.title, markdownBody:body, authorName:"CoachRank Editorial", authorBio:"An independent editorial for ambitious people. Celebrating greatness and understanding what builds it.", authorUrl:"/about", coverCredit:entry.coverCredit || "Original illustration created for CoachRank with AI assistance.", featured:entry.featured || false, noindex:false, ctaCategory:null,
     status:publish ? "published" : "draft", publishedAt:publish ? now : null, createdAt:now, updatedAt:now,
   };
   if (db) await db.collection("blogPosts").doc(`${collection}-${entry.slug}`).create(document);

@@ -1,8 +1,8 @@
 ---
-title: Business coach vs consultant vs mentor
+title: Business Coach vs Consultant vs Mentor: Which Do You Need?
 slug: business-coach-vs-consultant-vs-mentor
-seoTitle: Business Coach vs Consultant vs Mentor - Which One Do You Need?
-metaDescription: A coach asks, a consultant answers, a mentor has been there. The difference is who owns the decision and who does the work. Here is how to tell which one your problem needs.
+seoTitle: Business Coach vs Consultant vs Mentor: Which Do You Need?
+metaDescription: Compare business coaching, consulting and mentoring by the help you need, who does the work and what a useful result looks like. Includes questions to ask.
 excerpt: A coach asks, a consultant answers, a mentor has been there. The real difference is who owns the decision - and hiring the wrong one wastes months.
 ctaCategory: business
 ---

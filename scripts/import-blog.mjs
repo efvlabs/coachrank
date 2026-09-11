@@ -47,6 +47,7 @@ function parse(raw) {
 }
 
 const dir = join(process.cwd(), "content", "blog");
+const editorial = JSON.parse(readFileSync(join(dir, "editorial-metadata.json"), "utf8"));
 const files = readdirSync(dir).filter((f) => f.endsWith(".md")).sort();
 console.log(`Importing ${files.length} posts into ${projectId}/${databaseId}\n`);
 
@@ -63,11 +64,15 @@ for (const file of files) {
   const now = Timestamp.now();
 
   const doc = {
+    ...(editorial.find(entry => entry.slug === slug) || {}),
+    authorName: "CoachRank Editorial",
+    authorUrl: "/about",
+    topic: "coaching",
     title: meta.title,
     slug,
     excerpt: meta.excerpt ?? "",
     markdownBody: body,
-    seoTitle: meta.seoTitle ?? meta.title,
+    seoTitle: meta.title,
     metaDescription: meta.metaDescription ?? meta.excerpt ?? "",
     ctaCategory: meta.ctaCategory || null,
     updatedAt: now,

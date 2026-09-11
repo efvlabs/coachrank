@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+import { articleDescription, articleChecks } from "../article-seo";
 import { Timestamp } from "firebase-admin/firestore";
 
 import { isCategorySlug } from "../categories";
@@ -29,7 +31,7 @@ export async function getPublishedPosts(limit = 50): Promise<BlogPost[]> {
   }
 }
 
-export async function getPublishedPostBySlug(slug: string): Promise<BlogPost | null> {
+export const getPublishedPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
   const ref = postsRef();
   if (!ref || !slug) return null;
   try {
@@ -41,7 +43,7 @@ export async function getPublishedPostBySlug(slug: string): Promise<BlogPost | n
     console.error("[blog] getPublishedPostBySlug failed:", error);
     return null;
   }
-}
+});
 
 /** Admin-only: every post, published or not. */
 export async function listAllPosts(limit = 200): Promise<BlogPost[]> {
@@ -94,7 +96,10 @@ export function validateBlogInput(
     errors.push({ field: "slug", message: "Slug must be lowercase letters, numbers and hyphens." });
   }
   if (excerpt.length > 320) errors.push({ field: "excerpt", message: "Excerpt is too long." });
-  const metaDescription = (input.metaDescription ?? excerpt).trim().slice(0, 200);
+  const metaDescription = articleDescription({ metaDescription: input.metaDescription, excerpt });
+  if (metaDescription.length > 200) errors.push({ field: "metaDescription", message: "Keep the search description within 200 characters. It will not be cut off automatically." });
+  if (status === "published" && !excerpt) errors.push({ field: "excerpt", message: "Add a standfirst before publishing." });
+  if (status === "published" && !metaDescription) errors.push({ field: "metaDescription", message: "Add a search description before publishing." });
 
   const editorial = editorialDefaults(input);
   for (const field of ["authorName", "authorBio", "authorUrl", "coverUrl", "coverAlt", "coverCredit", "keyAnswer"] as const) {
@@ -114,6 +119,9 @@ export function validateBlogInput(
   if (!Array.isArray(editorial.tags) || editorial.tags.some((tag) => typeof tag !== "string")) errors.push({ field: "tags", message: "Tags must be text." });
 
   if (errors.length) return { ok: false, errors };
+  if (!articleChecks({ ...editorial, title, excerpt, markdownBody, metaDescription }).find(check => check.id === "style")!.ok) {
+    return { ok: false, errors: [{ field: "markdownBody", message: "CoachRank house style: replace em dashes with periods, commas, colons or parentheses." }] };
+  }
   editorial.tags = [...new Set(editorial.tags.map((tag) => tag.trim()).filter(Boolean))].slice(0, 12);
 
   return {
@@ -124,7 +132,7 @@ export function validateBlogInput(
       slug,
       excerpt,
       markdownBody,
-      seoTitle: (input.seoTitle ?? "").trim() || title,
+      seoTitle: title,
       metaDescription,
       ctaCategory: isCategorySlug(input.ctaCategory) ? input.ctaCategory : null,
       status,
@@ -151,8 +159,8 @@ export async function createPost(input: BlogInput): Promise<string> {
     slug: input.slug!,
     excerpt: input.excerpt,
     markdownBody: input.markdownBody,
-    seoTitle: input.seoTitle ?? input.title,
-    metaDescription: input.metaDescription ?? input.excerpt,
+    seoTitle: input.title,
+    metaDescription: articleDescription(input),
     ctaCategory: isCategorySlug(input.ctaCategory) ? input.ctaCategory : null,
     status: input.status,
     publishedAt: input.status === "published" ? now : null,
@@ -180,8 +188,8 @@ export async function updatePost(id: string, input: BlogInput): Promise<void> {
     slug: input.slug!,
     excerpt: input.excerpt,
     markdownBody: input.markdownBody,
-    seoTitle: input.seoTitle ?? input.title,
-    metaDescription: input.metaDescription ?? input.excerpt,
+    seoTitle: input.title,
+    metaDescription: articleDescription(input),
     ctaCategory: isCategorySlug(input.ctaCategory) ? input.ctaCategory : null,
     status: input.status,
     updatedAt: now,
