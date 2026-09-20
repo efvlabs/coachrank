@@ -73,6 +73,8 @@ Once your audience and offer are clearer, design has a more precise job. It can 
 
 ## A practical place to begin
 
+To work on the explanation itself, use our [positioning statement examples and worksheet](/blog/brand-positioning-statement-examples). To inspect the pages and steps a customer encounters, follow the [small-business brand audit checklist](/blog/brand-audit-checklist-small-business). Both guides include a complete free exercise.
+
 If you want a structured reflection before the conversations, the [CoachRank Brand Clarity Assessment](/tools/brand-clarity) asks 24 questions about audience, offer, difference, proof, messaging and visibility. It costs $9 USD before applicable tax and includes a visual report, three priorities and a seven-day plan. [Inspect the sample report first](/tools/brand-clarity/sample).
 
 This is our own product. It organizes your answers into next steps; it does not independently audit your business or replace customer research.

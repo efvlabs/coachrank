@@ -40,7 +40,7 @@ function field(value) {
   return {mapValue:{fields:Object.fromEntries(Object.entries(value).map(([key,item])=>[key,field(item)]))}};
 }
 const collection=option("collection") || "editorial-launch";
-if (!["editorial-launch","editorial-edition-02"].includes(collection)) throw new Error("Choose a reviewed editorial collection.");
+if (!["editorial-launch","editorial-edition-02","editorial-edition-03"].includes(collection)) throw new Error("Choose a reviewed editorial collection.");
 const entries=JSON.parse(readFileSync(new URL(`../content/${collection}/manifest.json`,import.meta.url),"utf8"));
 const publish=args.includes("--publish");
 

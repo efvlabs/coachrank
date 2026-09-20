@@ -32,3 +32,13 @@ Check the live page, page title, canonical URL and share preview. Submit `https:
 - [Google: search snippets and descriptions](https://developers.google.com/search/docs/appearance/snippet)
 - [Google: article structured data](https://developers.google.com/search/docs/appearance/structured-data/article)
 - [Google: requesting a recrawl](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)
+
+## Edition 03
+
+The three guides in `content/editorial-edition-03/` cover positioning statements, a small-business brand audit and task prioritization. Each includes an original exercise, sourced context, labeled fictional examples, metadata and an original vector cover. Regenerate the covers with `node scripts/generate-edition03-art.mjs`.
+
+Publish this collection with the existing importer using `--collection editorial-edition-03` and the explicit CoachRank project, database and authorized account. Omitting `--publish` creates private drafts. The importer preserves existing slugs rather than replacing published articles.
+
+The Brand Clarity product page links only to guides that are published, so deploying its layout before publishing the new collection does not expose draft links. Publish the collection after the cover assets are live. The existing brand-clarity article has a separate, narrowly scoped body update to link the new guides; preserve its title, URL and publication date, and use the stored document revision when applying that update.
+
+New small-product recommendations are in `docs/small-product-shortlist.md`. They are not public product promises and do not create purchase options.

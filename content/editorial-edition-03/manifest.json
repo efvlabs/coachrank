@@ -1,0 +1,63 @@
+[
+  {
+    "slug": "brand-positioning-statement-examples",
+    "title": "Brand Positioning Statement: Examples for Solo Businesses",
+    "topic": "business",
+    "excerpt": "Choose a customer, a concrete offer and a difference you can support. Six illustrative examples and a free worksheet help you write and test your own positioning.",
+    "metaDescription": "Write a brand positioning statement with six solo-business examples, a free worksheet and practical questions to test whether customers understand your offer.",
+    "keyAnswer": "A brand positioning statement names the customer, their situation, your offer and a relevant difference from alternatives. Add evidence and a boundary, then test whether intended customers understand it. Use the statement to guide decisions before turning it into shorter website copy.",
+    "coverUrl": "/editorial/edition-03/brand-positioning-statement-examples.webp",
+    "coverAlt": "Three cobalt paths converge on a single orange marker inside a focused frame.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": ["Branding", "Positioning", "Independent business", "Customer research"],
+    "featured": true,
+    "sources": [
+      {"title": "Strategyzer: the Value Proposition Canvas", "url": "https://www.strategyzer.com/library/the-value-proposition-canvas"},
+      {"title": "U.S. Small Business Administration: market research and competitive analysis", "url": "https://www.sba.gov/counseling/plan-your-business/#market-research-and-competitive-analysis"}
+    ],
+    "faqs": [
+      {"question": "Is a positioning statement the same as a tagline?", "answer": "No. A positioning statement guides decisions about the customer, offer and competitive context. A tagline is a short public expression. Your website can use simpler language while preserving the choices in the positioning statement."},
+      {"question": "How can I write a positioning statement before I have customers?", "answer": "Write a provisional version and label its assumptions. Describe the offer you can deliver, show a clearly labeled demonstration if useful, and investigate the customer's current problem and alternatives. Do not invent customer results or treat a completed template as proof of demand."}
+    ]
+  },
+  {
+    "slug": "brand-audit-checklist-small-business",
+    "title": "Brand Audit Checklist for Small Businesses: What to Fix First",
+    "topic": "business",
+    "excerpt": "Follow one customer journey from first impression to next step. A practical checklist and audit record help you find contradictions, missing evidence and broken actions.",
+    "metaDescription": "Audit your small-business brand with six practical checks, a worked example and a free worksheet. Find unclear offers, missing proof and broken buying steps.",
+    "keyAnswer": "Review one offer across its discovery page, message, evidence and buying journey. Record what is clear, needs work or has not been checked, with evidence for each finding. Address broken actions and misleading information first, then test the most consequential points of confusion.",
+    "coverUrl": "/editorial/edition-03/brand-audit-checklist-small-business.webp",
+    "coverAlt": "An orange inspection ring highlights one of six connected cobalt checkpoints on dark blue paper.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": ["Branding", "Brand audit", "Small business", "Customer experience"],
+    "featured": false,
+    "sources": [
+      {"title": "U.S. Small Business Administration: market research and competitive analysis", "url": "https://www.sba.gov/counseling/plan-your-business/#market-research-and-competitive-analysis"}
+    ],
+    "faqs": [
+      {"question": "Can I do a brand audit myself?", "answer": "You can review your own pages, claims and buying steps using the checklist. Record evidence and mark anything you have not checked. An internal review has limits, so add customer input and seek specialist help when the question requires research or expertise you do not have."},
+      {"question": "How is a brand audit different from the Brand Clarity Assessment?", "answer": "The checklist asks you to inspect actual material and customer journeys. CoachRank's paid Brand Clarity Assessment organizes your self-reported answers into six scores, three priorities and a seven-day plan. It does not automatically inspect a website or independently verify the business."}
+    ]
+  },
+  {
+    "slug": "task-prioritization-for-solopreneurs",
+    "title": "Task Prioritization for Solopreneurs: A Practical Method",
+    "topic": "growth",
+    "excerpt": "Choose a week that fits. Start with commitments and capacity, compare the evidence behind competing tasks, and leave with a small plan and a clear deferred list.",
+    "metaDescription": "Prioritize tasks as a solopreneur with a realistic time budget, a worked six-hour example and a free weekly worksheet. Choose what to do and what to defer.",
+    "keyAnswer": "Reserve time for existing commitments, choose one near-term outcome and estimate your remaining capacity. Compare optional tasks by their connection to that outcome, evidence, dependencies and effort. Schedule a small set that fits, leave a buffer and give deferred work a review condition.",
+    "coverUrl": "/editorial/edition-03/task-prioritization-for-solopreneurs.webp",
+    "coverAlt": "Three selected blocks fit inside a cobalt time frame while spare blocks remain outside it.",
+    "coverCredit": "Original graphic illustration by CoachRank.",
+    "tags": ["Productivity", "Prioritization", "Solopreneurs", "Weekly planning"],
+    "featured": false,
+    "sources": [
+      {"title": "Intercom: RICE prioritization framework", "url": "https://www.intercom.com/blog/rice-simple-prioritization-for-product-managers/"}
+    ],
+    "faqs": [
+      {"question": "What if all my tasks are urgent?", "answer": "Check which deadlines are real commitments and what delay would affect. If required work exceeds capacity, renegotiate scope or timing, or seek help. Ranking the tasks cannot make an impossible workload fit."},
+      {"question": "Do I need a scoring system to prioritize tasks?", "answer": "No. A short explanation of the outcome, evidence, dependencies and effort may be more useful when estimates are uncertain or tasks are unlike each other. Use a scoring framework when the inputs have a meaningful basis, and review its recommendations against actual constraints."}
+    ]
+  }
+]
