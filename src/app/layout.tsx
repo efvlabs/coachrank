@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { BuyingJourneyBeacon } from "@/components/BuyingJourneyBeacon";
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 
@@ -115,6 +117,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="main-content" className="flex-1">{children}</main>
         <Footer />
         <VisitorBeacon />
+        <Suspense fallback={null}><BuyingJourneyBeacon /></Suspense>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

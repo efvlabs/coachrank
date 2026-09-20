@@ -1,3 +1,4 @@
+import { recordVerifiedSignIn } from "@/lib/domain/buying-journeys";
 import { cookies } from "next/headers";
 import { jsonError, jsonOk, rateLimited, readJson } from "@/lib/api";
 import { sameOriginRequest } from "@/lib/assessment-request";
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
     if (!Number.isFinite(age) || age < -60 || age > 300) return jsonError("Please sign in again to start a fresh session.", 401);
     const session = await auth.createSessionCookie(body.idToken, { expiresIn: CUSTOMER_SESSION_MS });
     (await cookies()).set(CUSTOMER_COOKIE, session, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: CUSTOMER_SESSION_MS / 1000 });
+    await recordVerifiedSignIn();
     return jsonOk({ user: { uid: decoded.uid, email: decoded.email, name: decoded.name ?? null } }, { headers });
   } catch {
     // Never log ID tokens, session cookies or Firebase errors containing credentials.

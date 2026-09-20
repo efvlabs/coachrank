@@ -1351,3 +1351,16 @@
 .admin-story-copy,.editor-library-guidance > div,.admin-library-filters > label { min-width:0; }
 .admin-story-copy .editor-review-note { margin-top:12px; font-size:11px; color:var(--ink-2); text-transform:none; letter-spacing:0; line-height:1.6; }
 @media(max-width:760px) { .editor-library-guidance { flex-direction:column; align-items:flex-start; padding:22px; } .editor-library-guidance h2 { font-size:23px; } }
+
+/* Buying journey: readable counts and bounded tables in Studio. */
+.journey-section{margin-top:36px;padding-top:24px;border-top:1px solid var(--line)}
+.journey-section h2{font-size:24px;margin-bottom:12px}
+.journey-section>p{max-width:850px;line-height:1.7;margin:12px 0}
+.journey-stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:0;list-style:none;margin:24px 0}
+.journey-stages li{border:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:12px}
+.journey-stages strong{font-size:32px}
+.journey-table-wrap{max-width:100%;overflow-x:auto}
+.journey-table{width:100%;border-collapse:collapse;font-size:14px}
+.journey-table th,.journey-table td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line)}
+.journey-table tbody th{font-weight:500;max-width:360px;overflow-wrap:anywhere}
+@media(max-width:760px){.journey-stages{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-table{min-width:650px}}

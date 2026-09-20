@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { customerSignInUrl } from "@/lib/customer-links";
 
+import { captureJourneyPage } from "@/lib/journey-client";
+
 export function AssessmentCheckout({ enabled, email, ownedOrderId }: { enabled: boolean; email?: string | null; ownedOrderId?: string }) {
   const [accepted, setAccepted] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -12,6 +14,7 @@ export function AssessmentCheckout({ enabled, email, ownedOrderId }: { enabled: 
     if (busy) return;
     setBusy(true); setError("");
     try {
+      await captureJourneyPage();
       const response = await fetch("/api/assessment/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ acceptedTerms: accepted }) });
       const data = await response.json();
       if (response.status === 401 && data.signInUrl) { window.location.assign(data.signInUrl); return; }

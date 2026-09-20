@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MeasurementPreference } from "@/components/MeasurementPreference";
 
 import { LegalPage } from "@/components/LegalPage";
 import { SITE, absoluteUrl } from "@/lib/config";
@@ -67,6 +68,11 @@ export default function PrivacyPage() {
       <p>
         Your browser may also store a theme preference locally. That never leaves your device.
       </p>
+
+      <h2>Buying journey measurement</h2>
+      <p>We use a first-party <code>cr_journey</code> cookie for up to 30 days to understand which articles and referral sources lead to product visits, sign-in, checkout, purchases and completed reports. A random journey identifier connects these steps. We record public page paths, a broad source such as Reddit or Google, approved campaign labels and the first time each step occurs. We do not put email addresses, full referral URLs, sign-in codes, payment credentials or assessment answers in journey records.</p>
+      <p>The journey identifier may be attached to an order so a verified payment and completed report can be attributed to the visit that started checkout. It is not used for advertising or shared with social platforms. Journey records are scheduled for deletion after 90 days; a reference retained with an order no longer identifies a source after its journey record is deleted. Browser privacy signals (Global Privacy Control and Do Not Track) disable this measurement. You can also turn it off below. The preference is stored in <code>cr_measurement</code> for up to a year. Account, payment and delivery records needed to provide your purchase are still kept.</p>
+      <MeasurementPreference />
 
       <h2>Assessment answers and reports</h2>
       <p>For the Brand Clarity Assessment, we store your selected answers, completed reports, purchase reference and optional feedback in CoachRank’s Firestore database. We use them to save progress, generate your report, compare your included reassessment and improve the product. Recommendations are generated from CoachRank’s written scoring and guidance; no AI provider receives your answers.</p>

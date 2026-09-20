@@ -8,6 +8,8 @@ import { COLLECTIONS } from "./collections";
 export const ASSESSMENT_COOKIE = "cr_brand_access";
 export type AssessmentOrder = {
   id: string;
+  journeyId?: string;
+  firstCompletedAtMs?: number;
   ownerUid?: string;
   ownerEmail?: string;
   accessHash: string;
@@ -32,7 +34,7 @@ export type AssessmentOrder = {
 const hash = (token: string) => createHash("sha256").update(token).digest("hex");
 const orders = () => requireDb().collection(COLLECTIONS.assessmentOrders);
 
-async function createOrder(productId: string, preview: boolean, owner?: { uid: string; email: string }) {
+async function createOrder(productId: string, preview: boolean, owner?: { uid: string; email: string }, journeyId?: string) {
   const id = randomBytes(16).toString("hex");
   const token = randomBytes(32).toString("hex");
   const now = Date.now();
@@ -41,13 +43,14 @@ async function createOrder(productId: string, preview: boolean, owner?: { uid: s
     status: preview ? "paid" : "pending", preview, checkoutUrl: null, dodoSessionId: null,
     dodoPaymentId: null, createdAtMs: now, paidAtMs: preview ? now : null, acceptedTermsAtMs: now,
     version: BRAND_ASSESSMENT.version, revision: 0, answers: {}, completed: [], completedCount: 0, feedback: null,
+    ...(journeyId && !preview && /^[a-f0-9]{32}$/.test(journeyId) ? { journeyId } : {}),
     ...(owner && !preview ? { ownerUid: owner.uid, ownerEmail: owner.email } : {}),
   };
   await orders().doc(id).set(order);
   return { order, access: `${id}.${token}` };
 }
 
-export const createAssessmentOrder = (productId: string, owner?: { uid: string; email: string }) => createOrder(productId, false, owner);
+export const createAssessmentOrder = (productId: string, owner?: { uid: string; email: string }, journeyId?: string) => createOrder(productId, false, owner, journeyId);
 /** This entry point is called only by the authenticated admin preview route. */
 export const createAssessmentPreview = () => createOrder("admin-preview", true);
 
@@ -206,6 +209,7 @@ export async function updateAssessment(id: string, revision: number, action: str
         // Upgrade old two-report orders without losing their answers or dates.
         if (order.completedCount === undefined) order.completed.forEach((run,index)=>tx.set(reportCollection(id).doc(reportId(index)),{...run,index}));
         tx.set(reportCollection(id).doc(reportId(count)),{answers:payload,completedAtMs:Date.now(),index:count});
+        patch.firstCompletedAtMs = order.firstCompletedAtMs ?? order.completed[0]?.completedAtMs ?? Date.now();
         patch.completed = [];
         patch.completedCount = count + 1;
         patch.answers = null;

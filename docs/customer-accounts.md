@@ -40,3 +40,13 @@ Production browser review on September 7, 2026 confirmed Google sign-in and emai
 The live checkout displayed the $9 assessment plus $1.62 GST for India, totaling $10.62. Product, webhook signature configuration and private-route checks passed. A completed real Dodo purchase with automatic access still needs verification. Never fabricate a successful production payment or use production admin privileges to grant a test purchase.
 
 References: [Firebase email links](https://firebase.google.com/docs/auth/web/email-link-auth), [Firebase Google sign-in](https://firebase.google.com/docs/auth/web/google-signin), [Firebase session cookies](https://firebase.google.com/docs/auth/admin/manage-cookies), [Dodo checkout integration](https://docs.dodopayments.com/developer-resources/integration-guide).
+
+## September 20 follow-up
+
+A fresh Identity Toolkit configuration read confirms email sign-in remains enabled. Email delivery still uses Firebase's DEFAULT method, the shared `corporate-gupshup.firebaseapp.com` callback, and no configured custom email domain (`customDomainState: NOT_STARTED`). CoachRank's DNS points to GoDaddy/SecureServer mail, with SPF authorizing SecureServer and DMARC set to quarantine. Those records do not authenticate a new transactional email provider automatically.
+
+The user requested a test to contact@coachrank.lol. Chrome confirmed that the sign-in link request succeeded. Inbox or spam placement and the visible sender need confirmation from that mailbox. The in-app browser showed a network error on its earlier attempt, so its failure was not treated as proof that Chrome sign-in is broken.
+
+No shared project email template, OAuth name or sender was renamed. A CoachRank-specific branded email should use an Admin SDK-generated sign-in link and a verified CoachRank sending service. This supports app-specific templates without changing Corporate Gupshup's shared authentication identity. Sending-provider access and domain authentication must be available before that can be enabled. No new email service or paid subscription was created.
+
+See `docs/buying-journey.md` for the delivery simulation and measurement checks. The live Dodo product and enabled webhook were confirmed, with zero successful assessment payments. A completed real charge remains unverified.

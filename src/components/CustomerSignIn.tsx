@@ -6,6 +6,8 @@ import type { User } from "firebase/auth";
 import { getCustomerAuth } from "@/lib/firebase/client";
 import { customerReturnPath } from "@/lib/customer-links";
 
+import { captureJourneyPage } from "@/lib/journey-client";
+
 const EMAIL_KEY = "coachrank.signInEmail";
 function authMessage(error: unknown) {
   const code = (error as { code?: string })?.code;
@@ -35,6 +37,7 @@ export function CustomerSignIn({ next }: { next: string }) {
 
   async function establish(user: User) {
     verifiedUser.current = user;
+    await captureJourneyPage();
     const response = await fetch("/api/account/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: await user.getIdToken(true) }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Could not save your sign-in. Please try again.");

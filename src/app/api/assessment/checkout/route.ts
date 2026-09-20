@@ -7,6 +7,8 @@ import { customerSignInUrl } from "@/lib/customer-links";
 import { lockCustomerCheckout } from "@/lib/domain/customer-checkout";
 import { reconcileAssessmentPayment } from "@/lib/assessment-payment";
 
+import { requestJourneyId } from "@/lib/domain/buying-journeys";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -32,7 +34,7 @@ export async function POST(request: Request) {
     }
     if (existing?.status === "paid" && !existing.preview) return jsonOk({ checkoutUrl: `/tools/brand-clarity/assessment?order=${existing.id}` });
     if (existing?.status === "pending" && existing.ownerUid === customer.uid && existing.checkoutUrl && Date.now() - existing.createdAtMs < 24 * 60 * 60_000) return jsonOk({ checkoutUrl: existing.checkoutUrl });
-    const { order, access } = await createAssessmentOrder(assessmentProductId()!, customer);
+    const { order, access } = await createAssessmentOrder(assessmentProductId()!, customer, await requestJourneyId());
     orderId = order.id;
     // Establish access before leaving for payment, and retain it if Dodo is slow.
     await setAssessmentAccess(access);
